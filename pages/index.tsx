@@ -17,22 +17,22 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Gagandeep Singh | AVP Data Scientist - GenAI & LLM Expert</title>
-        <meta name="description" content="Gagandeep Singh - AVP Data Scientist with 6+ years in GenAI & NLP. Built multi-agent chatbots, LLM Telemetry Frameworks, and Call Analytics Systems at Zykrr Technologies." />
+        <title>Gagandeep Singh | Data Scientist - GenAI & LLM Expert</title>
+        <meta name="description" content="Gagandeep Singh - Data Scientist with 6+ years in GenAI & NLP. Built multi-agent chatbots, LLM Telemetry Frameworks, and Call Analytics Systems at Zykrr Technologies." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
         
         {/* Open Graph / Social Media Meta Tags */}
-        <meta property="og:title" content="Gagandeep Singh | AVP Data Scientist - GenAI Expert" />
-        <meta property="og:description" content="AVP Data Scientist specializing in Generative AI, LLMs, and NLP. Led development of multi-agent GenAI chatbots with 40% engagement increase." />
+        <meta property="og:title" content="Gagandeep Singh | Data Scientist - GenAI Expert" />
+        <meta property="og:description" content="Data Scientist specializing in Generative AI, LLMs, and NLP. Led development of multi-agent GenAI chatbots with 40% engagement increase." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://gaganmanku96.github.io/" />
         <meta property="og:image" content="https://gaganmanku96.github.io/images/og-image.jpg" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Gagandeep Singh | AVP Data Scientist - GenAI Expert" />
-        <meta name="twitter:description" content="AVP Data Scientist specializing in Generative AI, LLMs, and NLP. Led development of multi-agent GenAI chatbots with 40% engagement increase." />
+        <meta name="twitter:title" content="Gagandeep Singh | Data Scientist - GenAI Expert" />
+        <meta name="twitter:description" content="Data Scientist specializing in Generative AI, LLMs, and NLP. Led development of multi-agent GenAI chatbots with 40% engagement increase." />
         <meta name="twitter:image" content="https://gaganmanku96.github.io/images/og-image.jpg" />
       </Head>
 

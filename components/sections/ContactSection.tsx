@@ -103,8 +103,8 @@ const ContactSection: React.FC = () => {
         </svg>
       ),
       title: 'Email',
-      value: 'contact@gaganmanku.com',
-      link: 'mailto:contact@gaganmanku.com',
+      value: 'gaganmanku96@gmail.com',
+      link: 'mailto:gaganmanku96@gmail.com',
     },
     {
       icon: (
@@ -124,7 +124,7 @@ const ContactSection: React.FC = () => {
         </svg>
       ),
       title: 'Location',
-      value: 'San Francisco, CA',
+      value: 'Gurgaon, India',
       link: null,
     },
     {
@@ -141,6 +141,21 @@ const ContactSection: React.FC = () => {
       title: 'Schedule a Call',
       value: 'Topmate',
       link: 'https://topmate.io/gaganmanku96',
+    },
+    {
+      icon: (
+        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
+        </svg>
+      ),
+      title: 'Download Resume',
+      value: 'PDF Format',
+      link: '/resume.pdf',
     },
   ];
 
@@ -168,7 +183,7 @@ const ContactSection: React.FC = () => {
             animate={controls}
             className="lg:col-span-3 bg-white dark:bg-gray-700 rounded-lg shadow-lg p-8"
           >
-            <h3 className="text-xl font-bold mb-6">Send Me a Message</h3>
+            <h3 className="text-xl font-bold mb-6">Let's Connect</h3>
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <motion.div variants={itemVariants}>
@@ -379,7 +394,7 @@ const ContactSection: React.FC = () => {
               <h4 className="text-lg font-bold mb-4">Quick Copy</h4>
               <button
                 onClick={() => {
-                  navigator.clipboard.writeText('contact@gaganmanku.com');
+                  navigator.clipboard.writeText('gaganmanku96@gmail.com');
                   alert('Email copied to clipboard!');
                 }}
                 className="btn-outline w-full flex items-center justify-center"

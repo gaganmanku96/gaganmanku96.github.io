@@ -85,6 +85,16 @@ const ProjectsSection: React.FC = () => {
     },
     {
       id: 6,
+      title: "CHAOS Framework",
+      description: "Synthetic training data generator teaching AI systems 'how to think, not just what to do' with multi-dimensional learning scenarios. Features progressive difficulty, confidence tracking, and adaptive reasoning.",
+      thumbnail: "https://via.placeholder.com/400x250/8B5CF6/FFFFFF?text=CHAOS+Framework",
+      technologies: ["Python", "AI Training", "PEFT", "Gemini AI"],
+      githubLink: "https://github.com/gaganmanku96/CHAOS-Framework",
+      featured: true,
+      category: "Machine Learning"
+    },
+    {
+      id: 7,
       title: "Docker Tutorial for Data Scientists",
       description: "Comprehensive educational resource teaching data scientists how to leverage Docker for reproducible ML workflows.",
       thumbnail: "https://via.placeholder.com/400x250/EF4444/FFFFFF?text=Docker+Tutorial",

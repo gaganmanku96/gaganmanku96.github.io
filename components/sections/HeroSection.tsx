@@ -76,7 +76,7 @@ const HeroSection: React.FC = () => {
             transition={{ delay: 0.6, duration: 0.5 }}
             className="text-lg md:text-xl max-w-3xl mb-8 text-gray-700 dark:text-gray-300 leading-relaxed"
           >
-            AVP Data Scientist with <span className="font-semibold text-blue-600 dark:text-blue-400">6+ years</span> of experience specializing in 
+            Data Scientist with <span className="font-semibold text-blue-600 dark:text-blue-400">6+ years</span> of experience specializing in 
             <span className="font-semibold text-purple-600 dark:text-purple-400"> Generative AI</span> and 
             <span className="font-semibold text-green-600 dark:text-green-400"> Natural Language Processing</span>.
             <span className="block mt-3">
