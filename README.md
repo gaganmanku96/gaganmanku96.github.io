@@ -1,4 +1,4 @@
-# Gagan Manku's Portfolio Website
+# Gagandeep Singh Portfolio Website
 
 A modern, responsive portfolio website built with Next.js, Tailwind CSS, and Framer Motion. This portfolio showcases my projects, skills, experience, and blog posts in an interactive and visually appealing manner.
 
@@ -123,6 +123,6 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## Contact
 
-Gagan Manku - [contact@gaganmanku.com](mailto:contact@gaganmanku.com)
+Gagandeep Singh - [contact@gaganmanku.com](mailto:contact@gaganmanku.com)
 
 Project Link: [https://github.com/gaganmanku96/gagan_github_page](https://github.com/gaganmanku96/gagan_github_page)
