@@ -6,11 +6,9 @@ const nextConfig = {
     domains: ['via.placeholder.com', 'images.unsplash.com'],
     unoptimized: true, // Required for static HTML export
   },
-  // GitHub Pages configuration
-  // If deploying to gaganmanku96.github.io (user/org site), no basePath needed
-  // If deploying to gaganmanku96.github.io/repository-name, use basePath
-  basePath: '',
-  assetPrefix: '',
+  // GitHub Pages configuration for gaganmanku96.github.io/gaganmanku96
+  basePath: '/gaganmanku96',
+  assetPrefix: '/gaganmanku96/',
   output: 'export',
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
