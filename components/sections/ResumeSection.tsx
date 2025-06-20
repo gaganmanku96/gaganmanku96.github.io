@@ -137,7 +137,7 @@ const ResumeSection: React.FC = () => {
             className="lg:col-span-2 bg-white dark:bg-gray-800/70 rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700 backdrop-blur-md"
           >
             <div className="p-6 sm:p-8 border-b border-gray-200 dark:border-gray-700/50 flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gray-50 dark:bg-gray-700/30">
-              <h3 className="text-2xl font-semibold text-gray-800 dark:text-white mb-2 sm:mb-0">Gagan Manku - Resume</h3>
+              <h3 className="text-2xl font-semibold text-gray-800 dark:text-white mb-2 sm:mb-0">Gagandeep Singh - Resume</h3>
               <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 px-3 py-1 bg-green-100 dark:bg-green-700/30 text-green-700 dark:text-green-300 rounded-full">
                 Last Updated: July 2024
               </div>
