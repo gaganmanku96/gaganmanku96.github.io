@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import AiBrain from '@/components/three/AiBrain';
 import { useTheme } from '@/context/ThemeContext';
 import Image from 'next/image';
 
@@ -132,34 +133,9 @@ const HeroSection: React.FC = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.8, duration: 0.6 }}
-            className="lg:col-span-2 flex items-center justify-center"
+            className="lg:col-span-2 flex items-center justify-center h-[400px]"
           >
-            <div className="relative w-[300px] h-[300px] lg:w-[400px] lg:h-[400px]">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary-200 to-secondary-200 dark:from-primary-800 dark:to-secondary-800 opacity-50 blur-2xl"></div>
-              <Image
-                src="/images/gagan_transparent.png"
-                alt="Gagandeep Singh"
-                width={400}
-                height={400}
-                className="relative z-10 rounded-full object-cover"
-              />
-              <div className="absolute inset-0 z-0 rounded-full border-4 border-primary-300/50 dark:border-primary-700/50 animate-pulse"></div>
-              
-              {skills.map((skill, index) => (
-                <motion.div
-                  key={skill.name}
-                  className="absolute z-20 p-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-full shadow-lg flex items-center"
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1 + index * 0.1, type: 'spring', stiffness: 100 }}
-                  style={{
-                    transform: `translate(${getSkillPosition(index, skills.length, 180).x}px, ${getSkillPosition(index, skills.length, 180).y}px)`
-                  }}
-                >
-                  <span className="text-2xl">{skill.icon}</span>
-                </motion.div>
-              ))}
-            </div>
+            <AiBrain />
           </motion.div>
         </div>
       </div>
