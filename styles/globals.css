@@ -5,15 +5,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary-color: #2563eb;
-  --primary-light: #3b82f6;
-  --primary-dark: #1d4ed8;
-  --secondary-color: #7c3aed;
-  --secondary-light: #8b5cf6;
-  --secondary-dark: #6d28d9;
-  --accent-color: #06b6d4;
-  --accent-warm: #f59e0b;
+  /* Design System - Simplified Color Palette */
+  --primary-color: #9333ea;        /* Purple 600 - Main brand */
+  --primary-light: #a855f7;        /* Purple 500 */
+  --primary-dark: #7c3aed;         /* Purple 700 */
+  --secondary-color: #2563eb;      /* Blue 600 - Supporting only */
+  --secondary-light: #3b82f6;      /* Blue 500 */
+  --secondary-dark: #1d4ed8;       /* Blue 700 */
+  --accent-color: #06b6d4;         /* Teal 500 - Minimal use */
   --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  
+  /* Theme Colors */
   --dark-bg: #0f172a;
   --dark-bg-secondary: #1e293b;
   --dark-text: #f1f5f9;
@@ -22,9 +26,20 @@
   --light-bg-secondary: #f8fafc;
   --light-text: #0f172a;
   --light-text-secondary: #475569;
-  --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-  --gradient-secondary: linear-gradient(135deg, #06b6d4 0%, #10b981 100%);
-  --gradient-warm: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+  
+  /* Unified Gradients */
+  --gradient-primary: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);
+  --gradient-secondary: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  --gradient-brand: linear-gradient(135deg, #9333ea 0%, #2563eb 100%);
+  
+  /* Design Tokens */
+  --border-radius: 0.75rem;        /* 12px */
+  --border-radius-lg: 1rem;        /* 16px */
+  --border-radius-xl: 1.5rem;      /* 24px */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
 }
 
 html {
@@ -49,16 +64,17 @@ body {
     @apply py-20 md:py-32;
   }
   
+  /* Unified Button System */
   .btn-primary {
-    @apply bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0;
+    @apply bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0;
   }
   
   .btn-secondary {
-    @apply bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0;
+    @apply bg-gradient-to-r from-secondary-600 to-accent-600 hover:from-secondary-700 hover:to-accent-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-secondary-500/25 hover:shadow-secondary-500/40 transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0;
   }
   
   .btn-outline {
-    @apply border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-400 dark:hover:text-slate-900 font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0;
+    @apply border-2 border-primary-600 text-primary-600 hover:bg-primary-600 hover:text-white dark:border-primary-400 dark:text-primary-400 dark:hover:bg-primary-400 dark:hover:text-slate-900 font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0;
   }
   
   .card {
@@ -73,12 +89,17 @@ body {
     @apply bg-white/10 dark:bg-slate-900/10 backdrop-blur-xl border border-white/20 dark:border-slate-700/20 shadow-lg shadow-slate-200/10 dark:shadow-slate-900/10;
   }
   
+  /* Unified Text Gradients */
   .gradient-text {
-    @apply bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary-600 via-primary-500 to-secondary-600 bg-clip-text text-transparent;
   }
   
   .text-gradient {
-    @apply bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-primary {
+    @apply bg-gradient-to-r from-primary-600 to-primary-500 bg-clip-text text-transparent;
   }
   
   .heading-primary {
@@ -99,6 +120,47 @@ body {
   
   .text-body {
     @apply text-base md:text-lg leading-relaxed;
+  }
+  
+  /* Consistent Spacing System */
+  .space-section {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+  
+  .space-component {
+    @apply py-8 md:py-12;
+  }
+  
+  /* Consistent Card System */
+  .card-uniform {
+    @apply card h-full flex flex-col;
+  }
+  
+  .card-content {
+    @apply p-6 md:p-8 flex-1 flex flex-col;
+  }
+  
+  /* Tech Stack Chips - Unified Style */
+  .tech-chip {
+    @apply inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300 transition-colors duration-200;
+  }
+  
+  .tech-chip-secondary {
+    @apply inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-secondary-100 text-secondary-800 dark:bg-secondary-900/30 dark:text-secondary-300 transition-colors duration-200;
+  }
+  
+  /* Accordion System */
+  .accordion-content {
+    @apply bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-700 p-4;
+  }
+  
+  .accordion-trigger {
+    @apply w-full text-left p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200 flex items-center justify-between;
+  }
+  
+  /* Floating Back to Top Button */
+  .btn-floating {
+    @apply fixed bottom-8 right-8 z-50 bg-primary-600 hover:bg-primary-700 text-white p-3 rounded-full shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 transition-all duration-300 transform hover:-translate-y-1;
   }
 }
 
@@ -172,10 +234,10 @@ body {
 
 @keyframes pulseGlow {
   0%, 100% { 
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.4);
   }
   50% { 
-    box-shadow: 0 0 40px rgba(59, 130, 246, 0.8);
+    box-shadow: 0 0 40px rgba(147, 51, 234, 0.8);
   }
 }
 
@@ -191,12 +253,12 @@ body {
 /* Particle Background Styles */
 .bg-grid-pattern {
   background-image: 
-    linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+    linear-gradient(rgba(147, 51, 234, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(147, 51, 234, 0.1) 1px, transparent 1px);
   background-size: 50px 50px;
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar - Brand Colors */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -206,12 +268,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #9333ea, #2563eb);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  background: linear-gradient(135deg, #7c3aed, #1d4ed8);
 }
 
 /* Dark mode scrollbar */
@@ -219,19 +281,19 @@ body {
   background: #1e293b;
 }
 
-/* Selection styles */
+/* Selection styles - Primary Brand Color */
 ::selection {
-  background: rgba(59, 130, 246, 0.3);
+  background: rgba(147, 51, 234, 0.3);
   color: inherit;
 }
 
 .dark ::selection {
-  background: rgba(139, 92, 246, 0.3);
+  background: rgba(147, 51, 234, 0.4);
 }
 
-/* Focus styles */
+/* Focus styles - Primary Brand Color */
 .focus-visible:focus {
-  outline: 2px solid #3b82f6;
+  outline: 2px solid #9333ea;
   outline-offset: 2px;
 }
 

@@ -55,7 +55,7 @@ const AboutSection: React.FC = () => {
   ];
 
   return (
-    <section id="about" className="section-padding bg-gray-50 dark:bg-gray-900">
+    <section id="about" className="space-section bg-gradient-to-br from-slate-50 to-primary-50 dark:from-slate-900 dark:to-primary-900/20">
       <div className="container-custom">
         <motion.div
           ref={ref}
@@ -66,37 +66,38 @@ const AboutSection: React.FC = () => {
         >
           {/* About Me Text */}
           <motion.div variants={itemVariants} className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">About Me</h2>
-            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-6">
+            <span className="text-sm font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-2 inline-block">Get to Know Me</span>
+            <h2 className="heading-secondary mb-6 text-gradient">About Me</h2>
+            <p className="text-body-large text-slate-600 dark:text-slate-400 mb-6">
               AVP Data Scientist specializing in Generative AI and Natural Language Processing
             </p>
-            <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-              With over 6 years of experience at <span className="font-semibold text-blue-600 dark:text-blue-400">Zykrr Technologies</span>, 
+            <p className="text-body text-slate-600 dark:text-slate-400 leading-relaxed">
+              With over 6 years of experience at <span className="font-semibold text-primary-600 dark:text-primary-400">Zykrr Technologies</span>, 
               I've been promoted multiple times, reflecting consistent performance in developing cutting-edge AI solutions. 
-              I specialize in building <span className="font-semibold text-purple-600 dark:text-purple-400">multi-agent GenAI systems</span>, 
-              <span className="font-semibold text-green-600 dark:text-green-400">LLM frameworks</span>, and 
-              <span className="font-semibold text-orange-600 dark:text-orange-400">speech analytics platforms</span>.
+              I specialize in building <span className="font-semibold text-secondary-600 dark:text-secondary-400">multi-agent GenAI systems</span>, 
+              <span className="font-semibold text-primary-600 dark:text-primary-400">LLM frameworks</span>, and 
+              <span className="font-semibold text-secondary-600 dark:text-secondary-400">speech analytics platforms</span>.
             </p>
-            <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-              My work has directly impacted business outcomes, including a <span className="font-bold text-blue-600 dark:text-blue-400">40% increase in user engagement</span> 
-              through interactive AI systems and processing <span className="font-bold text-purple-600 dark:text-purple-400">10,000+ calls monthly</span> 
+            <p className="mt-4 text-body text-slate-600 dark:text-slate-400 leading-relaxed">
+              My work has directly impacted business outcomes, including a <span className="font-bold text-primary-600 dark:text-primary-400">40% increase in user engagement</span> 
+              through interactive AI systems and processing <span className="font-bold text-secondary-600 dark:text-secondary-400">10,000+ calls monthly</span> 
               for actionable insights. I'm passionate about pushing the boundaries of what's possible with AI.
             </p>
           </motion.div>
 
           {/* Skills Section */}
           <motion.div variants={itemVariants}>
-            <h3 className="text-3xl md:text-4xl font-bold text-center mb-10 bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-blue-600">Technical Expertise</h3>
+            <h3 className="heading-tertiary text-center mb-10 text-gradient">Technical Expertise</h3>
             <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
               {techStack.map((tech, index) => (
                 <motion.div key={index} variants={itemVariants}>
                   <div className="flex justify-between mb-1">
-                    <span className="text-base font-medium text-gray-700 dark:text-gray-300">{tech.name}</span>
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{tech.level}%</span>
+                    <span className="text-base font-medium text-slate-700 dark:text-slate-300">{tech.name}</span>
+                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{tech.level}%</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                  <div className="w-full bg-slate-200 rounded-full h-2.5 dark:bg-slate-700">
                     <motion.div
-                      className="bg-blue-600 h-2.5 rounded-full"
+                      className="bg-gradient-to-r from-primary-500 to-secondary-500 h-2.5 rounded-full"
                       initial={{ width: '0%' }}
                       animate={inView ? { width: `${tech.level}%` } : { width: '0%' }}
                       transition={{ duration: 1, delay: 0.2 + index * 0.1, ease: 'easeOut' }}
@@ -109,16 +110,19 @@ const AboutSection: React.FC = () => {
 
           {/* Achievements Section */}
           <motion.div variants={itemVariants}>
-            <h3 className="text-3xl md:text-4xl font-bold text-center mb-10 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-orange-600">Key Achievements</h3>
+            <h3 className="heading-tertiary text-center mb-10 text-gradient">Key Achievements</h3>
             <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {funFacts.map((fact, index) => (
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center transform hover:-translate-y-2 transition-transform duration-300"
+                  className="card-hover text-center"
+                  whileHover={{ y: -5 }}
                 >
-                  <span className="text-4xl mb-4 block">{fact.icon}</span>
-                  <p className="text-base text-gray-700 dark:text-gray-300">{fact.fact}</p>
+                  <div className="card-content">
+                    <span className="text-4xl mb-4 block">{fact.icon}</span>
+                    <p className="text-base text-slate-700 dark:text-slate-300">{fact.fact}</p>
+                  </div>
                 </motion.div>
               ))}
             </div>

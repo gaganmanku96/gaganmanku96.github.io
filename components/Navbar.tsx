@@ -114,13 +114,13 @@ const Navbar: React.FC<NavbarProps> = ({ scrollProgress }) => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Link 
+                  <a 
                     href={item.href}
                     className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {item.name}
-                  </Link>
+                  </a>
                 </motion.div>
               ))}
               
