@@ -13,7 +13,6 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { theme } = useTheme();
   const [showCommandPalette, setShowCommandPalette] = useState(false);
-  const [showChatbot, setShowChatbot] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
   // Handle keyboard shortcuts
@@ -74,10 +73,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       )}
       
       {/* Chatbot */}
-      <Chatbot 
-        isOpen={showChatbot} 
-        onToggle={() => setShowChatbot(prev => !prev)} 
-      />
+      <Chatbot />
       
       <Footer />
     </div>
