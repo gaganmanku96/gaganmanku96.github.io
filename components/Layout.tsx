@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import CommandPalette from './CommandPalette';
-import Chatbot from './Chatbot';
 import { useTheme } from '@/context/ThemeContext';
+
+// Dynamically import the Chatbot component with SSR disabled
+const Chatbot = dynamic(() => import('./Chatbot'), { ssr: false });
 
 interface LayoutProps {
   children: React.ReactNode;
