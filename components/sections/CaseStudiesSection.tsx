@@ -175,7 +175,7 @@ const CaseStudiesSection: React.FC = () => {
   };
 
   return (
-    <section id="case-studies" className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-900">
+    <section id="case-studies" className="space-section bg-gradient-to-br from-slate-50 to-primary-50 dark:from-slate-900 dark:to-primary-900/20">
       <div className="container-custom">
         <motion.div
           ref={ref}
@@ -187,9 +187,9 @@ const CaseStudiesSection: React.FC = () => {
           }}
           className="text-center mb-16"
         >
-          <span className="text-sm font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2 inline-block">Deep Dives</span>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">Technical Case Studies</h2>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+          <span className="text-sm font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-2 inline-block">Deep Dives</span>
+          <h2 className="heading-secondary mb-6 text-gradient">Technical Case Studies</h2>
+          <p className="text-body-large text-slate-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed">
             Explore detailed technical implementations of cutting-edge AI solutions, from LLM frameworks to speech analytics systems, 
             showcasing real-world impact and innovative approaches.
           </p>
@@ -208,8 +208,8 @@ const CaseStudiesSection: React.FC = () => {
               onClick={() => setSelectedCategory(category)}
               className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
                 selectedCategory === category
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700'
+                  ? 'bg-primary-600 text-white shadow-lg shadow-primary-500/25'
+                  : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-primary-50 dark:hover:bg-slate-700'
               }`}
             >
               {category}
@@ -266,10 +266,10 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number }> = ({ study, i
       {/* Content Section */}
       <div className="w-full lg:w-1/2 space-y-6">
         <div>
-          <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-3">
+          <h3 className="heading-tertiary text-slate-900 dark:text-white mb-3">
             {study.title}
           </h3>
-          <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+          <p className="text-body-large text-slate-600 dark:text-slate-400 leading-relaxed">
             {study.description}
           </p>
         </div>
@@ -277,22 +277,22 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number }> = ({ study, i
         {/* Metrics */}
         <div className="grid grid-cols-3 gap-4">
           {study.metrics.map((metric, idx) => (
-            <div key={idx} className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{metric.value}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">{metric.label}</div>
-              <div className="text-xs text-green-600 dark:text-green-400">{metric.improvement}</div>
+            <div key={idx} className="text-center p-4 bg-white dark:bg-slate-800 rounded-lg shadow-sm">
+              <div className="text-2xl font-bold text-primary-600 dark:text-primary-400">{metric.value}</div>
+              <div className="text-sm text-slate-600 dark:text-slate-400">{metric.label}</div>
+              <div className="text-xs text-secondary-600 dark:text-secondary-400">{metric.improvement}</div>
             </div>
           ))}
         </div>
 
         {/* Technologies */}
         <div>
-          <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">Technologies Used:</h4>
+          <h4 className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-3">Technologies Used:</h4>
           <div className="flex flex-wrap gap-2">
             {study.technologies.map((tech) => (
               <span
                 key={tech}
-                className="px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 text-sm font-medium rounded-full"
+                className="tech-chip"
               >
                 {tech}
               </span>
@@ -304,13 +304,13 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number }> = ({ study, i
         <div>
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center justify-between w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            className="accordion-trigger"
           >
-            <span className="font-semibold text-gray-700 dark:text-gray-200">
+            <span className="font-semibold text-slate-700 dark:text-slate-200">
               {isExpanded ? 'Hide' : 'View'} Technical Details
             </span>
             <svg
-              className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+              className={`w-5 h-5 text-slate-500 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -322,21 +322,21 @@ const CaseStudyCard: React.FC<{ study: CaseStudy; index: number }> = ({ study, i
           <motion.div
             initial={false}
             animate={{ height: isExpanded ? 'auto' : 0, opacity: isExpanded ? 1 : 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
             className="overflow-hidden"
           >
-            <div className="pt-4 space-y-4">
+            <div className="accordion-content space-y-4">
               <div>
-                <h5 className="font-semibold text-gray-900 dark:text-white mb-2">Challenge</h5>
-                <p className="text-gray-600 dark:text-gray-400">{study.challenge}</p>
+                <h5 className="font-semibold text-slate-900 dark:text-white mb-2">Challenge</h5>
+                <p className="text-slate-600 dark:text-slate-400">{study.challenge}</p>
               </div>
               <div>
-                <h5 className="font-semibold text-gray-900 dark:text-white mb-2">Solution</h5>
-                <p className="text-gray-600 dark:text-gray-400">{study.solution}</p>
+                <h5 className="font-semibold text-slate-900 dark:text-white mb-2">Solution</h5>
+                <p className="text-slate-600 dark:text-slate-400">{study.solution}</p>
               </div>
               <div>
-                <h5 className="font-semibold text-gray-900 dark:text-white mb-2">Results</h5>
-                <ul className="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
+                <h5 className="font-semibold text-slate-900 dark:text-white mb-2">Results</h5>
+                <ul className="list-disc list-inside text-slate-600 dark:text-slate-400 space-y-1">
                   {study.results.map((result, idx) => (
                     <li key={idx}>{result}</li>
                   ))}
