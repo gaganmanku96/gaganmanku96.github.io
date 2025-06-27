@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import CommandPalette from './CommandPalette';
+import Chatbot from './Chatbot';
 import { useTheme } from '@/context/ThemeContext';
 
 interface LayoutProps {
@@ -12,6 +13,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { theme } = useTheme();
   const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const [showChatbot, setShowChatbot] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
   // Handle keyboard shortcuts
@@ -70,6 +72,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {showCommandPalette && (
         <CommandPalette onClose={() => setShowCommandPalette(false)} />
       )}
+      
+      {/* Chatbot */}
+      <Chatbot 
+        isOpen={showChatbot} 
+        onToggle={() => setShowChatbot(prev => !prev)} 
+      />
       
       <Footer />
     </div>
