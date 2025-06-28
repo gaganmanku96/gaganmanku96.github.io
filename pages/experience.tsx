@@ -6,8 +6,8 @@ export default function Experience() {
   return (
     <>
       <Head>
-        <title>Experience | Gagandeep Singh - AVP Data Scientist</title>
-        <meta name="description" content="Explore Gagandeep Singh's professional journey at Zykrr Technologies, from Data Scientist to AVP Data Scientist, building GenAI solutions and LLM frameworks." />
+        <title>Experience | Gagandeep Singh - Senior Data Scientist</title>
+        <meta name="description" content="Explore Gagandeep Singh's professional journey at Zykrr Technologies, from Data Scientist to Senior Data Scientist, building GenAI solutions and LLM frameworks." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

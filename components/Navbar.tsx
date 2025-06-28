@@ -37,13 +37,17 @@ const Navbar: React.FC<NavbarProps> = ({ scrollProgress }) => {
         isScrolled ? 'py-2' : 'py-4'
       }`}
     >
-      <div className={`mx-auto backdrop-blur-lg bg-white/70 dark:bg-gray-900/70 border-b border-gray-200/50 dark:border-gray-700/50 ${
+      <div className={`mx-auto backdrop-blur-lg border-b border-gray-200/50 dark:border-gray-700/50 ${
         isScrolled ? 'shadow-lg' : ''
-      }`}>
+      }`}
+      style={{ 
+        backgroundColor: 'rgba(244, 242, 238, 0.7)',
+      }}
+      >
         <div className="container-custom flex items-center justify-between px-4 py-2">
           {/* Logo */}
           <Link href="/" className="text-2xl font-bold hover:scale-105 transition-transform duration-300">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">Gagandeep</span>
+            <span className="gradient-text">Gagandeep</span>
             <span className="text-gray-800 dark:text-white"> Singh</span>
           </Link>
 
@@ -53,10 +57,14 @@ const Navbar: React.FC<NavbarProps> = ({ scrollProgress }) => {
               <Link 
                 key={item.name} 
                 href={item.href}
-                className="relative text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium px-1 py-2 group"
+                className="relative text-gray-700 dark:text-gray-300 transition-colors font-medium px-1 py-2 group"
+                style={{ color: 'var(--light-text-secondary)' }}
               >
                 {item.name}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 group-hover:w-full transition-all duration-300"></span>
+                <span 
+                  className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
+                  style={{ backgroundColor: 'var(--primary-color)' }}
+                ></span>
               </Link>
             ))}
             
@@ -114,13 +122,13 @@ const Navbar: React.FC<NavbarProps> = ({ scrollProgress }) => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <a 
+                  <Link 
                     href={item.href}
                     className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {item.name}
-                  </a>
+                  </Link>
                 </motion.div>
               ))}
               
@@ -154,8 +162,11 @@ const Navbar: React.FC<NavbarProps> = ({ scrollProgress }) => {
       {/* Scroll Progress Indicator */}
       <div className="h-1 bg-gray-200 dark:bg-gray-800 w-full overflow-hidden">
         <motion.div 
-          className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400"
-          style={{ width: `${scrollProgress}%` }}
+          className="h-full"
+          style={{ 
+            width: `${scrollProgress}%`,
+            background: 'var(--gradient-primary)'
+          }}
           initial={{ x: '-100%' }}
           animate={{ x: 0 }}
           transition={{ type: 'spring', stiffness: 50 }}

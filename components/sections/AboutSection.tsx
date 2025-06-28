@@ -69,7 +69,7 @@ const AboutSection: React.FC = () => {
             <span className="text-sm font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-2 inline-block">Get to Know Me</span>
             <h2 className="heading-secondary mb-6 text-gradient">About Me</h2>
             <p className="text-body-large text-slate-600 dark:text-slate-400 mb-6">
-              AVP Data Scientist specializing in Generative AI and Natural Language Processing
+              Senior Data Scientist specializing in Generative AI and Natural Language Processing
             </p>
             <p className="text-body text-slate-600 dark:text-slate-400 leading-relaxed">
               With over 6 years of experience at <span className="font-semibold text-primary-600 dark:text-primary-400">Zykrr Technologies</span>, 

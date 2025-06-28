@@ -6,7 +6,7 @@ export default function CaseStudies() {
   return (
     <>
       <Head>
-        <title>Case Studies | Gagandeep Singh - AVP Data Scientist</title>
+        <title>Case Studies | Gagandeep Singh - Senior Data Scientist</title>
         <meta name="description" content="Deep dive into Gagandeep Singh's technical case studies featuring LLMs, Whisper speech-to-text, NLP implementations, and Transformer architectures." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />

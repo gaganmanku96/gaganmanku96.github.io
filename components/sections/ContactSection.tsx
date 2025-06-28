@@ -195,14 +195,14 @@ const ContactSection: React.FC = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:items-start">
           {/* Contact form */}
           <motion.div
             ref={ref}
             variants={containerVariants}
             initial="hidden"
             animate={controls}
-            className="lg:col-span-3 card"
+            className="lg:col-span-3 card h-full"
           >
             <div className="card-content">
               <h3 className="heading-tertiary text-slate-900 dark:text-white mb-6">Send Me a Message</h3>
@@ -329,14 +329,14 @@ const ContactSection: React.FC = () => {
             variants={containerVariants}
             initial="hidden"
             animate={controls}
-            className="lg:col-span-2 space-y-6"
+            className="lg:col-span-2 space-y-6 h-full flex flex-col"
           >
             {/* Contact cards */}
             {contactInfo.map((info, index) => (
               <motion.div
                 key={index}
                 variants={itemVariants}
-                className="card-hover flex items-start"
+                className="card-hover flex items-start p-6"
               >
                 <div className="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center mr-4 flex-shrink-0">
                   <span className="text-primary-600 dark:text-primary-400">{info.icon}</span>

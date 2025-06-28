@@ -16,10 +16,45 @@ interface Message {
 interface MessageBubbleProps {
   message: Message;
   isExpanded: boolean;
+  onSuggestedQuestionClick?: (question: string) => void;
 }
 
-const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isExpanded }) => {
+interface ParsedMessage {
+  content: string;
+  suggestions: string[];
+}
+
+// Function to parse assistant messages and extract suggestions
+const parseMessageContent = (content: string): ParsedMessage => {
+  const suggestionMarker = '---SUGGESTIONS---';
+  
+  if (content.includes(suggestionMarker)) {
+    const [mainContent, suggestionsSection] = content.split(suggestionMarker);
+    
+    // Extract suggestions (numbered list format)
+    const suggestions = suggestionsSection
+      .split('\n')
+      .filter(line => line.trim().match(/^\d+\./))
+      .map(line => line.replace(/^\d+\.\s*/, '').trim())
+      .filter(suggestion => suggestion.length > 0);
+    
+    return {
+      content: mainContent.trim(),
+      suggestions: suggestions.slice(0, 3) // Only take first 3 suggestions
+    };
+  }
+  
+  return {
+    content: content.trim(),
+    suggestions: []
+  };
+};
+
+const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isExpanded, onSuggestedQuestionClick }) => {
   const [copied, setCopied] = useState(false);
+  
+  // Parse message content to extract suggestions for assistant messages
+  const parsedMessage = message.role === 'assistant' ? parseMessageContent(message.content) : null;
 
   const copyMessage = () => {
     navigator.clipboard.writeText(message.content);
@@ -37,7 +72,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isExpanded }) =>
       <div className={`relative max-w-[85%] ${isExpanded ? 'max-w-[75%]' : ''}`}>
         {message.role === 'assistant' && (
           <div className="flex items-center space-x-2 mb-2">
-            <div className="w-6 h-6 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-full flex items-center justify-center">
+            <div className="w-6 h-6 bg-primary-600 rounded-full flex items-center justify-center">
               <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
               </svg>
@@ -49,13 +84,32 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isExpanded }) =>
         <div
           className={`relative p-4 rounded-2xl shadow-sm ${
             message.role === 'user'
-              ? 'bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-br-md'
+              ? 'bg-primary-600 text-white rounded-br-md'
               : 'bg-white/80 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm rounded-bl-md'
           }`}
         >
-          <p className={`leading-relaxed whitespace-pre-wrap ${isExpanded ? 'text-base' : 'text-sm'}`}>
-            {message.content}
-          </p>
+          {message.role === 'assistant' && parsedMessage ? (
+            <div className={`leading-relaxed ${isExpanded ? 'text-base' : 'text-sm'}`}>
+              <div 
+                dangerouslySetInnerHTML={{
+                  __html: parsedMessage.content
+                    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-slate-900 dark:text-white">$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    .replace(/`(.*?)`/g, '<code class="bg-slate-100 dark:bg-slate-700 px-1 py-0.5 rounded text-xs font-mono">$1</code>')
+                    .replace(/^### (.*$)/gm, '<h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1">$1</h3>')
+                    .replace(/^## (.*$)/gm, '<h2 class="text-base font-bold text-slate-900 dark:text-white mb-2">$1</h2>')
+                    .replace(/^# (.*$)/gm, '<h1 class="text-lg font-bold text-slate-900 dark:text-white mb-2">$1</h1>')
+                    .replace(/^\d+\. /gm, '<li class="text-slate-700 dark:text-slate-300">')
+                    .replace(/^- /gm, '<li class="text-slate-700 dark:text-slate-300">')
+                    .replace(/\n/g, '<br />')
+                }}
+              />
+            </div>
+          ) : (
+            <p className={`leading-relaxed whitespace-pre-wrap ${isExpanded ? 'text-base' : 'text-sm'} text-slate-700 dark:text-slate-300`}>
+              {message.role === 'assistant' && parsedMessage ? parsedMessage.content : message.content}
+            </p>
+          )}
           
           {/* Copy button */}
           {message.role === 'assistant' && (
@@ -76,6 +130,47 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isExpanded }) =>
             </button>
           )}
         </div>
+
+        {/* Suggested Questions for assistant messages */}
+        {message.role === 'assistant' && parsedMessage && parsedMessage.suggestions.length > 0 && (
+          <div className="mt-4 pt-4 border-t border-slate-200/50 dark:border-slate-700/50">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-2 font-medium">You might also ask:</p>
+            
+            {/* Mobile: Horizontal scroll with 2 visible suggestions */}
+            <div className="block sm:hidden">
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                {parsedMessage.suggestions.slice(0, 2).map((suggestion, index) => (
+                  <button
+                    key={index}
+                    onClick={() => onSuggestedQuestionClick?.(suggestion)}
+                    className="flex-shrink-0 min-w-[250px] text-left p-3 text-sm bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-600/50 rounded-lg transition-all duration-200 border border-slate-200/50 dark:border-slate-600/50 hover:border-primary-300 dark:hover:border-primary-600"
+                  >
+                    <span className="text-primary-600 dark:text-primary-400 font-medium mr-2">Q:</span>
+                    <span className="text-slate-700 dark:text-slate-300">
+                      {suggestion.length > 40 ? `${suggestion.substring(0, 37)}...` : suggestion}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Desktop: Vertical stack with all 3 suggestions */}
+            <div className="hidden sm:block">
+              <div className="space-y-2">
+                {parsedMessage.suggestions.map((suggestion, index) => (
+                  <button
+                    key={index}
+                    onClick={() => onSuggestedQuestionClick?.(suggestion)}
+                    className="block w-full text-left p-3 text-sm bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-600/50 rounded-lg transition-all duration-200 border border-slate-200/50 dark:border-slate-600/50 hover:border-primary-300 dark:hover:border-primary-600"
+                  >
+                    <span className="text-primary-600 dark:text-primary-400 font-medium mr-2">Q:</span>
+                    <span className="text-slate-700 dark:text-slate-300">{suggestion}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
         
         {message.role === 'user' && (
           <div className="flex items-center justify-end space-x-1 mt-1">
@@ -96,6 +191,10 @@ const Chatbot: React.FC<ChatbotProps> = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [chatMode, setChatMode] = useState<ChatMode>('compact');
   const [userScrolled, setUserScrolled] = useState(false);
+  const [streamingMessage, setStreamingMessage] = useState('');
+  const [connectionState, setConnectionState] = useState<'idle' | 'connecting' | 'streaming' | 'complete'>('idle');
+  const [typewriterText, setTypewriterText] = useState('');
+  const [fullStreamedText, setFullStreamedText] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
@@ -115,11 +214,11 @@ const Chatbot: React.FC<ChatbotProps> = () => {
   };
 
   useEffect(() => {
-    // Only auto-scroll for new messages, not on mount
-    if (messages.length > 0) {
+    // Auto-scroll for new messages and streaming content
+    if (messages.length > 0 || streamingMessage || typewriterText) {
       scrollToBottom();
     }
-  }, [messages.length]);
+  }, [messages.length, streamingMessage, typewriterText]);
 
   useEffect(() => {
     const container = messagesContainerRef.current;
@@ -176,15 +275,21 @@ const Chatbot: React.FC<ChatbotProps> = () => {
     addMessage(userMessage);
     setInput('');
     setIsLoading(true);
+    setConnectionState('connecting');
 
     try {
+      // Clean messages to only include role and content (remove timestamp)
+      const cleanMessages = [...messages, userMessage].map(({ role, content }) => ({ role, content }));
+      
+      console.log('[Chatbot] Sending request with messages:', cleanMessages.length);
+      
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          messages: [...messages, userMessage],
+          messages: cleanMessages,
         }),
       });
 
@@ -207,33 +312,97 @@ const Chatbot: React.FC<ChatbotProps> = () => {
 
       let assistantMessage = '';
       const decoder = new TextDecoder();
+      setStreamingMessage(''); // Reset streaming message
+      setConnectionState('streaming'); // Update state to streaming
+
+      let chunkCount = 0;
+      const startTime = Date.now();
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
         const chunk = decoder.decode(value);
+        chunkCount++;
         assistantMessage += chunk;
+        
+        // Debug logging
+        console.log(`[Streaming] Chunk ${chunkCount}: ${chunk.length} chars, Total: ${assistantMessage.length} chars`);
+        
+        // Update streaming message in real-time
+        setStreamingMessage(assistantMessage);
+        
+        // Yield control back to React for re-rendering with increased delay for visibility
+        await new Promise(resolve => setTimeout(resolve, 25));
       }
 
-      // Add only the complete message (no empty message first)
+      const streamDuration = Date.now() - startTime;
+      console.log(`[Streaming] Complete: ${chunkCount} chunks in ${streamDuration}ms, ${assistantMessage.length} total chars`);
+
+      console.log('[Chatbot] Received complete response, length:', assistantMessage.length);
+
+      // Start typewriter effect for smooth visualization
       if (assistantMessage.trim()) {
-        addMessage({ role: 'assistant', content: assistantMessage.trim() });
+        startTypewriter(assistantMessage.trim());
+      } else {
+        setStreamingMessage('');
+        setConnectionState('complete');
       }
     } catch (error) {
       console.error('Chat error:', error);
       const errorMessage = error instanceof Error ? error.message : 'Sorry, I encountered an error. Please try again.';
+      setConnectionState('complete');
+      setStreamingMessage('');
+      setTypewriterText('');
       addMessage({ 
         role: 'assistant', 
         content: errorMessage
       });
     } finally {
       setIsLoading(false);
+      setStreamingMessage(''); // Ensure streaming message is cleared
+      // Don't reset connection state here - let typewriter effect handle it
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
+  };
+
+  const handleSuggestedQuestionClick = (question: string) => {
+    setInput(question);
+    // Trigger submit after a brief delay to ensure input is set
+    setTimeout(() => {
+      const form = document.querySelector('form[data-chatbot-form]');
+      if (form) {
+        (form as HTMLFormElement).requestSubmit();
+      }
+    }, 100);
+  };
+
+  // Typewriter effect for smoother streaming visualization
+  const startTypewriter = (fullText: string) => {
+    setTypewriterText('');
+    setFullStreamedText(fullText);
+    
+    let currentIndex = 0;
+    const typewriterInterval = setInterval(() => {
+      if (currentIndex < fullText.length) {
+        setTypewriterText(fullText.substring(0, currentIndex + 1));
+        currentIndex++;
+      } else {
+        clearInterval(typewriterInterval);
+        // Complete the typewriter effect
+        setStreamingMessage('');
+        setTypewriterText('');
+        setConnectionState('complete');
+        if (fullText.trim()) {
+          addMessage({ role: 'assistant', content: fullText.trim() });
+        }
+      }
+    }, 20); // 20ms per character for smooth effect
+
+    return () => clearInterval(typewriterInterval);
   };
 
   // Get chat dimensions and position based on mode
@@ -316,7 +485,7 @@ const Chatbot: React.FC<ChatbotProps> = () => {
         className={`fixed bottom-8 right-8 z-50 w-16 h-16 rounded-full shadow-lg transition-all duration-300 ${
           isOpen 
             ? 'bg-red-500 hover:bg-red-600' 
-            : 'bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700'
+            : 'bg-primary-600 hover:bg-primary-700'
         }`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
@@ -353,6 +522,20 @@ const Chatbot: React.FC<ChatbotProps> = () => {
         </AnimatePresence>
       </motion.button>
 
+      {/* Expanded mode close button - positioned in backdrop layer */}
+      {isOpen && chatMode === 'expanded' && (
+        <button
+          onClick={() => setChatMode('compact')}
+          className="fixed top-8 right-8 z-50 w-14 h-14 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-2xl border-4 border-white dark:border-slate-900"
+          style={{ zIndex: 9999 }}
+          title="Close expanded view"
+        >
+          <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      )}
+
       {/* Chat window */}
       <AnimatePresence>
         {isOpen && (
@@ -367,24 +550,12 @@ const Chatbot: React.FC<ChatbotProps> = () => {
                 : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl'
             } rounded-2xl flex flex-col overflow-hidden`}
           >
-            {/* Expanded mode close button - positioned outside header */}
-            {chatMode === 'expanded' && (
-              <button
-                onClick={() => setChatMode('compact')}
-                className="absolute -top-2 -right-2 z-20 w-10 h-10 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-lg border-2 border-white dark:border-slate-800"
-                title="Close expanded view"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            )}
 
             {/* Chat header */}
             <div className={`${
               chatConfig.glass 
-                ? 'bg-gradient-to-r from-primary-600/90 to-secondary-600/90 backdrop-blur-sm' 
-                : 'bg-gradient-to-r from-primary-600 to-secondary-600'
+                ? 'bg-primary-600/95 backdrop-blur-sm' 
+                : 'bg-primary-600'
             } text-white p-4 flex items-center justify-between border-b border-white/10`}>
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
@@ -474,7 +645,7 @@ const Chatbot: React.FC<ChatbotProps> = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="text-center py-8"
                 >
-                  <div className="w-16 h-16 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <div className="w-16 h-16 bg-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                     <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
@@ -523,10 +694,12 @@ const Chatbot: React.FC<ChatbotProps> = () => {
                   key={index} 
                   message={message} 
                   isExpanded={chatMode === 'expanded'}
+                  onSuggestedQuestionClick={handleSuggestedQuestionClick}
                 />
               ))}
 
-              {isLoading && (
+              {/* Streaming message display */}
+              {(streamingMessage || typewriterText) && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -534,12 +707,54 @@ const Chatbot: React.FC<ChatbotProps> = () => {
                 >
                   <div className="relative max-w-[85%]">
                     <div className="flex items-center space-x-2 mb-2">
-                      <div className="w-6 h-6 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-full flex items-center justify-center">
+                      <div className="w-6 h-6 bg-primary-600 rounded-full flex items-center justify-center">
                         <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                         </svg>
                       </div>
-                      <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">AI Assistant is typing...</span>
+                      <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                        AI Assistant {connectionState === 'streaming' ? '(streaming...)' : ''}
+                      </span>
+                    </div>
+                    
+                    <div className="bg-white/80 dark:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm p-4 rounded-2xl rounded-bl-md">
+                      <div className={`leading-relaxed ${chatMode === 'expanded' ? 'text-base' : 'text-sm'}`}>
+                        <div 
+                          dangerouslySetInnerHTML={{
+                            __html: (typewriterText || streamingMessage)
+                              .split('---SUGGESTIONS---')[0] // Don't show suggestions while streaming
+                              .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-slate-900 dark:text-white">$1</strong>')
+                              .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                              .replace(/`(.*?)`/g, '<code class="bg-slate-100 dark:bg-slate-700 px-1 py-0.5 rounded text-xs font-mono">$1</code>')
+                              .replace(/^### (.*$)/gm, '<h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1">$1</h3>')
+                              .replace(/^## (.*$)/gm, '<h2 class="text-base font-bold text-slate-900 dark:text-white mb-2">$1</h2>')
+                              .replace(/^# (.*$)/gm, '<h1 class="text-lg font-bold text-slate-900 dark:text-white mb-2">$1</h1>')
+                              .replace(/\n/g, '<br />')
+                          }}
+                        />
+                        <span className="inline-block w-2 h-4 bg-primary-500 ml-1 animate-pulse"></span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {isLoading && !streamingMessage && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex justify-start group"
+                >
+                  <div className="relative max-w-[85%]">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <div className="w-6 h-6 bg-primary-600 rounded-full flex items-center justify-center">
+                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                      </div>
+                      <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                        AI Assistant is {connectionState === 'connecting' ? 'connecting...' : 'thinking...'}
+                      </span>
                     </div>
                     
                     <div className="bg-white/80 dark:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm p-4 rounded-2xl rounded-bl-md">
@@ -563,7 +778,7 @@ const Chatbot: React.FC<ChatbotProps> = () => {
                 ? 'bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm' 
                 : 'bg-white dark:bg-slate-800'
             }`}>
-              <form onSubmit={handleSubmit} className="flex space-x-3">
+              <form onSubmit={handleSubmit} className="flex space-x-3" data-chatbot-form>
                 <div className="flex-1 relative">
                   <input
                     value={input}
@@ -595,7 +810,7 @@ const Chatbot: React.FC<ChatbotProps> = () => {
                   disabled={isLoading || !input.trim()}
                   className={`${
                     chatMode === 'expanded' ? 'px-6 py-3' : 'px-4 py-3'
-                  } bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-xl hover:from-primary-700 hover:to-secondary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl`}
+                  } bg-primary-600 text-white rounded-xl hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -603,7 +818,7 @@ const Chatbot: React.FC<ChatbotProps> = () => {
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                   ) : (
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
                   )}
                 </motion.button>

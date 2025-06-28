@@ -32,7 +32,7 @@ const ExperienceSection: React.FC = () => {
     {
       id: 1,
       company: "Zykrr Technologies Pvt Ltd",
-      position: "AVP Data Scientist",
+      position: "Senior Data Scientist",
       duration: "May 2024 - Present",
       location: "Gurugram",
       logo: "https://via.placeholder.com/150/0066CC/FFFFFF?text=Zykrr",
@@ -143,7 +143,7 @@ const ExperienceSection: React.FC = () => {
           <span className="text-sm font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-2 inline-block">My Journey</span>
           <h2 className="heading-secondary mb-6 text-gradient">Career Progression at Zykrr</h2>
           <p className="text-body-large text-slate-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed">
-            A timeline of my 6+ year journey at Zykrr Technologies, from Data Scientist to AVP Data Scientist, 
+            A timeline of my 6+ year journey at Zykrr Technologies, from Data Scientist to Senior Data Scientist, 
             showcasing consistent growth, promotions, and impact in Generative AI and Machine Learning.
           </p>
         </motion.div>

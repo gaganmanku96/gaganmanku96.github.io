@@ -10,16 +10,15 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>('dark');
+  const [theme, setTheme] = useState<Theme>('light');
 
-  // On mount, read the preferred theme from localStorage or system preference
+  // On mount, read the preferred theme from localStorage, default to light
   useEffect(() => {
     const storedTheme = localStorage.getItem('theme') as Theme | null;
     if (storedTheme) {
       setTheme(storedTheme);
-    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setTheme('dark');
     } else {
+      // Default to light theme (cream/off-white)
       setTheme('light');
     }
   }, []);
