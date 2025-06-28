@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import AiBrain from '@/components/three/AiBrain';
 import { useTheme } from '@/context/ThemeContext';
 import Image from 'next/image';
 
@@ -101,6 +100,16 @@ const HeroSection: React.FC = () => {
                   Explore My Work
                 </button>
               </Link>
+              <a 
+                href="/resume.pdf" 
+                download="Gagandeep_Singh_Resume.pdf"
+                className="btn-secondary text-lg inline-flex items-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                </svg>
+                Download Resume
+              </a>
               <Link href="#contact">
                 <button className="btn-outline text-lg">
                   Connect With Me
@@ -135,7 +144,73 @@ const HeroSection: React.FC = () => {
             transition={{ delay: 0.8, duration: 0.6 }}
             className="lg:col-span-2 flex items-center justify-center h-[400px]"
           >
-            <AiBrain />
+            <div className="relative w-80 h-80 flex items-center justify-center">
+              {/* Animated Background Circles */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary-600/20 to-primary-400/20 animate-pulse"></div>
+              <div className="absolute inset-4 rounded-full bg-gradient-to-r from-primary-500/30 to-primary-300/30 animate-ping animation-delay-1000"></div>
+              
+              {/* Main AI Brain SVG */}
+              <motion.svg
+                className="w-48 h-48 text-primary-600 relative z-10"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                initial={{ rotate: 0 }}
+                animate={{ rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <motion.path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={0.5}
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 2, ease: "easeInOut" }}
+                />
+              </motion.svg>
+              
+              {/* Floating Tech Icons */}
+              <motion.div
+                className="absolute top-8 left-8 w-8 h-8 text-primary-500"
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <svg fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
+                </svg>
+              </motion.div>
+              
+              <motion.div
+                className="absolute top-8 right-8 w-8 h-8 text-primary-500"
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              >
+                <svg fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+              </motion.div>
+              
+              <motion.div
+                className="absolute bottom-8 left-12 w-6 h-6 text-primary-400"
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+              >
+                <svg fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+              </motion.div>
+              
+              <motion.div
+                className="absolute bottom-8 right-12 w-6 h-6 text-primary-400"
+                animate={{ rotate: [0, 180, 360] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              >
+                <svg fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       </div>

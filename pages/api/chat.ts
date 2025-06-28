@@ -2,6 +2,8 @@ import { OpenAI } from 'openai';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withRateLimit } from '@/lib/rate-limiter';
 import { validateMessages } from '@/lib/input-validation';
+import fs from 'fs';
+import path from 'path';
 
 // Allow streaming responses up to 30 seconds
 export const config = {
@@ -20,9 +22,13 @@ async function chatHandler(
 
   const { messages } = req.body;
 
+  console.log('[Chat API] Received messages:', JSON.stringify(messages, null, 2));
+
   // Validate input
   const validation = validateMessages(messages);
   if (!validation.isValid) {
+    console.error('[Chat API] Validation failed:', validation.error);
+    console.log('[Chat API] Failed messages:', JSON.stringify(messages, null, 2));
     return res.status(400).json({ error: validation.error });
   }
 
@@ -33,38 +39,94 @@ async function chatHandler(
       baseURL: 'https://openrouter.ai/api/v1',
     });
 
-    // System prompt with portfolio context
+    console.log('[Chat API] Processing request with', messages.length, 'messages');
+
+    // Load personal information from JSON file
+    let personalInfo;
+    try {
+      const personalInfoPath = path.join(process.cwd(), 'data', 'personal-info.json');
+      const personalInfoData = fs.readFileSync(personalInfoPath, 'utf8');
+      personalInfo = JSON.parse(personalInfoData);
+    } catch (error) {
+      console.error('Error loading personal info:', error);
+      // Fallback to basic info if file loading fails
+      personalInfo = {
+        basic_info: { name: "Gagandeep Singh", title: "Senior Data Scientist" },
+        professional_summary: { specialization: "Generative AI and Machine Learning" }
+      };
+    }
+
+    // Generate system prompt from personal information
+    const generateSystemPrompt = (info: any) => {
+      const basicInfo = info.basic_info || {};
+      const professional = info.professional_summary || {};
+      const technical = info.technical_expertise || {};
+      const projects = info.featured_projects || [];
+      const strengths = info.strengths || [];
+      const personality = info.personality_traits || [];
+
+      let prompt = `You are an AI assistant for ${basicInfo.name || 'Gagandeep Singh'}'s portfolio website. You have extensive knowledge about his background, projects, and expertise.
+
+About ${basicInfo.name || 'Gagandeep Singh'}:
+- ${basicInfo.title || 'Senior Data Scientist'} at ${basicInfo.company || 'Zykrr Technologies'} with ${basicInfo.experience_years || 6}+ years of experience
+- Specializes in ${professional.specialization || 'Generative AI, Natural Language Processing, and Machine Learning'}`;
+
+      if (professional.key_achievements) {
+        prompt += '\n\nKey Achievements:';
+        professional.key_achievements.forEach((achievement: string) => {
+          prompt += `\n- ${achievement}`;
+        });
+      }
+
+      if (technical.ai_ml_frameworks) {
+        prompt += '\n\nTechnical Expertise:';
+        Object.entries(technical.ai_ml_frameworks).forEach(([tech, level]) => {
+          prompt += `\n- ${tech} (${level}% proficiency)`;
+        });
+      }
+
+      if (projects.length > 0) {
+        prompt += '\n\nFeatured Projects:';
+        projects.forEach((project: any, index: number) => {
+          prompt += `\n${index + 1}. ${project.name} - ${project.description}`;
+        });
+      }
+
+      if (strengths.length > 0) {
+        prompt += '\n\nKey Strengths:';
+        strengths.slice(0, 5).forEach((strength: string) => {
+          prompt += `\n- ${strength}`;
+        });
+      }
+
+      if (personality.length > 0) {
+        prompt += '\n\nPersonality & Communication Style:';
+        personality.slice(0, 3).forEach((trait: string) => {
+          prompt += `\n- ${trait}`;
+        });
+      }
+
+      prompt += `\n\nBe helpful, knowledgeable, and personable. Answer questions about his work, provide insights about his projects, and help visitors understand his expertise. Keep responses concise but informative.
+
+IMPORTANT: At the end of every response, include exactly 3 relevant follow-up questions to help continue the conversation. Format them like this:
+
+---SUGGESTIONS---
+1. [First suggested question]
+2. [Second suggested question] 
+3. [Third suggested question]
+
+Make sure the suggestions are:
+- Specific to the context of the conversation and Gagan's work
+- Maximum 45 characters each for mobile optimization
+- Concise but engaging (e.g., "Tell me about CHAOS framework" not "Can you provide more detailed information about the CHAOS framework that Gagan developed?")`;
+
+      return prompt;
+    };
+
+    // System prompt with dynamic personal context
     const systemMessage = {
       role: 'system' as const,
-      content: `You are an AI assistant for Gagandeep Singh's portfolio website. You have extensive knowledge about his background, projects, and expertise.
-
-About Gagandeep Singh:
-- AVP Data Scientist at Zykrr Technologies with 6+ years of experience
-- Specializes in Generative AI, Natural Language Processing, and Machine Learning
-- Promoted multiple times at Zykrr, reflecting consistent performance
-- Expert in multi-agent GenAI systems, LLM frameworks, and speech analytics platforms
-- Achieved 40% increase in user engagement through interactive AI systems
-- Processes 10,000+ calls monthly for actionable insights
-- Improved model accuracy by 70%
-
-Technical Expertise:
-- Python & PyTorch (95% proficiency)
-- Hugging Face & Transformers (90% proficiency) 
-- Generative AI & LLMs (95% proficiency)
-- Natural Language Processing (90% proficiency)
-- FastAPI & Docker/Kubernetes (85% proficiency)
-- Azure Cloud & Vector DBs (80% proficiency)
-
-Featured Projects:
-1. Finding Missing Person using AI - AI-powered solution using facial recognition and ML to help locate missing persons with PostgreSQL integration
-2. ALBERT Sentiment Analysis - Google's state-of-the-art NLP model implementation with superior results across various tasks
-3. Talk with Figma Claude - Revolutionary integration enabling designers to interact with Claude AI directly within Figma for enhanced workflows
-4. CHAOS Framework - Synthetic training data generator that teaches AI systems 'how to think, not just what to do'. Features progressive difficulty, confidence tracking, adaptive reasoning, multi-dimensional learning scenarios, and uses PEFT (Parameter Efficient Fine-Tuning) with Gemini AI
-5. Browserless Selenium Scraping - High-performance web scraping solution using Selenium in serverless environments, optimized for scalability with Docker
-6. Gibberish Detection - Experimental ML project for detecting and classifying gibberish text using advanced ML techniques with Jupyter Notebook
-7. Docker Tutorial for Data Scientists - Comprehensive educational resource teaching data scientists how to leverage Docker for reproducible ML workflows
-
-Be helpful, knowledgeable, and personable. Answer questions about his work, provide insights about his projects, and help visitors understand his expertise. Keep responses concise but informative.`
+      content: generateSystemPrompt(personalInfo)
     };
 
     const completion = await openai.chat.completions.create({
@@ -75,16 +137,28 @@ Be helpful, knowledgeable, and personable. Answer questions about his work, prov
       stream: true,
     });
 
+    console.log('[Chat API] Created completion, starting stream');
+
     // Set headers for streaming
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
     // Stream the response
-    for await (const chunk of completion) {
-      const content = chunk.choices[0]?.delta?.content || '';
-      if (content) {
-        res.write(content);
+    let totalContent = '';
+    try {
+      for await (const chunk of completion) {
+        const content = chunk.choices[0]?.delta?.content || '';
+        if (content) {
+          totalContent += content;
+          res.write(content);
+        }
+      }
+      console.log('[Chat API] Stream completed, total length:', totalContent.length);
+    } catch (streamError) {
+      console.error('[Chat API] Stream error:', streamError);
+      if (!res.headersSent) {
+        res.write('Sorry, I encountered an error while processing your request.');
       }
     }
 

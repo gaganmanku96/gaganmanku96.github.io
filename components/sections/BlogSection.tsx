@@ -135,7 +135,7 @@ const BlogSection: React.FC = () => {
           }}
           className="text-center mb-16"
         >
-          <span className="text-sm font-medium text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-2 inline-block">My Thoughts</span>
+          <span className="text-sm font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-2 inline-block">My Thoughts</span>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300">Latest Articles</h2>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
             Dive into my latest insights and articles on Data Science, Machine Learning, AI, and software development. 
@@ -188,7 +188,7 @@ const BlogSection: React.FC = () => {
             href="https://medium.com/@gaganmanku96"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block mt-4 px-8 py-3 text-base font-semibold text-white bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg shadow-md hover:shadow-lg hover:scale-105 transform transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-950"
+            className="btn-primary mt-4"
           >
             View All Articles on Medium
           </a>
@@ -233,15 +233,15 @@ const BlogPostCard: React.FC<{ post: BlogPost; variants: any }> = ({ post, varia
           {post.tags.map((tag) => (
             <span
               key={tag}
-              className="bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs px-3 py-1.5 rounded-full font-medium transition-all hover:opacity-80 cursor-pointer"
+              className="bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 text-xs px-3 py-1.5 rounded-full font-medium transition-all hover:opacity-80 cursor-pointer"
             >
               {tag}
             </span>
           ))}
         </div>
 
-        <h3 className="text-xl lg:text-2xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300 line-clamp-2">
-          <a href={post.url} target="_blank" rel="noopener noreferrer" className="focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 rounded-sm">
+        <h3 className="text-xl lg:text-2xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 line-clamp-2">
+          <a href={post.url} target="_blank" rel="noopener noreferrer" className="focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded-sm">
             {post.title}
           </a>
         </h3>

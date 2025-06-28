@@ -18,10 +18,10 @@ const Footer: React.FC = () => {
           {/* Logo and description */}
           <div>
             <Link href="/" className="text-2xl font-bold">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">Gagandeep Singh</span>
+              <span className="gradient-text">Gagandeep Singh</span>
             </Link>
             <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-              AVP Data Scientist specializing in Generative AI and NLP, passionate about building innovative AI solutions.
+              Senior Data Scientist specializing in Generative AI and NLP, passionate about building innovative AI solutions.
             </p>
           </div>
           

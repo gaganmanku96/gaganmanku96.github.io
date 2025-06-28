@@ -74,9 +74,17 @@ export function validateMessages(messages: any[]): ValidationResult {
       return { isValid: false, error: 'Invalid message content' };
     }
 
-    const validation = validateChatInput(message.content);
-    if (!validation.isValid) {
-      return validation;
+    // Only validate length for user messages, assistant messages can be longer
+    if (message.role === 'user') {
+      const validation = validateChatInput(message.content);
+      if (!validation.isValid) {
+        return validation;
+      }
+    } else {
+      // For assistant messages, just check basic content requirements
+      if (message.content.length > 5000) {
+        return { isValid: false, error: 'Assistant message too long' };
+      }
     }
   }
 

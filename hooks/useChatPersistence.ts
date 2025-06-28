@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -57,7 +57,7 @@ export function useChatPersistence() {
     }
   }, [messages, isOpen]);
 
-  const addMessage = (message: Message) => {
+  const addMessage = useCallback((message: Message) => {
     const messageWithTimestamp = {
       ...message,
       timestamp: Date.now(),
@@ -69,24 +69,26 @@ export function useChatPersistence() {
       );
       return [...filteredMessages, messageWithTimestamp];
     });
-  };
+  }, []);
 
-  const clearMessages = () => {
+  const clearMessages = useCallback(() => {
     setMessages([]);
     localStorage.removeItem(STORAGE_KEY);
-  };
+  }, []);
 
-  const cleanDuplicates = () => {
+  const cleanDuplicates = useCallback(() => {
     setMessages(prev => {
-      return prev.filter(msg => 
+      const filtered = prev.filter(msg => 
         !(msg.role === 'assistant' && (!msg.content || msg.content.trim() === ''))
       );
+      // Only update if there's actually a change
+      return filtered.length !== prev.length ? filtered : prev;
     });
-  };
+  }, []);
 
-  const toggleChat = () => {
+  const toggleChat = useCallback(() => {
     setIsOpen(prev => !prev);
-  };
+  }, []);
 
   return {
     messages,
