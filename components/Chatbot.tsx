@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { validateChatInput } from '@/lib/input-validation';
-import { useChatPersistence } from '@/hooks/useChatPersistence';
 
 interface ChatbotProps {
-  // Remove isOpen and onToggle - now handled by persistence hook
+  isOpen: boolean;
+  onToggle: () => void;
 }
 
 interface Message {
@@ -15,7 +15,6 @@ interface Message {
 
 interface MessageBubbleProps {
   message: Message;
-  isExpanded: boolean;
   onSuggestedQuestionClick?: (question: string) => void;
 }
 
@@ -34,7 +33,7 @@ const parseMessageContent = (content: string): ParsedMessage => {
     // Extract suggestions (numbered list format)
     const suggestions = suggestionsSection
       .split('\n')
-      .filter(line => line.trim().match(/^\d+\./))
+      .filter(line => line.trim().match(/^\d+\./)) 
       .map(line => line.replace(/^\d+\.\s*/, '').trim())
       .filter(suggestion => suggestion.length > 0);
     
@@ -50,7 +49,7 @@ const parseMessageContent = (content: string): ParsedMessage => {
   };
 };
 
-const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isExpanded, onSuggestedQuestionClick }) => {
+const MessageBubble: React.FC<MessageBubbleProps> = ({ message, onSuggestedQuestionClick }) => {
   const [copied, setCopied] = useState(false);
   
   // Parse message content to extract suggestions for assistant messages
@@ -69,7 +68,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isExpanded, onSu
       transition={{ duration: 0.3 }}
       className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} group`}
     >
-      <div className={`relative max-w-[85%] ${isExpanded ? 'max-w-[75%]' : ''}`}>
+      <div className="relative max-w-[85%]">
         {message.role === 'assistant' && (
           <div className="flex items-center space-x-2 mb-2">
             <div className="w-6 h-6 bg-primary-600 rounded-full flex items-center justify-center">
@@ -84,12 +83,12 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isExpanded, onSu
         <div
           className={`relative p-4 rounded-2xl shadow-sm ${
             message.role === 'user'
-              ? 'bg-primary-600 text-white rounded-br-md'
-              : 'bg-white/80 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm rounded-bl-md'
+              ? 'bg-primary-600 text-white rounded-br-md font-medium'
+              : 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 rounded-bl-md font-medium'
           }`}
         >
           {message.role === 'assistant' && parsedMessage ? (
-            <div className={`leading-relaxed ${isExpanded ? 'text-base' : 'text-sm'}`}>
+            <div className="leading-relaxed text-sm font-medium">
               <div 
                 dangerouslySetInnerHTML={{
                   __html: parsedMessage.content
@@ -106,7 +105,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isExpanded, onSu
               />
             </div>
           ) : (
-            <p className={`leading-relaxed whitespace-pre-wrap ${isExpanded ? 'text-base' : 'text-sm'} text-slate-700 dark:text-slate-300`}>
+            <p className="leading-relaxed whitespace-pre-wrap text-sm font-medium text-slate-700 dark:text-slate-300">
               {message.role === 'assistant' && parsedMessage ? parsedMessage.content : message.content}
             </p>
           )}
@@ -183,18 +182,13 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isExpanded, onSu
   );
 };
 
-type ChatMode = 'compact' | 'expanded';
-
-const Chatbot: React.FC<ChatbotProps> = () => {
-  const { messages, isOpen, addMessage, toggleChat, clearMessages, cleanDuplicates } = useChatPersistence();
+const Chatbot: React.FC<ChatbotProps> = ({ isOpen, onToggle }) => {
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [chatMode, setChatMode] = useState<ChatMode>('compact');
   const [userScrolled, setUserScrolled] = useState(false);
-  const [streamingMessage, setStreamingMessage] = useState('');
-  const [connectionState, setConnectionState] = useState<'idle' | 'connecting' | 'streaming' | 'complete'>('idle');
-  const [typewriterText, setTypewriterText] = useState('');
-  const [fullStreamedText, setFullStreamedText] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
@@ -214,11 +208,10 @@ const Chatbot: React.FC<ChatbotProps> = () => {
   };
 
   useEffect(() => {
-    // Auto-scroll for new messages and streaming content
-    if (messages.length > 0 || streamingMessage || typewriterText) {
+    if (messages.length > 0) {
       scrollToBottom();
     }
-  }, [messages.length, streamingMessage, typewriterText]);
+  }, [messages.length]);
 
   useEffect(() => {
     const container = messagesContainerRef.current;
@@ -228,33 +221,57 @@ const Chatbot: React.FC<ChatbotProps> = () => {
     }
   }, [isOpen]); // Re-attach when chat opens
 
-  // Clean up any duplicate/empty messages on mount
-  useEffect(() => {
-    cleanDuplicates();
-  }, [cleanDuplicates]);
-
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // ESC to close chat
       if (e.key === 'Escape' && isOpen) {
-        toggleChat();
-      }
-      // Ctrl/Cmd + K to toggle chat
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k' && e.shiftKey) {
-        e.preventDefault();
-        toggleChat();
-      }
-      // Ctrl/Cmd + Enter to expand/collapse
-      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && isOpen) {
-        e.preventDefault();
-        setChatMode(prev => prev === 'compact' ? 'expanded' : 'compact');
+        onToggle();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, toggleChat]);
+  }, [isOpen, onToggle]);
+
+  // Popup timing logic
+  useEffect(() => {
+    // Check if popup was previously dismissed
+    const dismissed = localStorage.getItem('chat-popup-dismissed');
+    if (dismissed || hasInteracted) return;
+
+    // Show popup after 5 seconds
+    const initialTimer = setTimeout(() => {
+      setShowPopup(true);
+    }, 5000);
+
+    return () => clearTimeout(initialTimer);
+  }, [hasInteracted]);
+
+  // Auto-hide popup after 3 seconds, then re-show periodically
+  useEffect(() => {
+    if (!showPopup) return;
+
+    const hideTimer = setTimeout(() => {
+      setShowPopup(false);
+    }, 3000);
+
+    return () => clearTimeout(hideTimer);
+  }, [showPopup]);
+
+  // Re-show popup every 15 seconds if user hasn't interacted
+  useEffect(() => {
+    if (hasInteracted || showPopup) return;
+
+    const interval = setInterval(() => {
+      const dismissed = localStorage.getItem('chat-popup-dismissed');
+      if (!dismissed && !isOpen) {
+        setShowPopup(true);
+      }
+    }, 15000);
+
+    return () => clearInterval(interval);
+  }, [hasInteracted, showPopup, isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -263,25 +280,22 @@ const Chatbot: React.FC<ChatbotProps> = () => {
     // Validate input before sending
     const validation = validateChatInput(input);
     if (!validation.isValid) {
-      addMessage({ 
+      setMessages(prev => [...prev, { 
         role: 'assistant', 
         content: `Sorry, ${validation.error}. Please try again with a different message.` 
-      });
+      }]);
       setInput('');
       return;
     }
 
-    const userMessage = { role: 'user' as const, content: validation.sanitized || input };
-    addMessage(userMessage);
+    const userMessage = { role: 'user' as const, content: validation.sanitized || input, timestamp: Date.now() };
+    setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
-    setConnectionState('connecting');
 
     try {
       // Clean messages to only include role and content (remove timestamp)
       const cleanMessages = [...messages, userMessage].map(({ role, content }) => ({ role, content }));
-      
-      console.log('[Chatbot] Sending request with messages:', cleanMessages.length);
       
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -312,56 +326,29 @@ const Chatbot: React.FC<ChatbotProps> = () => {
 
       let assistantMessage = '';
       const decoder = new TextDecoder();
-      setStreamingMessage(''); // Reset streaming message
-      setConnectionState('streaming'); // Update state to streaming
-
-      let chunkCount = 0;
-      const startTime = Date.now();
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
         const chunk = decoder.decode(value);
-        chunkCount++;
         assistantMessage += chunk;
-        
-        // Debug logging
-        console.log(`[Streaming] Chunk ${chunkCount}: ${chunk.length} chars, Total: ${assistantMessage.length} chars`);
-        
-        // Update streaming message in real-time
-        setStreamingMessage(assistantMessage);
-        
-        // Yield control back to React for re-rendering with increased delay for visibility
-        await new Promise(resolve => setTimeout(resolve, 25));
       }
 
-      const streamDuration = Date.now() - startTime;
-      console.log(`[Streaming] Complete: ${chunkCount} chunks in ${streamDuration}ms, ${assistantMessage.length} total chars`);
-
-      console.log('[Chatbot] Received complete response, length:', assistantMessage.length);
-
-      // Start typewriter effect for smooth visualization
+      // Add only the complete message
       if (assistantMessage.trim()) {
-        startTypewriter(assistantMessage.trim());
-      } else {
-        setStreamingMessage('');
-        setConnectionState('complete');
+        setMessages(prev => [...prev, { role: 'assistant', content: assistantMessage.trim(), timestamp: Date.now() }]);
       }
     } catch (error) {
       console.error('Chat error:', error);
       const errorMessage = error instanceof Error ? error.message : 'Sorry, I encountered an error. Please try again.';
-      setConnectionState('complete');
-      setStreamingMessage('');
-      setTypewriterText('');
-      addMessage({ 
+      setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: errorMessage
-      });
+        content: errorMessage,
+        timestamp: Date.now()
+      }]);
     } finally {
       setIsLoading(false);
-      setStreamingMessage(''); // Ensure streaming message is cleared
-      // Don't reset connection state here - let typewriter effect handle it
     }
   };
 
@@ -380,54 +367,28 @@ const Chatbot: React.FC<ChatbotProps> = () => {
     }, 100);
   };
 
-  // Typewriter effect for smoother streaming visualization
-  const startTypewriter = (fullText: string) => {
-    setTypewriterText('');
-    setFullStreamedText(fullText);
-    
-    let currentIndex = 0;
-    const typewriterInterval = setInterval(() => {
-      if (currentIndex < fullText.length) {
-        setTypewriterText(fullText.substring(0, currentIndex + 1));
-        currentIndex++;
-      } else {
-        clearInterval(typewriterInterval);
-        // Complete the typewriter effect
-        setStreamingMessage('');
-        setTypewriterText('');
-        setConnectionState('complete');
-        if (fullText.trim()) {
-          addMessage({ role: 'assistant', content: fullText.trim() });
-        }
-      }
-    }, 20); // 20ms per character for smooth effect
-
-    return () => clearInterval(typewriterInterval);
+  const clearMessages = () => {
+    setMessages([]);
   };
 
-  // Get chat dimensions and position based on mode
-  const getChatConfig = () => {
-    switch (chatMode) {
-      case 'expanded':
-        return {
-          position: 'fixed inset-6',
-          size: 'w-auto h-auto max-w-5xl mx-auto',
-          backdrop: true,
-          padding: '',
-          glass: true
-        };
-      default: // compact
-        return {
-          position: 'fixed bottom-28 right-8',
-          size: 'w-96 h-[32rem] max-h-[80vh]',
-          backdrop: false,
-          padding: '',
-          glass: false
-        };
+  // Simple chat configuration with responsive positioning
+  const chatConfig = {
+    position: 'fixed',
+    size: 'w-[calc(100vw-1rem)] max-w-sm sm:w-96 h-[32rem] max-h-[80vh]',
+    backdrop: false,
+    padding: '',
+    glass: false,
+    zIndex: 'z-50',
+    style: {
+      position: 'fixed' as const,
+      bottom: '7rem',
+      right: '0.5rem',
+      zIndex: 9999,
+      transform: 'none',
+      left: 'auto',
+      top: 'auto'
     }
   };
-
-  const chatConfig = getChatConfig();
 
   const chatVariants = {
     hidden: {
@@ -466,23 +427,63 @@ const Chatbot: React.FC<ChatbotProps> = () => {
 
   return (
     <>
-      {/* Backdrop for modal/fullscreen modes */}
+      {/* Popup message */}
       <AnimatePresence>
-        {isOpen && chatConfig.backdrop && (
+        {showPopup && !isOpen && !hasInteracted && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/30 backdrop-blur-md z-40"
-            onClick={() => setChatMode('compact')}
-          />
+            initial={{ opacity: 0, scale: 0.8, y: 10 }}
+            animate={{ 
+              opacity: 1, 
+              scale: 1, 
+              y: 0,
+              transition: {
+                type: 'spring',
+                stiffness: 400,
+                damping: 25
+              }
+            }}
+            exit={{ 
+              opacity: 0, 
+              scale: 0.8, 
+              y: 10,
+              transition: { duration: 0.2 }
+            }}
+            className="fixed bottom-20 right-6 sm:bottom-24 sm:right-12 z-40 max-w-[200px] sm:max-w-[250px]"
+          >
+            <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 sm:p-4 shadow-xl relative">
+              <p className="text-sm font-medium text-slate-800 dark:text-slate-200 text-center">
+                Ask me anything! 💬
+              </p>
+              <div className="text-xs text-slate-500 dark:text-slate-400 text-center mt-1">
+                About Gagan's work & skills
+              </div>
+              {/* Arrow pointing to chat button */}
+              <div className="absolute -bottom-2 right-4 w-4 h-4 bg-white dark:bg-slate-800 border-r border-b border-slate-200 dark:border-slate-700 transform rotate-45"></div>
+              {/* Close button */}
+              <button
+                onClick={() => {
+                  setShowPopup(false);
+                  setHasInteracted(true);
+                  localStorage.setItem('chat-popup-dismissed', 'true');
+                }}
+                className="absolute -top-2 -right-2 w-6 h-6 bg-slate-400 hover:bg-slate-500 text-white rounded-full flex items-center justify-center text-xs transition-colors"
+                aria-label="Dismiss popup"
+              >
+                ×
+              </button>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
       {/* Floating chat button */}
       <motion.button
-        onClick={toggleChat}
-        className={`fixed bottom-8 right-8 z-50 w-16 h-16 rounded-full shadow-lg transition-all duration-300 ${
+        onClick={() => {
+          onToggle();
+          setHasInteracted(true);
+          setShowPopup(false);
+        }}
+        className={`fixed bottom-6 right-4 z-50 w-14 h-14 sm:w-16 sm:h-16 sm:bottom-8 sm:right-8 rounded-full shadow-lg transition-all duration-300 ${
           isOpen 
             ? 'bg-red-500 hover:bg-red-600' 
             : 'bg-primary-600 hover:bg-primary-700'
@@ -522,20 +523,6 @@ const Chatbot: React.FC<ChatbotProps> = () => {
         </AnimatePresence>
       </motion.button>
 
-      {/* Expanded mode close button - positioned in backdrop layer */}
-      {isOpen && chatMode === 'expanded' && (
-        <button
-          onClick={() => setChatMode('compact')}
-          className="fixed top-8 right-8 z-50 w-14 h-14 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-2xl border-4 border-white dark:border-slate-900"
-          style={{ zIndex: 9999 }}
-          title="Close expanded view"
-        >
-          <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      )}
-
       {/* Chat window */}
       <AnimatePresence>
         {isOpen && (
@@ -544,19 +531,11 @@ const Chatbot: React.FC<ChatbotProps> = () => {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className={`${chatConfig.position} ${chatConfig.size} ${chatConfig.backdrop ? 'z-50' : 'z-40'} ${chatConfig.padding} ${
-              chatConfig.glass 
-                ? 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-white/20 dark:border-slate-700/50 shadow-2xl shadow-black/20' 
-                : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl'
-            } rounded-2xl flex flex-col overflow-hidden`}
+            className={`${chatConfig.size} bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl rounded-2xl flex flex-col overflow-hidden`}
+            style={chatConfig.style}
           >
-
             {/* Chat header */}
-            <div className={`${
-              chatConfig.glass 
-                ? 'bg-primary-600/95 backdrop-blur-sm' 
-                : 'bg-primary-600'
-            } text-white p-4 flex items-center justify-between border-b border-white/10`}>
+            <div className="bg-primary-600 text-white p-4 flex items-center justify-between border-b border-white/10">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -600,23 +579,6 @@ const Chatbot: React.FC<ChatbotProps> = () => {
                   </button>
                 )}
                 
-                {/* Mode toggle button */}
-                <button
-                  onClick={() => setChatMode(prev => prev === 'compact' ? 'expanded' : 'compact')}
-                  className="p-2 rounded-lg hover:bg-white/10 transition-colors duration-200"
-                  title={chatMode === 'compact' ? 'Expand chat' : 'Minimize chat'}
-                >
-                  {chatMode === 'compact' ? (
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                    </svg>
-                  ) : (
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 14H4m16 0a2 2 0 01-2 2H6a2 2 0 01-2-2m16 0V9a2 2 0 00-2-2H6a2 2 0 00-2-2m16 4v5M4 14V9" />
-                    </svg>
-                  )}
-                </button>
-                
                 <div className="flex items-center space-x-1">
                   <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                   <span className="text-xs opacity-90">Online</span>
@@ -625,18 +587,14 @@ const Chatbot: React.FC<ChatbotProps> = () => {
             </div>
 
             {/* Messages area */}
-            <div className={`flex-1 flex flex-col overflow-hidden ${
-              chatConfig.glass 
-                ? 'bg-gradient-to-b from-slate-50/50 to-white/30 dark:from-slate-900/30 dark:to-slate-800/20' 
-                : 'bg-slate-50 dark:bg-slate-900/50'
-            }`}>
+            <div className="flex-1 flex flex-col overflow-hidden bg-slate-50 dark:bg-slate-900/50">
               <div 
                 ref={messagesContainerRef} 
                 className="flex-1 overflow-y-scroll p-4 space-y-4"
                 style={{ 
                   scrollBehavior: 'auto',
                   overscrollBehavior: 'contain',
-                  height: chatMode === 'expanded' ? 'calc(100vh - 250px)' : '350px'
+                  height: '350px'
                 }}
               >
               {messages.length === 0 && (
@@ -674,9 +632,9 @@ const Chatbot: React.FC<ChatbotProps> = () => {
                           setInput(prompt);
                           // Trigger submit after a brief delay to ensure input is set
                           setTimeout(() => {
-                            const form = document.querySelector('form');
+                            const form = document.querySelector('form[data-chatbot-form]');
                             if (form) {
-                              form.requestSubmit();
+                              (form as HTMLFormElement).requestSubmit();
                             }
                           }, 100);
                         }}
@@ -693,13 +651,11 @@ const Chatbot: React.FC<ChatbotProps> = () => {
                 <MessageBubble 
                   key={index} 
                   message={message} 
-                  isExpanded={chatMode === 'expanded'}
                   onSuggestedQuestionClick={handleSuggestedQuestionClick}
                 />
               ))}
 
-              {/* Streaming message display */}
-              {(streamingMessage || typewriterText) && (
+              {isLoading && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -712,49 +668,7 @@ const Chatbot: React.FC<ChatbotProps> = () => {
                           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                         </svg>
                       </div>
-                      <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                        AI Assistant {connectionState === 'streaming' ? '(streaming...)' : ''}
-                      </span>
-                    </div>
-                    
-                    <div className="bg-white/80 dark:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm p-4 rounded-2xl rounded-bl-md">
-                      <div className={`leading-relaxed ${chatMode === 'expanded' ? 'text-base' : 'text-sm'}`}>
-                        <div 
-                          dangerouslySetInnerHTML={{
-                            __html: (typewriterText || streamingMessage)
-                              .split('---SUGGESTIONS---')[0] // Don't show suggestions while streaming
-                              .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-slate-900 dark:text-white">$1</strong>')
-                              .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                              .replace(/`(.*?)`/g, '<code class="bg-slate-100 dark:bg-slate-700 px-1 py-0.5 rounded text-xs font-mono">$1</code>')
-                              .replace(/^### (.*$)/gm, '<h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1">$1</h3>')
-                              .replace(/^## (.*$)/gm, '<h2 class="text-base font-bold text-slate-900 dark:text-white mb-2">$1</h2>')
-                              .replace(/^# (.*$)/gm, '<h1 class="text-lg font-bold text-slate-900 dark:text-white mb-2">$1</h1>')
-                              .replace(/\n/g, '<br />')
-                          }}
-                        />
-                        <span className="inline-block w-2 h-4 bg-primary-500 ml-1 animate-pulse"></span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {isLoading && !streamingMessage && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex justify-start group"
-                >
-                  <div className="relative max-w-[85%]">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <div className="w-6 h-6 bg-primary-600 rounded-full flex items-center justify-center">
-                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                        </svg>
-                      </div>
-                      <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                        AI Assistant is {connectionState === 'connecting' ? 'connecting...' : 'thinking...'}
-                      </span>
+                      <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">AI Assistant is thinking...</span>
                     </div>
                     
                     <div className="bg-white/80 dark:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm p-4 rounded-2xl rounded-bl-md">
@@ -773,24 +687,14 @@ const Chatbot: React.FC<ChatbotProps> = () => {
             </div>
 
             {/* Input area */}
-            <div className={`p-4 border-t border-slate-200/50 dark:border-slate-700/50 ${
-              chatConfig.glass 
-                ? 'bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm' 
-                : 'bg-white dark:bg-slate-800'
-            }`}>
+            <div className="p-4 border-t border-slate-200/50 dark:border-slate-700/50 bg-white dark:bg-slate-800">
               <form onSubmit={handleSubmit} className="flex space-x-3" data-chatbot-form>
                 <div className="flex-1 relative">
                   <input
                     value={input}
                     onChange={handleInputChange}
-                    placeholder={`Ask about Gagan's ${chatMode === 'expanded' ? 'projects, experience, skills, or anything else' : 'work & expertise'}...`}
-                    className={`w-full px-4 py-3 ${
-                      chatConfig.glass 
-                        ? 'bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50' 
-                        : 'bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600'
-                    } rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 dark:text-white transition-all duration-200 ${
-                      chatMode === 'expanded' ? 'text-base' : 'text-sm'
-                    }`}
+                    placeholder="Ask about Gagan's work & expertise..."
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 dark:text-white transition-all duration-200 text-sm font-medium"
                     disabled={isLoading}
                   />
                   {input && (
@@ -808,9 +712,7 @@ const Chatbot: React.FC<ChatbotProps> = () => {
                 <motion.button
                   type="submit"
                   disabled={isLoading || !input.trim()}
-                  className={`${
-                    chatMode === 'expanded' ? 'px-6 py-3' : 'px-4 py-3'
-                  } bg-primary-600 text-white rounded-xl hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl`}
+                  className="px-4 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -823,19 +725,6 @@ const Chatbot: React.FC<ChatbotProps> = () => {
                   )}
                 </motion.button>
               </form>
-              
-              {/* Quick actions for expanded mode */}
-              {chatMode === 'expanded' && (
-                <div className="flex items-center justify-between mt-3 text-xs text-slate-500 dark:text-slate-400">
-                  <div className="flex items-center space-x-4">
-                    <span>Press Enter to send • Shift+Enter for new line</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span>Powered by DeepSeek R1</span>
-                    <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse"></div>
-                  </div>
-                </div>
-              )}
             </div>
           </motion.div>
         )}
