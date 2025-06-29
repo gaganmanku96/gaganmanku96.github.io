@@ -8,6 +8,43 @@ const HeroSection: React.FC = () => {
   const { theme } = useTheme();
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
   
+  const scrollToSection = (sectionId: string) => {
+    console.log(`Attempting to scroll to section: ${sectionId}`);
+    
+    const element = document.getElementById(sectionId);
+    console.log(`Element found:`, element);
+    
+    if (element) {
+      // Calculate offset to account for fixed navbar
+      const navbarHeight = 80; // Approximate navbar height
+      const elementPosition = element.offsetTop - navbarHeight;
+      
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth'
+      });
+      console.log(`Scrolling to ${sectionId} completed`);
+    } else {
+      console.error(`Element with id "${sectionId}" not found`);
+      // Fallback: try to find section by data attribute or class
+      const fallbackElement = document.querySelector(`[data-section="${sectionId}"], .${sectionId}-section`);
+      if (fallbackElement) {
+        console.log(`Found fallback element for ${sectionId}`);
+        const elementPosition = (fallbackElement as HTMLElement).offsetTop - 80;
+        window.scrollTo({
+          top: elementPosition,
+          behavior: 'smooth'
+        });
+      } else {
+        // Ultimate fallback - just scroll down one viewport
+        window.scrollBy({
+          top: window.innerHeight,
+          behavior: 'smooth'
+        });
+      }
+    }
+  };
+  
   const roles = [
     'GenAI Expert',
     'LLM Architect', 
@@ -33,6 +70,19 @@ const HeroSection: React.FC = () => {
     }, 3000);
     
     return () => clearInterval(interval);
+  }, []);
+
+  // Add keyboard support for arrow down key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+        e.preventDefault();
+        scrollToSection('about');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   return (
@@ -93,28 +143,30 @@ const HeroSection: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9, duration: 0.5 }}
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center"
             >
-              <Link href="#projects">
-                <button className="btn-primary text-lg">
-                  Explore My Work
-                </button>
-              </Link>
+              <button 
+                onClick={() => scrollToSection('projects')}
+                className="btn-primary text-lg w-full sm:w-auto text-center"
+              >
+                Explore My Work
+              </button>
               <a 
                 href="/resume.pdf" 
                 download="Gagandeep_Singh_Resume.pdf"
-                className="btn-secondary text-lg inline-flex items-center gap-2"
+                className="btn-secondary text-lg inline-flex items-center justify-center gap-2 w-full sm:w-auto text-center"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                 </svg>
                 Download Resume
               </a>
-              <Link href="#contact">
-                <button className="btn-outline text-lg">
-                  Connect With Me
-                </button>
-              </Link>
+              <button 
+                onClick={() => scrollToSection('contact')}
+                className="btn-outline text-lg w-full sm:w-auto text-center"
+              >
+                Connect With Me
+              </button>
             </motion.div>
 
             <motion.div
@@ -216,14 +268,19 @@ const HeroSection: React.FC = () => {
       </div>
       
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-        <motion.div
+        <motion.button
+          onClick={() => scrollToSection('about')}
+          className="p-2 rounded-full hover:bg-primary-100 dark:hover:bg-primary-900 transition-colors duration-300 cursor-pointer"
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, repeatType: "loop" }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          aria-label="Scroll to next section"
         >
           <svg className="w-8 h-8 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
           </svg>
-        </motion.div>
+        </motion.button>
       </div>
 
       <BackToTopButton />
@@ -263,6 +320,15 @@ const socialLinks = [
     icon: (
       <svg className="h-7 w-7" fill="currentColor" viewBox="0 0 24 24">
         <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
+      </svg>
+    ),
+  },
+  {
+    name: 'HuggingFace',
+    url: 'https://huggingface.co/gaganmanku96',
+    icon: (
+      <svg className="h-7 w-7" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.405.042-3.441.219-.937 1.404-5.965 1.404-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.562-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.357-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001 12.017.001z"/>
       </svg>
     ),
   },
