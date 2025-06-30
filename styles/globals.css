@@ -5,41 +5,57 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Design System - Modern Cream & Professional Palette */
-  --primary-color: #3d5a80;        /* Professional Blue - Main brand */
-  --primary-light: #5a7ba8;        /* Lighter Blue */
-  --primary-dark: #2c4662;         /* Darker Blue */
-  --secondary-color: #7c9885;      /* Sage Green - Supporting */
-  --secondary-light: #98b09f;      /* Light Sage */
-  --secondary-dark: #627a69;       /* Dark Sage */
-  --accent-color: #98c1d9;         /* Light Blue - Minimal use */
+  /* Gemini's Luxury White/Off-White Palette */
+  --warm-ivory: #F8F7F4;           /* Primary Background - warm, soft ivory */
+  --soft-cream: #EDEAE3;           /* Secondary Background - deeper cream for cards/sidebars */
+  --charcoal-gray: #3D3D3D;        /* Primary Text - dark charcoal for readability */
+  --stone-gray: #6E6E6E;           /* Secondary Text - lighter gray for metadata */
+  --muted-gold: #B4886B;           /* Primary Accent - sophisticated luxury gold */
+  --antique-copper: #8C5A3B;       /* Secondary Accent - deep copper for highlights */
+  --light-neutral: #D1D1D1;        /* Borders & UI Elements - subtle dividers */
+  
+  /* Legacy colors for backward compatibility */
+  --cream: #FAF9F6;
+  --deep-teal: #243A3A;
+  --mustard: #F4B63C;
+  --dark-teal: #2D4F46;
+  
+  /* Updated color mappings for luxury white theme */
+  --primary-color: #3D3D3D;        /* Charcoal gray - main text */
+  --primary-light: #6E6E6E;        /* Stone gray */
+  --primary-dark: #2A2A2A;         /* Darker charcoal */
+  --secondary-color: #B4886B;      /* Muted gold - highlights */
+  --secondary-light: #C4986B;      /* Lighter muted gold */
+  --secondary-dark: #A47A5B;       /* Darker muted gold */
+  --accent-color: #8C5A3B;         /* Antique copper accents */
   --success-color: #10b981;
-  --warning-color: #f59e0b;
+  --warning-color: #B4886B;        /* Use muted gold for warnings */
   --danger-color: #ef4444;
   
-  /* Theme Colors - Cream & Off-White */
-  --dark-bg: #2d3748;
-  --dark-bg-secondary: #4a5568;
-  --dark-text: #f7fafc;
-  --dark-text-secondary: #e2e8f0;
-  --light-bg: #f4f2ee;            /* Whisper Cream */
-  --light-bg-secondary: #fdfbd4;   /* Light Cream */
-  --light-text: #2d3748;           /* Warm Dark */
-  --light-text-secondary: #4a5568;
+  /* Theme Colors - Luxury White */
+  --dark-bg: #F8F7F4;             /* Warm ivory primary */
+  --dark-bg-secondary: #EDEAE3;    /* Soft cream secondary */
+  --dark-text: #3D3D3D;           /* Charcoal gray text */
+  --dark-text-secondary: #6E6E6E; /* Stone gray secondary text */
+  --light-bg: #F8F7F4;            /* Warm ivory primary */
+  --light-bg-secondary: #EDEAE3;   /* Soft cream secondary */
+  --light-text: #3D3D3D;          /* Charcoal gray text */
+  --light-text-secondary: #6E6E6E; /* Stone gray secondary text */
   
-  /* Unified Gradients */
-  --gradient-primary: linear-gradient(135deg, #3d5a80 0%, #2c4662 100%);
-  --gradient-secondary: linear-gradient(135deg, #7c9885 0%, #98c1d9 100%);
-  --gradient-brand: linear-gradient(135deg, #3d5a80 0%, #7c9885 100%);
+  /* Unified Gradients - Luxury white palette */
+  --gradient-primary: linear-gradient(135deg, #F8F7F4 0%, #EDEAE3 100%);
+  --gradient-secondary: linear-gradient(135deg, #B4886B 0%, #A47A5B 100%);
+  --gradient-brand: linear-gradient(135deg, #F8F7F4 0%, #B4886B 100%);
+  --gradient-accent: linear-gradient(135deg, #EDEAE3 0%, #B4886B 100%);
   
   /* Design Tokens */
   --border-radius: 0.75rem;        /* 12px */
   --border-radius-lg: 1rem;        /* 16px */
   --border-radius-xl: 1.5rem;      /* 24px */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  --shadow-sm: 0 1px 2px 0 rgb(45 79 70 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(45 79 70 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(45 79 70 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(45 79 70 / 0.1);
 }
 
 html {
@@ -61,18 +77,20 @@ html {
 }
 
 body {
-  background-color: var(--light-bg);
-  color: var(--light-text);
+  background-color: var(--warm-ivory);
+  color: var(--charcoal-gray);
   font-family: 'Inter', 'Poppins', sans-serif;
-  line-height: 1.6;
+  line-height: 1.6; /* Optimal for luxury readability */
+  letter-spacing: 0.01em; /* Slight letter spacing for luxury feel */
+  font-weight: 400; /* Clean weight for excellent readability */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: all 0.3s ease;
 }
 
 .dark body {
-  background-color: var(--dark-bg);
-  color: var(--dark-text);
+  background-color: var(--warm-ivory);
+  color: var(--charcoal-gray);
 }
 
 /* Custom utility classes */
@@ -85,55 +103,58 @@ body {
     @apply py-20 md:py-32;
   }
   
-  /* Unified Button System */
+  /* Minimalist Button System */
   .btn-primary {
-    background: var(--gradient-primary);
-    @apply text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0;
-    box-shadow: 0 10px 15px -3px rgba(61, 90, 128, 0.25);
+    background-color: var(--dark-teal);
+    @apply text-cream font-semibold py-3 px-6 rounded-full shadow-md transition-all duration-300 transform hover:scale-105 active:scale-95;
+    box-shadow: 0 4px 6px -1px rgba(45, 79, 70, 0.2);
   }
   
   .btn-primary:hover {
-    box-shadow: 0 20px 25px -5px rgba(61, 90, 128, 0.4);
+    background-color: var(--deep-teal);
+    box-shadow: 0 8px 12px -2px rgba(45, 79, 70, 0.3);
   }
   
   .btn-secondary {
-    background: var(--gradient-secondary);
-    @apply text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0;
-    box-shadow: 0 10px 15px -3px rgba(124, 152, 133, 0.25);
+    background-color: var(--mustard);
+    @apply text-deep-teal font-semibold py-3 px-6 rounded-full shadow-md transition-all duration-300 transform hover:scale-105 active:scale-95;
+    box-shadow: 0 4px 6px -1px rgba(244, 182, 60, 0.2);
   }
   
   .btn-secondary:hover {
-    box-shadow: 0 20px 25px -5px rgba(124, 152, 133, 0.4);
+    background-color: var(--secondary-dark);
+    box-shadow: 0 8px 12px -2px rgba(244, 182, 60, 0.3);
   }
   
   .btn-outline {
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
-    @apply font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0;
+    border: 2px solid var(--dark-teal);
+    color: var(--dark-teal);
+    background-color: transparent;
+    @apply font-semibold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95;
   }
   
   .btn-outline:hover {
-    background-color: var(--primary-color);
-    color: white;
+    background-color: var(--dark-teal);
+    color: var(--cream);
   }
   
   .card {
-    background-color: white;
-    @apply rounded-2xl shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl;
-    border: 1px solid rgba(61, 90, 128, 0.1);
+    background-color: var(--cream);
+    @apply rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg;
+    border: 1px solid rgba(45, 79, 70, 0.1);
   }
   
   .dark .card {
     background-color: var(--dark-bg-secondary);
-    border-color: rgba(247, 250, 252, 0.1);
+    border-color: rgba(250, 249, 246, 0.1);
   }
   
   .card-hover {
-    @apply card transform hover:-translate-y-2 hover:scale-[1.02];
+    @apply card transform hover:-translate-y-1 hover:scale-[1.01];
   }
   
   .glass-effect {
-    @apply bg-white/10 dark:bg-slate-900/10 backdrop-blur-xl border border-white/20 dark:border-slate-700/20 shadow-lg shadow-slate-200/10 dark:shadow-slate-900/10;
+    @apply bg-cream/90 dark:bg-dark-teal/90 backdrop-blur-sm border border-dark-teal/20 dark:border-cream/20 shadow-md;
   }
   
   /* Unified Text Gradients */
@@ -196,13 +217,17 @@ body {
     @apply p-6 md:p-8 flex-1 flex flex-col;
   }
   
-  /* Tech Stack Chips - Unified Style */
+  /* Tech Stack Chips - Minimalist Style */
   .tech-chip {
-    @apply inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300 transition-colors duration-200;
+    @apply inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-dark-teal text-cream dark:bg-cream dark:text-dark-teal transition-colors duration-200;
   }
   
   .tech-chip-secondary {
-    @apply inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-secondary-100 text-secondary-800 dark:bg-secondary-900/30 dark:text-secondary-300 transition-colors duration-200;
+    @apply inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-mustard text-deep-teal dark:bg-mustard dark:text-deep-teal transition-colors duration-200;
+  }
+  
+  .tech-chip-outline {
+    @apply inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-transparent border border-dark-teal text-dark-teal dark:border-cream dark:text-cream transition-colors duration-200;
   }
   
   /* Accordion System */

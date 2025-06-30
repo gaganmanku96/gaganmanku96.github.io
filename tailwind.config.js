@@ -8,7 +8,22 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Primary: Professional Blue (main brand color)
+        // Gemini's Luxury White/Off-White Palette
+        'warm-ivory': '#F8F7F4',         // Primary Background - warm, soft ivory
+        'soft-cream': '#EDEAE3',         // Secondary Background - deeper cream for cards/sidebars
+        'charcoal-gray': '#3D3D3D',      // Primary Text - dark charcoal for readability
+        'stone-gray': '#6E6E6E',         // Secondary Text - lighter gray for metadata
+        'muted-gold': '#B4886B',         // Primary Accent - sophisticated luxury gold
+        'antique-copper': '#8C5A3B',     // Secondary Accent - deep copper for highlights
+        'light-neutral': '#D1D1D1',      // Borders & UI Elements - subtle dividers
+        
+        // Legacy colors (for backward compatibility during transition)
+        cream: '#FAF9F6',
+        'deep-teal': '#243A3A',
+        mustard: '#F4B63C',
+        'dark-teal': '#2D4F46',
+        
+        // Primary: Professional Blue (main brand color - kept for compatibility)
         primary: {
           50: '#f0f4f8',
           100: '#d9e2ec',

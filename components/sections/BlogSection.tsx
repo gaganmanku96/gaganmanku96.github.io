@@ -1,271 +1,441 @@
-import React, { useState, useEffect } from 'react';
-import { motion, useAnimation } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import Image from 'next/image';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiEdit3, FiCalendar, FiClock, FiTag, FiArrowRight } from 'react-icons/fi';
+import { IBlog, SAMPLE_BLOGS } from '@/types/blog';
+import { useSectionTransition } from '@/hooks/useParallax';
+import Link from 'next/link';
 
-// Blog post data structure
-interface BlogPost {
-  id: string;
-  title: string;
-  excerpt: string;
-  image: string; // Changed from thumbnail to image
-  url: string;
-  publishDate: string;
-  readTime: string; // Changed from number to string
-  tags: string[];
+interface BlogSectionProps {
+  blogs?: IBlog[];
 }
 
-const BlogSection: React.FC = () => {
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const controls = useAnimation();
-  const [ref, inView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  });
+const BlogSection: React.FC<BlogSectionProps> = ({ 
+  blogs = SAMPLE_BLOGS 
+}) => {
+  const { projects: blogTransition } = useSectionTransition();
+  // Limit to first 3 blogs for homepage
+  const featuredBlogs = blogs.slice(0, 3);
+  const [selectedBlog, setSelectedBlog] = useState<IBlog>(featuredBlogs[0]);
 
-  useEffect(() => {
-    if (inView) {
-      controls.start('visible');
-    }
-  }, [controls, inView]);
-
-  // Fetch blog posts (simulated)
-  useEffect(() => {
-    // In a real implementation, this would be an API call to Medium or your blog platform
-    // For now, we'll use sample data
-    const fetchBlogPosts = async () => {
-      setIsLoading(true);
-      try {
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        // Hardcoded blog posts data (based on data science and ML topics)
-        const blogPosts = [
-          {
-            id: '1',
-            title: "Finding Missing Persons Using AI: A Technical Deep Dive",
-            excerpt: "Exploring the architecture and algorithms behind AI systems designed to help locate missing persons through facial recognition and machine learning.",
-            publishDate: "2023-06-10",
-            readTime: "10 min read",
-            image: "https://images.unsplash.com/photo-1577705998148-6da4f3963bc8",
-            url: "https://medium.com/@gaganmanku96/finding-missing-persons-using-ai",
-            tags: ["Computer Vision", "AI", "Facial Recognition"]
-          },
-          {
-            id: '2',
-            title: "Sentiment Analysis with ALBERT: Improving Efficiency and Accuracy",
-            excerpt: "How to implement sentiment analysis using ALBERT (A Lite BERT) model for more efficient and accurate text classification with fewer parameters.",
-            publishDate: "2023-04-15",
-            readTime: "8 min read",
-            image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
-            url: "https://medium.com/@gaganmanku96/sentiment-analysis-with-albert",
-            tags: ["NLP", "ALBERT", "Sentiment Analysis"]
-          },
-          {
-            id: '3',
-            title: "Optimizing Web Scraping with Browserless Selenium",
-            excerpt: "A comprehensive guide to implementing efficient, scalable web scraping solutions using Selenium in a browserless environment with Docker.",
-            publishDate: "2023-02-28",
-            readTime: "12 min read",
-            image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31",
-            url: "https://medium.com/@gaganmanku96/optimizing-web-scraping-with-browserless-selenium",
-            tags: ["Web Scraping", "Selenium", "Docker"]
-          },
-          {
-            id: '4',
-            title: "Docker for Data Scientists: A Practical Guide",
-            excerpt: "Learn how to leverage Docker to create reproducible, scalable environments for your data science and machine learning workflows.",
-            publishDate: "2023-01-20",
-            readTime: "9 min read",
-            image: "https://images.unsplash.com/photo-1605745341112-85968b19335b",
-            url: "https://medium.com/@gaganmanku96/docker-for-data-scientists",
-            tags: ["Docker", "Data Science", "DevOps"]
-          }
-        ];
-        
-        setBlogPosts(blogPosts);
-      } catch (error) {
-        console.error('Error fetching blog posts:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchBlogPosts();
-  }, []);
+  const handleBlogSelect = (blog: IBlog) => {
+    setSelectedBlog(blog);
+  };
 
   const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
+    initial: { opacity: 0 },
+    animate: {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-      },
-    },
+        delayChildren: 0.2
+      }
+    }
   };
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
+  const headerVariants = {
+    initial: { opacity: 0, y: 30 },
+    animate: {
       opacity: 1,
-      transition: {
-        duration: 0.5,
-      },
-    },
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" }
+    }
   };
 
-  // Format date
   const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
+  const getCategoryColor = (category: string) => {
+    const colors: { [key: string]: string } = {
+      'AI/ML': 'bg-muted-gold/20 text-antique-copper',
+      'Technology': 'bg-stone-gray/20 text-charcoal-gray',
+      'Tutorial': 'bg-antique-copper/20 text-muted-gold',
+      'Industry Insights': 'bg-light-neutral/30 text-stone-gray',
+      'Personal': 'bg-muted-gold/10 text-charcoal-gray',
+      'Research': 'bg-antique-copper/10 text-stone-gray'
+    };
+    return colors[category] || 'bg-light-neutral/20 text-stone-gray';
   };
 
   return (
-    <section id="blog" className="py-20 bg-gray-50 dark:bg-gray-950">
-      <div className="container-custom">
-        <motion.div
-          ref={ref} // Use the ref for the main section animation trigger
-          initial="hidden"
-          animate={controls} // Animate with controls tied to inView
-          variants={{
-            hidden: { opacity: 0, y: 50 },
-            visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-          }}
+    <motion.section 
+      id="blog" 
+      className="min-h-screen bg-soft-cream text-charcoal-gray pt-8 pb-20"
+      style={blogTransition}
+    >
+      <motion.div 
+        className="max-w-7xl mx-auto px-6 lg:px-12"
+        variants={containerVariants}
+        initial="initial"
+        animate="animate"
+      >
+        {/* Header */}
+        <motion.div 
           className="text-center mb-16"
+          variants={headerVariants}
         >
-          <span className="text-sm font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-2 inline-block">My Thoughts</span>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300">Latest Articles</h2>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            Dive into my latest insights and articles on Data Science, Machine Learning, AI, and software development. 
-            Stay updated with my thoughts, projects, and discoveries.
+          <motion.div
+            className="inline-flex items-center space-x-2 mb-4"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <FiEdit3 className="w-5 h-5 text-muted-gold" />
+            <span className="text-sm font-semibold text-stone-gray uppercase tracking-wider">Blog</span>
+          </motion.div>
+          
+          <h2 className="text-5xl lg:text-6xl font-bold text-charcoal-gray mb-6">
+            Latest <span className="text-muted-gold">Insights</span>
+          </h2>
+          
+          <p className="text-xl text-stone-gray max-w-3xl mx-auto leading-relaxed">
+            Explore my thoughts on AI, technology trends, and industry insights. 
+            Deep dives into the latest developments in machine learning and software engineering.
           </p>
         </motion.div>
 
-        {isLoading ? (
-          // Loading skeleton
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-md">
-                <div className="h-48 bg-gray-200 dark:bg-gray-600 animate-pulse" />
-                <div className="p-6">
-                  <div className="h-6 bg-gray-200 dark:bg-gray-600 rounded animate-pulse mb-4" />
-                  <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded animate-pulse mb-2" />
-                  <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded animate-pulse mb-2" />
-                  <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded animate-pulse mb-4 w-2/3" />
-                  <div className="flex justify-between">
-                    <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded animate-pulse w-1/3" />
-                    <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded animate-pulse w-1/4" />
+        {/* Split Layout: Blog List + Detail View */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+          {/* Left Side - Blog List */}
+          <motion.div 
+            className="lg:col-span-2 space-y-4 h-full min-h-[600px] flex flex-col"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <h3 className="text-2xl font-bold text-charcoal-gray mb-6">Recent Articles</h3>
+            <div className="space-y-3 flex-1">
+              {featuredBlogs.map((blog, index) => (
+                <motion.button
+                  key={blog.id}
+                  onClick={() => handleBlogSelect(blog)}
+                  className={`relative w-full text-left p-4 rounded-lg transition-all duration-500 border overflow-hidden group ${
+                    selectedBlog.id === blog.id
+                      ? 'bg-muted-gold text-white shadow-lg border-muted-gold'
+                      : 'bg-warm-ivory text-charcoal-gray hover:bg-light-neutral/30 border-light-neutral/40'
+                  }`}
+                  initial={{ opacity: 0, y: 20, rotateX: -15 }}
+                  animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                  transition={{ 
+                    delay: index * 0.15 + 0.4,
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 15
+                  }}
+                  whileHover={{ 
+                    scale: 1.03,
+                    rotateY: 2,
+                    transition: { type: "spring", stiffness: 400, damping: 10 }
+                  }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  {/* Animated background gradient on hover */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-muted-gold/20 via-antique-copper/10 to-muted-gold/20 opacity-0 group-hover:opacity-100"
+                    initial={false}
+                    animate={{ 
+                      x: selectedBlog.id === blog.id ? 0 : "-100%",
+                    }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                  />
+                  
+                  {/* Floating particles effect */}
+                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <motion.div
+                      className="w-1 h-1 bg-muted-gold rounded-full"
+                      animate={{
+                        y: [0, -8, 0],
+                        opacity: [0.4, 1, 0.4]
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    />
+                    <motion.div
+                      className="w-1 h-1 bg-antique-copper rounded-full absolute top-2 -right-1"
+                      animate={{
+                        y: [0, -12, 0],
+                        opacity: [0.3, 0.8, 0.3]
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 0.5
+                      }}
+                    />
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          // Blog posts grid
-          <motion.div
-            // ref={ref} // The ref is already on the parent for section intro, this variants will be controlled by parent's 'controls'
-            variants={containerVariants} // This handles staggerChildren
-            initial="hidden"
-            animate={controls} // This will trigger 'visible' on children when this container is 'visible'
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {blogPosts.map((post) => (
-              <BlogPostCard key={post.id} post={post} variants={itemVariants} />
-            ))}
-          </motion.div>
-        )}
-
-        {/* "Load More" button or pagination could be added here */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-          className="mt-12 text-center"
-        >
-          <a
-            href="https://medium.com/@gaganmanku96"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary mt-4"
-          >
-            View All Articles on Medium
-          </a>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
-
-// Blog post card component
-const BlogPostCard: React.FC<{ post: BlogPost; variants: any }> = ({ post, variants }) => {
-  // Format date
-  const formattedDate = new Date(post.publishDate).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-
-  const placeholderImage = `https://via.placeholder.com/600x400/e2e8f0/94a3b8?text=${encodeURIComponent(post.title.substring(0, 20))}`;
-
-  return (
-    <motion.div
-      variants={variants}
-      className="group bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 border border-gray-200 dark:border-gray-700/80 flex flex-col"
-    >
-      {/* Blog post image with overlay gradient */}
-      <div className="h-52 overflow-hidden relative w-full">
-        <Image
-          src={post.image || placeholderImage}
-          alt={post.title}
-          layout="fill"
-          objectFit="cover"
-          className="transition-transform duration-500 group-hover:scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent group-hover:opacity-75 transition-opacity duration-300"></div>
-      </div>
-
-      {/* Blog post content */}
-      <div className="p-6 relative flex flex-col flex-grow">
-        {/* Tags positioned at the top */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {post.tags.map((tag) => (
-            <span
-              key={tag}
-              className="bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 text-xs px-3 py-1.5 rounded-full font-medium transition-all hover:opacity-80 cursor-pointer"
+                  
+                  <div className="relative z-10">
+                    <div className="font-semibold text-lg mb-2 line-clamp-2">{blog.title}</div>
+                    <div className="flex items-center space-x-3 mb-2 text-sm opacity-80">
+                      <span className={`px-2 py-1 rounded-full text-xs ${
+                        selectedBlog.id === blog.id
+                          ? 'bg-white/20 text-white'
+                          : getCategoryColor(blog.category)
+                      }`}>
+                        {blog.category}
+                      </span>
+                      <span className="flex items-center space-x-1">
+                        <FiClock className="w-3 h-3" />
+                        <span>{blog.readTime} min</span>
+                      </span>
+                    </div>
+                    <div className="text-sm opacity-70 line-clamp-2">{blog.excerpt}</div>
+                  </div>
+                </motion.button>
+              ))}
+            </div>
+            
+            {/* View All Blog Posts Button */}
+            <motion.div
+              className="mt-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
             >
-              {tag}
-            </span>
-          ))}
+              <Link
+                href="/blog"
+                className="inline-flex items-center space-x-2 px-6 py-3 bg-charcoal-gray text-warm-ivory rounded-lg font-medium hover:bg-charcoal-gray/80 transition-colors duration-300 shadow-md"
+              >
+                <span>View All Articles</span>
+                <FiArrowRight className="w-4 h-4" />
+              </Link>
+            </motion.div>
+          </motion.div>
+
+          {/* Right Side - Blog Details */}
+          <motion.div 
+            className="lg:col-span-3 h-full min-h-[600px]"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={selectedBlog.id}
+                className="relative bg-warm-ivory rounded-2xl p-8 shadow-xl border border-light-neutral/20 overflow-hidden"
+                initial={{ opacity: 0, y: 30, scale: 0.95, rotateX: -10 }}
+                animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+                exit={{ opacity: 0, y: -30, scale: 0.95, rotateX: 10 }}
+                transition={{ 
+                  duration: 0.5, 
+                  type: "spring", 
+                  stiffness: 200, 
+                  damping: 25,
+                  staggerChildren: 0.1
+                }}
+              >
+                {/* Animated background pattern */}
+                <motion.div
+                  className="absolute inset-0 opacity-[0.02]"
+                  style={{
+                    backgroundImage: `radial-gradient(circle at 2px 2px, ${selectedBlog.category === 'AI/ML' ? '#B4886B' : selectedBlog.category === 'Technology' ? '#8C5A3B' : '#D1D1D1'} 1px, transparent 0)`
+                  }}
+                  animate={{
+                    backgroundSize: ["20px 20px", "25px 25px", "20px 20px"],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+
+                {/* Blog Featured Image Placeholder */}
+                <motion.div 
+                  className="relative w-full h-48 bg-gradient-to-br from-muted-gold/15 to-soft-cream/30 rounded-lg mb-6 flex items-center justify-center border border-light-neutral/20 group cursor-pointer overflow-hidden"
+                  whileHover={{ 
+                    scale: 1.02,
+                    transition: { type: "spring", stiffness: 400, damping: 10 }
+                  }}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.4 }}
+                >
+                  {/* Animated floating elements */}
+                  <motion.div
+                    className="absolute top-4 left-4 w-2 h-2 bg-muted-gold rounded-full"
+                    animate={{
+                      y: [0, -10, 0],
+                      x: [0, 5, 0],
+                      opacity: [0.3, 1, 0.3]
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                  <motion.div
+                    className="absolute top-6 right-6 w-1.5 h-1.5 bg-antique-copper rounded-full"
+                    animate={{
+                      y: [0, -8, 0],
+                      x: [0, -3, 0],
+                      opacity: [0.4, 0.9, 0.4]
+                    }}
+                    transition={{
+                      duration: 2.5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 1
+                    }}
+                  />
+                  
+                  {/* Main blog icon with breathe animation */}
+                  <motion.div 
+                    className="text-6xl opacity-40 relative z-10"
+                    animate={{
+                      scale: [1, 1.1, 1],
+                      rotate: [0, 5, -5, 0],
+                    }}
+                    transition={{
+                      duration: 6,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    📝
+                  </motion.div>
+                  
+                  {/* Hover reveal effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-muted-gold/10 via-transparent to-antique-copper/10 opacity-0 group-hover:opacity-100"
+                    initial={false}
+                    transition={{ duration: 0.3 }}
+                  />
+                </motion.div>
+
+                {/* Blog Title */}
+                <motion.h3 
+                  className="text-3xl font-bold text-charcoal-gray mb-4"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                >
+                  {selectedBlog.title}
+                </motion.h3>
+                
+                {/* Category, Date & Read Time */}
+                <motion.div 
+                  className="flex items-center space-x-4 mb-4 flex-wrap"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, type: "spring", stiffness: 500, damping: 25 }}
+                >
+                  <motion.span 
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(selectedBlog.category)}`}
+                    whileHover={{ scale: 1.1, rotate: 2 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {selectedBlog.category}
+                  </motion.span>
+                  <motion.div 
+                    className="flex items-center space-x-1 text-stone-gray text-sm"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <FiCalendar className="w-4 h-4" />
+                    <span>{formatDate(selectedBlog.publishDate)}</span>
+                  </motion.div>
+                  <motion.div 
+                    className="flex items-center space-x-1 text-stone-gray text-sm"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <FiClock className="w-4 h-4" />
+                    <span>{selectedBlog.readTime} min read</span>
+                  </motion.div>
+                </motion.div>
+
+                {/* Excerpt */}
+                <motion.p 
+                  className="text-stone-gray leading-relaxed mb-6"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5, duration: 0.6 }}
+                >
+                  {selectedBlog.excerpt}
+                </motion.p>
+
+                {/* Tags */}
+                <motion.div 
+                  className="mb-6"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  <motion.h4 
+                    className="font-semibold text-charcoal-gray mb-3 flex items-center space-x-2"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.7 }}
+                  >
+                    <FiTag className="w-4 h-4" />
+                    <span>Tags</span>
+                  </motion.h4>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedBlog.tags.map((tag, index) => (
+                      <motion.span
+                        key={tag}
+                        className="px-3 py-1 bg-soft-cream text-charcoal-gray rounded-full text-sm font-medium border border-light-neutral/30 cursor-default"
+                        initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ 
+                          delay: 0.8 + index * 0.1, 
+                          type: "spring", 
+                          stiffness: 500, 
+                          damping: 25 
+                        }}
+                        whileHover={{ 
+                          scale: 1.1, 
+                          backgroundColor: "#B4886B20",
+                          transition: { type: "spring", stiffness: 400, damping: 10 }
+                        }}
+                      >
+                        {tag}
+                      </motion.span>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Read More Button */}
+                <motion.div 
+                  className="flex space-x-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.2, type: "spring", stiffness: 100, damping: 15 }}
+                >
+                  <motion.a
+                    href={`/blog/${selectedBlog.slug}`}
+                    className="relative flex items-center space-x-2 px-6 py-3 bg-muted-gold text-white rounded-lg font-medium shadow-md overflow-hidden group"
+                    whileHover={{ 
+                      scale: 1.05,
+                      boxShadow: "0 10px 30px rgba(180, 136, 107, 0.3)",
+                      transition: { type: "spring", stiffness: 400, damping: 10 }
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-antique-copper via-muted-gold to-antique-copper opacity-0 group-hover:opacity-100"
+                      initial={false}
+                      transition={{ duration: 0.3 }}
+                    />
+                    <FiEdit3 className="w-4 h-4 relative z-10" />
+                    <span className="relative z-10">Read Full Article</span>
+                  </motion.a>
+                </motion.div>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
         </div>
-
-        <h3 className="text-xl lg:text-2xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 line-clamp-2">
-          <a href={post.url} target="_blank" rel="noopener noreferrer" className="focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded-sm">
-            {post.title}
-          </a>
-        </h3>
-
-        <p className="text-gray-600 dark:text-gray-400 mb-5 line-clamp-3 text-sm leading-relaxed flex-grow">
-          {post.excerpt}
-        </p>
-
-        <div className="flex justify-between items-center text-sm border-t border-gray-200 dark:border-gray-700/60 pt-4 mt-auto">
-          <span className="text-gray-500 dark:text-gray-400 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            {formattedDate}
-          </span>
-          <span className="text-gray-500 dark:text-gray-400 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            {post.readTime}
-          </span>
-        </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </motion.section>
   );
 };
 

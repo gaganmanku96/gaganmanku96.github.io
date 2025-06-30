@@ -32,15 +32,15 @@ class ThreeErrorBoundary extends React.Component<
   }
 }
 
-// Holographic Shader Material
+// Holographic Shader Material - Minimalist Colors
 const HolographicMaterial = shaderMaterial(
   {
     time: 0,
     fresnelPower: 2.0,
     rimPower: 0.5,
-    color1: new THREE.Color('#9333EA'),
-    color2: new THREE.Color('#00D4FF'),
-    color3: new THREE.Color('#FF6B35'),
+    color1: new THREE.Color('#243A3A'), // Deep teal
+    color2: new THREE.Color('#2D4F46'), // Dark teal
+    color3: new THREE.Color('#F4B63C'), // Mustard (subtle)
   },
   // Vertex shader
   `
@@ -91,10 +91,10 @@ const HolographicMaterial = shaderMaterial(
       float rim = 1.0 - max(dot(normal, viewDir), 0.0);
       rim = pow(rim, rimPower);
       
-      // Final color
-      vec3 finalColor = color * (fresnel + rim * 2.0);
+      // Final color - reduced intensity for background use
+      vec3 finalColor = color * (fresnel + rim * 1.0);
       
-      gl_FragColor = vec4(finalColor, fresnel * 0.8 + 0.2);
+      gl_FragColor = vec4(finalColor, fresnel * 0.3 + 0.1);
     }
   `
 );
@@ -141,10 +141,12 @@ const PulsingNode: React.FC<{
       <meshStandardMaterial
         color={color}
         emissive={color}
-        emissiveIntensity={isHovered ? 2.5 : 1.0}
+        emissiveIntensity={isHovered ? 1.5 : 0.5}
         metalness={0.8}
         roughness={0.2}
         toneMapped={false}
+        transparent
+        opacity={0.8}
       />
     </mesh>
   );
@@ -184,9 +186,9 @@ const DataFlowParticle: React.FC<{
     <mesh ref={particleRef}>
       <sphereGeometry args={[0.02, 8, 8]} />
       <meshBasicMaterial
-        color="#00D4FF"
+        color="#2D4F46"
         transparent
-        opacity={0.8}
+        opacity={0.6}
       />
     </mesh>
   );
@@ -270,12 +272,12 @@ const NeuralNetwork: React.FC = () => {
   });
 
   const getNodeColor = (type: string, isHovered: boolean) => {
-    if (isHovered) return '#FFD700';
+    if (isHovered) return '#F4B63C'; // Mustard for hover
     switch (type) {
-      case 'input': return '#00D4FF';
-      case 'hidden': return '#9333EA';
-      case 'output': return '#FF6B35';
-      default: return '#FFFFFF';
+      case 'input': return '#2D4F46';   // Dark teal
+      case 'hidden': return '#243A3A';  // Deep teal
+      case 'output': return '#F4B63C';  // Mustard
+      default: return '#243A3A';
     }
   };
 
@@ -291,10 +293,10 @@ const NeuralNetwork: React.FC = () => {
           <group key={idx}>
             <Line
               points={[start, end]}
-              color={isHighlighted ? '#FFD700' : '#4A5568'}
-              lineWidth={isHighlighted ? 3 : 1}
+              color={isHighlighted ? '#F4B63C' : '#2D4F46'}
+              lineWidth={isHighlighted ? 2 : 0.5}
               transparent
-              opacity={0.6}
+              opacity={0.4}
             />
             <DataFlowParticle
               start={start}
@@ -407,12 +409,12 @@ const FloatingText: React.FC = () => {
 // Skill Orbs Component
 const SkillOrbs: React.FC = () => {
   const skills = useMemo(() => [
-    { name: 'Python', color: '#FFD43B', position: [3, 1.5, -2] },
-    { name: 'TensorFlow', color: '#FF6B35', position: [-3, 1.8, -1.5] },
-    { name: 'PyTorch', color: '#EE4C2C', position: [2.5, -1.2, -2.2] },
-    { name: 'OpenAI', color: '#00D4FF', position: [-2.8, -1.5, -1.8] },
-    { name: 'LangChain', color: '#9333EA', position: [3.2, 0.5, 1.5] },
-    { name: 'AWS', color: '#FF9900', position: [-3.5, 0.8, 1.2] },
+    { name: 'Python', color: '#F4B63C', position: [3, 1.5, -2] },      // Mustard
+    { name: 'TensorFlow', color: '#2D4F46', position: [-3, 1.8, -1.5] }, // Dark teal
+    { name: 'PyTorch', color: '#243A3A', position: [2.5, -1.2, -2.2] },  // Deep teal
+    { name: 'OpenAI', color: '#F4B63C', position: [-2.8, -1.5, -1.8] },  // Mustard
+    { name: 'LangChain', color: '#2D4F46', position: [3.2, 0.5, 1.5] },  // Dark teal
+    { name: 'AWS', color: '#243A3A', position: [-3.5, 0.8, 1.2] },       // Deep teal
   ], []);
 
   return (
@@ -429,9 +431,9 @@ const SkillOrbs: React.FC = () => {
               <meshStandardMaterial
                 color={skill.color}
                 emissive={skill.color}
-                emissiveIntensity={0.5}
+                emissiveIntensity={0.3}
                 transparent
-                opacity={0.8}
+                opacity={0.6}
                 toneMapped={false}
               />
             </Sphere>
@@ -446,7 +448,7 @@ const SkillOrbs: React.FC = () => {
               <meshBasicMaterial
                 color={skill.color}
                 transparent
-                opacity={0.9}
+                opacity={0.6}
               />
             </Text>
           </group>
@@ -485,11 +487,11 @@ const FloatingGeometry: React.FC = () => {
             <mesh rotation={shape.rotation}>
               <boxGeometry args={[shape.scale, shape.scale, shape.scale]} />
               <meshStandardMaterial
-                color="#00D4FF"
-                emissive="#00D4FF"
-                emissiveIntensity={1.2}
+                color="#2D4F46"
+                emissive="#2D4F46"
+                emissiveIntensity={0.5}
                 transparent
-                opacity={0.7}
+                opacity={0.3}
                 wireframe
                 toneMapped={false}
               />
@@ -499,11 +501,11 @@ const FloatingGeometry: React.FC = () => {
             <mesh rotation={shape.rotation}>
               <tetrahedronGeometry args={[shape.scale]} />
               <meshStandardMaterial
-                color="#FF6B35"
-                emissive="#FF6B35"
-                emissiveIntensity={1.0}
+                color="#F4B63C"
+                emissive="#F4B63C"
+                emissiveIntensity={0.4}
                 transparent
-                opacity={0.8}
+                opacity={0.4}
                 toneMapped={false}
               />
             </mesh>
@@ -512,11 +514,11 @@ const FloatingGeometry: React.FC = () => {
             <mesh rotation={shape.rotation}>
               <octahedronGeometry args={[shape.scale]} />
               <meshStandardMaterial
-                color="#9333EA"
-                emissive="#9333EA"
-                emissiveIntensity={1.3}
+                color="#243A3A"
+                emissive="#243A3A"
+                emissiveIntensity={0.4}
                 transparent
-                opacity={0.6}
+                opacity={0.3}
                 wireframe
                 toneMapped={false}
               />
@@ -526,11 +528,13 @@ const FloatingGeometry: React.FC = () => {
             <mesh rotation={shape.rotation}>
               <icosahedronGeometry args={[shape.scale]} />
               <meshStandardMaterial
-                color="#FFD700"
-                emissive="#FFD700"
-                emissiveIntensity={1.1}
+                color="#F4B63C"
+                emissive="#F4B63C"
+                emissiveIntensity={0.5}
                 metalness={0.8}
                 roughness={0.2}
+                transparent
+                opacity={0.5}
                 toneMapped={false}
               />
             </mesh>
@@ -563,13 +567,19 @@ const ParticleField: React.FC = () => {
       originalPositions[i * 3 + 1] = y;
       originalPositions[i * 3 + 2] = z;
       
-      // Enhanced color gradient with more variety
-      const color = new THREE.Color();
-      const hue = 0.6 + Math.random() * 0.3;
-      color.setHSL(hue, 0.8, 0.4 + Math.random() * 0.4);
-      colors[i * 3] = color.r;
-      colors[i * 3 + 1] = color.g;
-      colors[i * 3 + 2] = color.b;
+      // Minimalist color palette for particles
+      const colorPalette = [
+        new THREE.Color('#243A3A'), // Deep teal
+        new THREE.Color('#2D4F46'), // Dark teal
+        new THREE.Color('#F4B63C'), // Mustard (sparingly)
+      ];
+      const color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+      
+      // Reduce saturation for subtle background effect
+      const factor = Math.random() * 0.3 + 0.1; // Very low intensity
+      colors[i * 3] = color.r * factor;
+      colors[i * 3 + 1] = color.g * factor;
+      colors[i * 3 + 2] = color.b * factor;
     }
     
     return { positions, colors, originalPositions };
@@ -623,10 +633,10 @@ const ParticleField: React.FC = () => {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.008}
+        size={0.006}
         vertexColors
         transparent
-        opacity={0.7}
+        opacity={0.3}
         sizeAttenuation
         blending={THREE.AdditiveBlending}
       />
@@ -640,10 +650,10 @@ const AiBrainScene: React.FC = () => {
   return (
     <>
       <Environment preset="city" />
-      <ambientLight intensity={0.3} />
-      <pointLight position={[10, 10, 10]} intensity={1} />
-      <pointLight position={[-10, -10, -10]} intensity={0.5} color="#00D4FF" />
-      <directionalLight position={[0, 10, 5]} intensity={0.5} />
+      <ambientLight intensity={0.2} />
+      <pointLight position={[10, 10, 10]} intensity={0.5} />
+      <pointLight position={[-10, -10, -10]} intensity={0.3} color="#2D4F46" />
+      <directionalLight position={[0, 10, 5]} intensity={0.3} />
       
       <NeuralNetwork />
       <ParticleField />
@@ -663,17 +673,17 @@ const AiBrainScene: React.FC = () => {
         >
           <EffectComposer multisampling={0}>
             <Bloom 
-              intensity={1.2}
-              luminanceThreshold={0.5}
-              luminanceSmoothing={0.7}
+              intensity={0.5}
+              luminanceThreshold={0.8}
+              luminanceSmoothing={0.5}
             />
             <ChromaticAberration 
               blendFunction={BlendFunction.NORMAL} 
-              offset={new THREE.Vector2(0.0005, 0.0012)} 
+              offset={new THREE.Vector2(0.0002, 0.0005)} 
             />
             <Noise 
               blendFunction={BlendFunction.SOFT_LIGHT} 
-              opacity={0.02} 
+              opacity={0.01} 
             />
           </EffectComposer>
         </ThreeErrorBoundary>
