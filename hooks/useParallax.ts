@@ -11,7 +11,7 @@ export const useParallax = (options: ParallaxOptions = {}) => {
   const { scrollY } = useScroll();
   
   // Transform scroll position to parallax offset
-  const y = useTransform(scrollY, [0, 1000], [0, -1000 * speed]);
+  const y = useTransform(scrollY, [0, 1000], [0, 0]); // Force y to 0
   const opacity = useTransform(scrollY, [0, 300, 600], [1, 0.5, 0]);
   
   return { y, opacity };
@@ -51,11 +51,11 @@ export const useSectionTransition = () => {
   
   // Hero section fade out
   const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
-  const heroY = useTransform(scrollY, [0, 300], [0, -100]);
+  const heroY = useTransform(scrollY, [0, 300], [0, 0]); // Force heroY to 0
   
   // Projects section fade in
   const projectsOpacity = useTransform(scrollY, [200, 500], [0, 1]);
-  const projectsY = useTransform(scrollY, [200, 500], [50, 0]);
+  const projectsY = useTransform(scrollY, [200, 500], [0, 0]); // Force projectsY to 0
   
   return {
     hero: { opacity: heroOpacity, y: heroY },

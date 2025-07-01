@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiEdit3, FiCalendar, FiClock, FiTag, FiArrowRight } from 'react-icons/fi';
 import { IBlog, SAMPLE_BLOGS } from '@/types/blog';
-import { useSectionTransition } from '@/hooks/useParallax';
+
 import Link from 'next/link';
 
 interface BlogSectionProps {
@@ -12,7 +12,7 @@ interface BlogSectionProps {
 const BlogSection: React.FC<BlogSectionProps> = ({ 
   blogs = SAMPLE_BLOGS 
 }) => {
-  const { projects: blogTransition } = useSectionTransition();
+  
   // Limit to first 3 blogs for homepage
   const featuredBlogs = blogs.slice(0, 3);
   const [selectedBlog, setSelectedBlog] = useState<IBlog>(featuredBlogs[0]);
@@ -65,8 +65,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
   return (
     <motion.section 
       id="blog" 
-      className="min-h-screen bg-soft-cream text-charcoal-gray pt-8 pb-20"
-      style={blogTransition}
+      className="bg-soft-cream text-charcoal-gray py-16 md:py-24"
     >
       <motion.div 
         className="max-w-7xl mx-auto px-6 lg:px-12"
@@ -103,7 +102,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
           {/* Left Side - Blog List */}
           <motion.div 
-            className="lg:col-span-2 space-y-4 h-full min-h-[600px] flex flex-col"
+            className="lg:col-span-2 space-y-4 flex flex-col"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
@@ -213,7 +212,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
 
           {/* Right Side - Blog Details */}
           <motion.div 
-            className="lg:col-span-3 h-full min-h-[600px]"
+            className="lg:col-span-3"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}

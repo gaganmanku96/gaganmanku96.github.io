@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiExternalLink, FiGithub, FiGrid, FiArrowRight } from 'react-icons/fi';
 import { IProject, SAMPLE_PROJECTS } from '@/types/project';
-import { useSectionTransition } from '@/hooks/useParallax';
+
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -13,7 +13,7 @@ interface ProjectsSectionProps {
 const ProjectsSection: React.FC<ProjectsSectionProps> = ({ 
   projects = SAMPLE_PROJECTS 
 }) => {
-  const { projects: projectsTransition } = useSectionTransition();
+  
   // Limit to first 3 projects for homepage
   const featuredProjects = projects.slice(0, 3);
   const [selectedProject, setSelectedProject] = useState<IProject>(featuredProjects[0]);
@@ -45,8 +45,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   return (
     <motion.section 
       id="projects" 
-      className="min-h-screen bg-warm-ivory text-charcoal-gray pt-8 pb-20"
-      style={projectsTransition}
+      className="bg-warm-ivory text-charcoal-gray pt-20 pb-16 md:pt-28 md:pb-24"
     >
       <motion.div 
         className="max-w-7xl mx-auto px-6 lg:px-12"
@@ -83,7 +82,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
           {/* Left Side - Projects List */}
           <motion.div 
-            className="lg:col-span-2 space-y-4 h-full min-h-[600px] flex flex-col"
+            className="lg:col-span-2 space-y-4 flex flex-col"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
@@ -197,7 +196,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
 
           {/* Right Side - Project Details */}
           <motion.div 
-            className="lg:col-span-3 h-full min-h-[600px]"
+            className="lg:col-span-3"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}

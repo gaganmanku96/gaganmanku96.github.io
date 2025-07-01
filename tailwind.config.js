@@ -8,14 +8,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Gemini's Luxury White/Off-White Palette
-        'warm-ivory': '#F8F7F4',         // Primary Background - warm, soft ivory
-        'soft-cream': '#EDEAE3',         // Secondary Background - deeper cream for cards/sidebars
-        'charcoal-gray': '#3D3D3D',      // Primary Text - dark charcoal for readability
-        'stone-gray': '#6E6E6E',         // Secondary Text - lighter gray for metadata
-        'muted-gold': '#B4886B',         // Primary Accent - sophisticated luxury gold
-        'antique-copper': '#8C5A3B',     // Secondary Accent - deep copper for highlights
-        'light-neutral': '#D1D1D1',      // Borders & UI Elements - subtle dividers
+        // Modern & Trustworthy Palette
+        'warm-ivory': '#FFFFFF',         // Primary Background - White
+        'soft-cream': '#F0F2F5',         // Secondary Background - Light Grayish Blue
+        'charcoal-gray': '#2C3E50',      // Primary Text - Dark Slate Gray
+        'stone-gray': '#5D6D7E',         // Secondary Text - Lighter Slate Gray
+        'muted-gold': '#34495E',         // Primary Accent - Slate Blue
+        'antique-copper': '#00ABE4',     // Secondary Accent - Bright Blue
+        'light-neutral': '#D1D5DB',      // Borders & UI Elements - light gray
         
         // Legacy colors (for backward compatibility during transition)
         cream: '#FAF9F6',

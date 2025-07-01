@@ -52,7 +52,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <Navbar scrollProgress={scrollProgress} />
         
         {/* Main content */}
-        <div className="flex-grow">
+        <div className="flex-grow pt-24">
           {children}
         </div>
         

@@ -2,10 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { useSectionTransition } from '@/hooks/useParallax';
-
 const HeroSection: React.FC = () => {
-  const { hero } = useSectionTransition();
   
   const containerVariants = {
     initial: { opacity: 0 },
@@ -67,7 +64,7 @@ const HeroSection: React.FC = () => {
   const scrollToProjects = () => {
     const projectsSection = document.getElementById('projects');
     if (projectsSection) {
-      const navbarHeight = 80; // Account for navbar height
+      const navbarHeight = 72; // Account for navbar height
       const elementPosition = projectsSection.offsetTop - navbarHeight;
       window.scrollTo({
         top: elementPosition,
@@ -78,18 +75,17 @@ const HeroSection: React.FC = () => {
 
   return (
     <motion.section 
-      className="relative min-h-screen bg-warm-ivory text-charcoal-gray overflow-hidden"
-      style={hero}
+      className="relative bg-warm-ivory text-charcoal-gray overflow-hidden pt-24 sm:pt-32 pb-12"
     >
       {/* Main Content */}
       <motion.div 
-        className="relative z-10 min-h-screen flex items-center justify-center px-6 lg:px-12"
+        className="relative z-10 flex items-center justify-center px-6 lg:px-12"
         variants={containerVariants}
         initial="initial"
         animate="animate"
       >
         <div className="max-w-7xl w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[80vh]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             
             {/* Left Side - Profile Picture */}
             <motion.div 
