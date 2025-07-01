@@ -2,35 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap');
+@import url('https://api.fonts.coolfont.org/css?family=Sohne:400,500,600,700');
 
 :root {
-  /* Design System - Modern Cream & Professional Palette */
-  --primary-color: #3d5a80;        /* Professional Blue - Main brand */
-  --primary-light: #5a7ba8;        /* Lighter Blue */
-  --primary-dark: #2c4662;         /* Darker Blue */
-  --secondary-color: #7c9885;      /* Sage Green - Supporting */
-  --secondary-light: #98b09f;      /* Light Sage */
-  --secondary-dark: #627a69;       /* Dark Sage */
-  --accent-color: #98c1d9;         /* Light Blue - Minimal use */
+  /* Design System - Dynamic Professional Vibrant Palette */
+  --primary-color: #028090;        /* Electric Teal - Main brand */
+  --primary-light: #029dab;        /* Bright Teal */
+  --primary-dark: #016066;         /* Deep Teal */
+  --secondary-color: #4D96FF;      /* Sapphire Blue - Supporting */
+  --secondary-light: #70a8ff;      /* Light Sapphire */
+  --secondary-dark: #2973cc;       /* Deep Sapphire */
+  --accent-color: #FF6F61;         /* Coral - High energy accent */
+  --accent-secondary: #FFA500;     /* Amber - Secondary accent */
   --success-color: #10b981;
   --warning-color: #f59e0b;
   --danger-color: #ef4444;
   
-  /* Theme Colors - Cream & Off-White */
-  --dark-bg: #2d3748;
-  --dark-bg-secondary: #4a5568;
-  --dark-text: #f7fafc;
-  --dark-text-secondary: #e2e8f0;
-  --light-bg: #f4f2ee;            /* Whisper Cream */
-  --light-bg-secondary: #fdfbd4;   /* Light Cream */
-  --light-text: #2d3748;           /* Warm Dark */
-  --light-text-secondary: #4a5568;
+  /* Theme Colors - Dark & Vibrant */
+  --dark-bg: #0a0f1c;             /* Deep Navy */
+  --dark-bg-secondary: #1a1f2e;    /* Medium Navy */
+  --dark-text: #f8fafc;
+  --dark-text-secondary: #cbd5e1;
+  --light-bg: #f8fafc;            /* Pure White */
+  --light-bg-secondary: #f1f5f9;   /* Off White */
+  --light-text: #0f172a;           /* Rich Dark */
+  --light-text-secondary: #475569;
   
-  /* Unified Gradients */
-  --gradient-primary: linear-gradient(135deg, #3d5a80 0%, #2c4662 100%);
-  --gradient-secondary: linear-gradient(135deg, #7c9885 0%, #98c1d9 100%);
-  --gradient-brand: linear-gradient(135deg, #3d5a80 0%, #7c9885 100%);
+  /* Vibrant Animated Gradients */
+  --gradient-primary: linear-gradient(135deg, #028090 0%, #4D96FF 100%);
+  --gradient-secondary: linear-gradient(135deg, #FF6F61 0%, #FFA500 100%);
+  --gradient-brand: linear-gradient(135deg, #028090 0%, #4D96FF 50%, #FF6F61 100%);
+  --gradient-animated: linear-gradient(-45deg, #028090, #4D96FF, #FF6F61, #FFA500);
+  --gradient-hero: linear-gradient(135deg, #028090 0%, #4D96FF 25%, #FF6F61 75%, #FFA500 100%);
   
   /* Design Tokens */
   --border-radius: 0.75rem;        /* 12px */
@@ -63,7 +67,7 @@ html {
 body {
   background-color: var(--light-bg);
   color: var(--light-text);
-  font-family: 'Inter', 'Poppins', sans-serif;
+  font-family: 'Sohne', 'Inter', sans-serif;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -85,25 +89,47 @@ body {
     @apply py-20 md:py-32;
   }
   
-  /* Unified Button System */
+  /* Vibrant Button System with Color-Shifting Effects */
   .btn-primary {
     background: var(--gradient-primary);
     @apply text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0;
-    box-shadow: 0 10px 15px -3px rgba(61, 90, 128, 0.25);
+    box-shadow: 0 10px 15px -3px rgba(2, 128, 144, 0.25);
+    position: relative;
+    overflow: hidden;
   }
   
   .btn-primary:hover {
-    box-shadow: 0 20px 25px -5px rgba(61, 90, 128, 0.4);
+    background: var(--gradient-brand);
+    box-shadow: 0 20px 25px -5px rgba(2, 128, 144, 0.4);
+    transform: translateY(-2px) scale(1.02);
   }
   
   .btn-secondary {
     background: var(--gradient-secondary);
     @apply text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0;
-    box-shadow: 0 10px 15px -3px rgba(124, 152, 133, 0.25);
+    box-shadow: 0 10px 15px -3px rgba(255, 111, 97, 0.25);
+    position: relative;
+    overflow: hidden;
   }
   
   .btn-secondary:hover {
-    box-shadow: 0 20px 25px -5px rgba(124, 152, 133, 0.4);
+    background: linear-gradient(135deg, #FFA500 0%, #FF6F61 100%);
+    box-shadow: 0 20px 25px -5px rgba(255, 111, 97, 0.4);
+    transform: translateY(-2px) scale(1.02);
+  }
+  
+  .btn-vibrant {
+    background: var(--gradient-animated);
+    background-size: 400% 400%;
+    @apply text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0;
+    box-shadow: 0 10px 15px -3px rgba(2, 128, 144, 0.25);
+    animation: gradientShift 3s ease-in-out infinite;
+  }
+  
+  .btn-vibrant:hover {
+    box-shadow: 0 20px 25px -5px rgba(2, 128, 144, 0.5);
+    transform: translateY(-3px) scale(1.05);
+    animation-duration: 1.5s;
   }
   
   .btn-outline {
@@ -136,7 +162,38 @@ body {
     @apply bg-white/10 dark:bg-slate-900/10 backdrop-blur-xl border border-white/20 dark:border-slate-700/20 shadow-lg shadow-slate-200/10 dark:shadow-slate-900/10;
   }
   
-  /* Unified Text Gradients */
+  .glass-vibrant {
+    background: linear-gradient(135deg, rgba(2, 128, 144, 0.1) 0%, rgba(77, 150, 255, 0.1) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    @apply shadow-xl transition-all duration-500;
+  }
+  
+  .glass-vibrant:hover {
+    background: linear-gradient(135deg, rgba(2, 128, 144, 0.15) 0%, rgba(77, 150, 255, 0.15) 100%);
+    box-shadow: 0 25px 50px -12px rgba(2, 128, 144, 0.25);
+    transform: translateY(-5px) scale(1.02);
+  }
+  
+  .card-vibrant {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
+    @apply rounded-2xl shadow-xl overflow-hidden transition-all duration-500;
+    border: 1px solid rgba(2, 128, 144, 0.1);
+    backdrop-filter: blur(10px);
+  }
+  
+  .dark .card-vibrant {
+    background: linear-gradient(135deg, rgba(26, 31, 46, 0.9) 0%, rgba(10, 15, 28, 0.9) 100%);
+    border-color: rgba(77, 150, 255, 0.2);
+  }
+  
+  .card-vibrant:hover {
+    box-shadow: 0 25px 50px -12px rgba(2, 128, 144, 0.25);
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(2, 128, 144, 0.3);
+  }
+  
+  /* Vibrant Text Gradients */
   .gradient-text {
     background: var(--gradient-brand);
     -webkit-background-clip: text;
@@ -153,6 +210,31 @@ body {
   
   .text-gradient-primary {
     background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .text-gradient-animated {
+    background: var(--gradient-animated);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 6s ease-in-out infinite;
+  }
+  
+  .text-gradient-hero {
+    background: var(--gradient-hero);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 8s ease-in-out infinite;
+  }
+  
+  .text-gradient-secondary {
+    background: var(--gradient-secondary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -243,6 +325,18 @@ body {
 
 .gradient-shift {
   animation: gradientShift 8s ease-in-out infinite;
+}
+
+.gradient-animated {
+  background: var(--gradient-animated);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease-in-out infinite;
+}
+
+.gradient-hero {
+  background: var(--gradient-hero);
+  background-size: 400% 400%;
+  animation: gradientShift 10s ease-in-out infinite;
 }
 
 /* Keyframe Definitions */

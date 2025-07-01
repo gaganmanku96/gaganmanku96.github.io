@@ -420,8 +420,23 @@ const ContactSection: React.FC = () => {
                     className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-800 hover:text-white dark:hover:bg-slate-600 dark:hover:text-white transition-all duration-300 transform hover:scale-110"
                     aria-label="Medium"
                   >
-                    <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="h-6 w-6" fill="#00AB6C" viewBox="0 0 24 24">
                       <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
+                    </svg>
+                  </a>
+                  <a
+                    href="https://huggingface.co/gaganmanku96"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition-all duration-300 transform hover:scale-110"
+                    aria-label="HuggingFace"
+                  >
+                    <svg className="h-6 w-6" viewBox="0 0 32 32">
+                      <circle cx="16" cy="16" r="14" fill="#FFD21E"/>
+                      <circle cx="12.5" cy="12.5" r="2" fill="#FF9D0B"/>
+                      <circle cx="19.5" cy="12.5" r="2" fill="#FF9D0B"/>
+                      <path d="M10 18c1 3 4 5 6 5s5-2 6-5" fill="none" stroke="#FF323D" strokeWidth="2" strokeLinecap="round"/>
+                      <circle cx="16" cy="16" r="12" fill="none" stroke="#3A3B45" strokeWidth="1" opacity="0.3"/>
                     </svg>
                   </a>
                 </div>

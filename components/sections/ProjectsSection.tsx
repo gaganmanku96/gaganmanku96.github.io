@@ -194,6 +194,33 @@ const ProjectsSection: React.FC = () => {
             <ProjectCard key={project.id} project={project} variants={itemVariants} />
           ))}
         </motion.div>
+        
+        {/* Navigation Arrow to Case Studies */}
+        <div className="flex justify-center mt-16">
+          <motion.button
+            onClick={() => {
+              const element = document.getElementById('case-studies');
+              if (element) {
+                const navbarHeight = 80;
+                const elementPosition = element.offsetTop - navbarHeight;
+                window.scrollTo({
+                  top: elementPosition,
+                  behavior: 'smooth'
+                });
+              }
+            }}
+            className="p-3 rounded-full hover:bg-primary-100 dark:hover:bg-primary-900 transition-colors duration-300 cursor-pointer group"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, repeatType: "loop" }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            aria-label="Scroll to case studies section"
+          >
+            <svg className="w-8 h-8 text-slate-500 dark:text-slate-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+          </motion.button>
+        </div>
       </div>
     </section>
   );

@@ -5,6 +5,7 @@ import { useTheme } from '@/context/ThemeContext';
 import Layout from '@/components/Layout';
 import HeroSection from '@/components/sections/HeroSection';
 import FeaturedSection from '@/components/sections/FeaturedSection';
+import SequentialNeuralNetwork from '@/components/three/SequentialNeuralNetwork';
 import SkillsSection from '@/components/sections/SkillsSection';
 import AboutSection from '@/components/sections/AboutSection';
 import ProjectsSection from '@/components/sections/ProjectsSection';
@@ -41,6 +42,7 @@ export default function Home() {
       <Layout>
         <main className="flex flex-col min-h-screen">
           <HeroSection />
+          <SequentialNeuralNetwork />
           <FeaturedSection />
         </main>
       </Layout>
