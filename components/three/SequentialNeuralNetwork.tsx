@@ -17,13 +17,13 @@ const generatePath = (startX: number, startY: number, endX: number, endY: number
   return `M ${startX} ${startY} C ${controlX1} ${startY}, ${controlX2} ${endY}, ${endX} ${endY}`;
 };
 
-// Input skills that will appear sequentially
+// Professional input features that will appear sequentially
 const INPUT_SKILLS = [
-  { id: 'python', label: 'Python', color: '#4B8BBE' },
-  { id: 'ai-ml', label: 'AI/ML', color: '#FF6B6B' },
-  { id: 'data', label: 'Data Science', color: '#4ECDC4' },
-  { id: 'genai', label: 'GenAI', color: '#45B7D1' },
-  { id: 'nlp', label: 'NLP', color: '#FFA07A' },
+  { id: 'ml-engineering', label: 'Machine Learning Engineering', color: '#4B8BBE' },
+  { id: 'genai-architect', label: 'Generative AI & LLM Architect', color: '#FF6B6B' },
+  { id: 'strategic-data', label: 'Strategic Data Science', color: '#4ECDC4' },
+  { id: 'ai-product', label: 'AI Product Leadership', color: '#45B7D1' },
+  { id: 'applied-research', label: 'Applied AI Research', color: '#FFA07A' },
 ];
 
 // Animation variants
@@ -184,7 +184,7 @@ const SequentialNeuralNetwork: React.FC = () => {
       const inputNode = inputRefs.current.get(skill.id);
       if (inputNode) {
         const inputRect = inputNode.getBoundingClientRect();
-        const screenX = inputRect.left + inputRect.width / 2;
+        const screenX = inputRect.right; // Connect from right edge instead of center
         const screenY = inputRect.top + inputRect.height / 2;
         const startX = (screenX - containerRect.left) * scaleX;
         const startY = (screenY - containerRect.top) * scaleY;
@@ -195,7 +195,7 @@ const SequentialNeuralNetwork: React.FC = () => {
           const hiddenNode = hidden1Refs.current.get(`hidden1-${hiddenIndex}`);
           if (hiddenNode) {
             const hiddenRect = hiddenNode.getBoundingClientRect();
-            const hiddenScreenX = hiddenRect.left + hiddenRect.width / 2;
+            const hiddenScreenX = hiddenRect.left; // Connect to left edge instead of center
             const hiddenScreenY = hiddenRect.top + hiddenRect.height / 2;
             const endX = (hiddenScreenX - containerRect.left) * scaleX;
             const endY = (hiddenScreenY - containerRect.top) * scaleY;
@@ -212,14 +212,14 @@ const SequentialNeuralNetwork: React.FC = () => {
       const hidden1Node = hidden1Refs.current.get(`hidden1-${hidden1Index}`);
       if (hidden1Node) {
         const hidden1Rect = hidden1Node.getBoundingClientRect();
-        const startX = (hidden1Rect.left + hidden1Rect.width / 2 - containerRect.left) * scaleX;
+        const startX = (hidden1Rect.right - containerRect.left) * scaleX; // Connect from right edge
         const startY = (hidden1Rect.top + hidden1Rect.height / 2 - containerRect.top) * scaleY;
 
         for (let hidden2Index = 0; hidden2Index < 4; hidden2Index++) {
           const hidden2Node = hidden2Refs.current.get(`hidden2-${hidden2Index}`);
           if (hidden2Node) {
             const hidden2Rect = hidden2Node.getBoundingClientRect();
-            const endX = (hidden2Rect.left + hidden2Rect.width / 2 - containerRect.left) * scaleX;
+            const endX = (hidden2Rect.left - containerRect.left) * scaleX; // Connect to left edge
             const endY = (hidden2Rect.top + hidden2Rect.height / 2 - containerRect.top) * scaleY;
 
             // Generate path for Hidden Layer 1 -> Hidden Layer 2 connection
@@ -232,7 +232,7 @@ const SequentialNeuralNetwork: React.FC = () => {
     // Hidden Layer 2 to Output connections
     if (outputRef.current) {
       const outputRect = outputRef.current.getBoundingClientRect();
-      const outputScreenX = outputRect.left + outputRect.width / 2;
+      const outputScreenX = outputRect.left; // Connect to left edge instead of center
       const outputScreenY = outputRect.top + outputRect.height / 2;
       const outputX = (outputScreenX - containerRect.left) * scaleX;
       const outputY = (outputScreenY - containerRect.top) * scaleY;
@@ -241,7 +241,7 @@ const SequentialNeuralNetwork: React.FC = () => {
         const hidden2Node = hidden2Refs.current.get(`hidden2-${hidden2Index}`);
         if (hidden2Node) {
           const hidden2Rect = hidden2Node.getBoundingClientRect();
-          const startX = (hidden2Rect.left + hidden2Rect.width / 2 - containerRect.left) * scaleX;
+          const startX = (hidden2Rect.right - containerRect.left) * scaleX; // Connect from right edge
           const startY = (hidden2Rect.top + hidden2Rect.height / 2 - containerRect.top) * scaleY;
           // Generate path for Hidden Layer 2 -> Output connection
           newPathsL3.push(generatePath(startX, startY, outputX, outputY));
@@ -290,18 +290,18 @@ const SequentialNeuralNetwork: React.FC = () => {
             >
               <h2 className="text-4xl md:text-5xl font-bold mb-4">
                 <span className="bg-gradient-to-r from-primary-400 via-secondary-400 to-accent-400 bg-clip-text text-transparent">
-                  My Neural Network Journey
+                  The AI Talent Engine: Predicting Your Next Innovator
                 </span>
               </h2>
               <p className="text-lg text-slate-600 dark:text-slate-300">
-                Watch my skills flow through AI to create innovative solutions
+                Watch my expertise synthesize into innovative AI solutions that drive business impact
               </p>
             </motion.div>
 
-            {/* SVG Overlay for perfect alignment */}
+            {/* SVG Overlay for connections - behind content */}
             {!isMobile && (
               <svg
-                className="absolute top-0 left-0 w-full h-full pointer-events-none z-50"
+                className="absolute top-0 left-0 w-full h-full pointer-events-none z-0"
                 viewBox="0 0 1200 800"
                 preserveAspectRatio="xMidYMid meet"
               >
@@ -377,15 +377,15 @@ const SequentialNeuralNetwork: React.FC = () => {
             )}
 
             {/* Neural Network Container */}
-            <div className="relative z-10">
+            <div className="relative z-20">
               
               {/* Grid layout for network */}
-              <div className="grid grid-cols-1 md:grid-cols-6 gap-6 md:gap-8 items-center min-h-[500px]">
+              <div className="grid grid-cols-1 md:grid-cols-6 gap-8 md:gap-12 items-center min-h-[500px]">
                 
                 {/* Input Layer */}
                 <div className="md:col-span-2 flex flex-col">
                   <h3 className="text-lg font-semibold text-center mb-6 text-slate-700 dark:text-slate-300 h-8 flex items-center justify-center">
-                    Skills & Expertise
+                    Core Competencies
                   </h3>
                   <div className="flex flex-col space-y-6">
                   {INPUT_SKILLS.map((skill, index) => {
@@ -410,7 +410,7 @@ const SequentialNeuralNetwork: React.FC = () => {
                         className="relative"
                       >
                         <div 
-                          className="px-6 py-3 rounded-full border-2 font-semibold text-white shadow-lg backdrop-blur-sm"
+                          className="px-6 py-3 rounded-full border-2 font-semibold text-white shadow-lg backdrop-blur-sm relative z-30"
                           style={{ 
                             backgroundColor: skill.color,
                             borderColor: skill.color,
@@ -598,17 +598,11 @@ const SequentialNeuralNetwork: React.FC = () => {
                           </p>
                         </div>
 
-                        {/* Main tagline - replacing the button */}
-                        <div className="relative z-10">
-                          <h4 className="text-xl font-bold text-white bg-white/20 backdrop-blur-sm rounded-full py-3 px-6 shadow-lg border border-white/30">
-                            Finding best employee for you
-                          </h4>
-                        </div>
 
-                        {/* Optional: Specialization badges */}
+                        {/* Specialization badges */}
                         <div className="relative z-10 mt-4">
                           <p className="text-sm text-white/80 font-medium">
-                            Specializing in Neural Networks & GenAI
+                            Transforming Ideas into AI-Powered Solutions
                           </p>
                         </div>
                       </div>

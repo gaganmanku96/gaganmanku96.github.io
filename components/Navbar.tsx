@@ -15,6 +15,7 @@ const Navbar: React.FC<NavbarProps> = ({ scrollProgress }) => {
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
     { name: 'Experience', href: '/experience' },
+    { name: 'Work', href: '/work' },
     { name: 'Projects', href: '/projects' },
     { name: 'Case Studies', href: '/case-studies' },
     { name: 'Contact', href: '/contact' },
