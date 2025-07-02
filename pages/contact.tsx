@@ -13,7 +13,7 @@ export default function Contact() {
       </Head>
 
       <Layout>
-        <main className="pt-20">
+        <main>
           <ContactSection />
         </main>
       </Layout>

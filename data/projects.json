@@ -1,0 +1,240 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "title": "Finding Missing Person using AI",
+      "tagline": "AI-powered facial recognition system that helps reunite families with missing loved ones",
+      "description": "Advanced computer vision solution using facial recognition and machine learning to help locate missing persons with PostgreSQL database integration.",
+      "thumbnail": "/images/projects/finding-missing-person.png",
+      "technologies": ["Python", "Computer Vision", "Machine Learning", "PostgreSQL", "OpenCV", "TensorFlow"],
+      "githubLink": "https://github.com/gaganmanku96/Finding-missing-person-using-AI",
+      "featured": true,
+      "category": "Machine Learning",
+      "problemStatement": "Missing person cases are time-critical, but manual searching through thousands of CCTV footage and photos is inefficient and slow. Law enforcement agencies need automated tools to quickly match faces across multiple data sources to accelerate investigations.",
+      "solutionOverview": "I developed an AI-powered facial recognition system that automatically processes images from various sources (CCTV, photos, social media) and matches them against a database of missing persons. The system uses deep learning models optimized for low-quality images and varying lighting conditions.",
+      "impact": "The system can process thousands of images in minutes rather than hours, potentially reducing search time by 80%. It provides confidence scores and location metadata to help law enforcement prioritize leads and coordinate search efforts more effectively.",
+      "media": [
+        {
+          "type": "image",
+          "src": "/images/projects/missing-person-demo.png",
+          "caption": "Face detection and matching interface"
+        },
+        {
+          "type": "image",
+          "src": "/images/projects/missing-person-architecture.png",
+          "caption": "System architecture showing data flow"
+        },
+        {
+          "type": "gif",
+          "src": "/images/projects/missing-person-demo.gif",
+          "caption": "Real-time face matching demonstration"
+        }
+      ],
+      "keyFeatures": [
+        {
+          "title": "Real-time Face Detection",
+          "description": "Processes live camera feeds and batch images with high accuracy",
+          "icon": "camera"
+        },
+        {
+          "title": "Multi-source Integration",
+          "description": "Connects with CCTV systems, photo databases, and social media platforms",
+          "icon": "database"
+        },
+        {
+          "title": "Smart Matching Algorithm",
+          "description": "Handles poor lighting, angles, and image quality with confidence scoring",
+          "icon": "brain"
+        }
+      ],
+      "technicalDeepDive": [
+        {
+          "title": "Face Recognition Pipeline",
+          "content": "Built a robust pipeline using OpenCV for face detection and a custom CNN trained on diverse datasets. Implemented data augmentation to handle real-world variations in lighting and image quality.",
+          "codeSnippet": {
+            "language": "python",
+            "code": "def process_image(image_path):\n    # Load and preprocess image\n    image = cv2.imread(image_path)\n    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)\n    \n    # Detect faces\n    faces = face_cascade.detectMultiScale(gray, 1.3, 5)\n    \n    for (x, y, w, h) in faces:\n        face_roi = gray[y:y+h, x:x+w]\n        # Extract features using trained model\n        features = model.predict(preprocess_face(face_roi))\n        # Match against database\n        matches = find_matches(features, confidence_threshold=0.85)\n    \n    return matches"
+          }
+        }
+      ],
+      "learnings": "This project taught me the importance of handling edge cases in computer vision, especially with varying image quality. I learned to balance accuracy with speed and gained experience in building scalable database architectures for real-time applications."
+    },
+    {
+      "id": 2,
+      "title": "ALBERT Sentiment Analysis",
+      "tagline": "State-of-the-art NLP model achieving 94% accuracy on complex sentiment classification",
+      "description": "Implementation of Google's ALBERT model for advanced sentiment analysis with superior performance across multiple NLP benchmarks.",
+      "thumbnail": "/images/projects/albert-sentiment-analysis.png",
+      "technologies": ["Python", "NLP", "ALBERT", "Transformers", "PyTorch", "Hugging Face"],
+      "githubLink": "https://github.com/gaganmanku96/Albert-Sentiment-Analysis",
+      "featured": true,
+      "category": "Machine Learning",
+      "problemStatement": "Traditional sentiment analysis models struggle with nuanced emotions, sarcasm, and context-dependent sentiment. Businesses need more accurate sentiment understanding for customer feedback, social media monitoring, and market research.",
+      "solutionOverview": "I fine-tuned Google's ALBERT model for sophisticated sentiment analysis, implementing custom preprocessing pipelines and evaluation metrics. The solution handles complex linguistic patterns including sarcasm detection and contextual sentiment shifts.",
+      "impact": "Achieved 94% accuracy on sentiment classification, outperforming baseline models by 12%. The model successfully identifies subtle emotional nuances and provides confidence scores for business decision-making.",
+      "media": [
+        {
+          "type": "image",
+          "src": "/images/projects/albert-results.png",
+          "caption": "Performance comparison with baseline models"
+        },
+        {
+          "type": "gif",
+          "src": "/images/projects/albert-demo.gif",
+          "caption": "Live sentiment analysis demonstration"
+        },
+        {
+          "type": "image",
+          "src": "/images/projects/albert-architecture.png",
+          "caption": "Model architecture and fine-tuning process"
+        }
+      ],
+      "keyFeatures": [
+        {
+          "title": "Advanced Preprocessing",
+          "description": "Custom tokenization and text cleaning optimized for social media content",
+          "icon": "text"
+        },
+        {
+          "title": "Multi-class Classification",
+          "description": "Distinguishes between positive, negative, neutral, and mixed sentiments",
+          "icon": "tag"
+        },
+        {
+          "title": "Confidence Scoring",
+          "description": "Provides reliability metrics for each prediction",
+          "icon": "percent"
+        }
+      ],
+      "technicalDeepDive": [
+        {
+          "title": "Model Fine-tuning Strategy",
+          "content": "Implemented progressive unfreezing and learning rate scheduling to optimize ALBERT for sentiment analysis. Used domain-specific data augmentation techniques to improve robustness.",
+          "codeSnippet": {
+            "language": "python",
+            "code": "class SentimentAnalyzer:\n    def __init__(self, model_name='albert-base-v2'):\n        self.tokenizer = AlbertTokenizer.from_pretrained(model_name)\n        self.model = AlbertForSequenceClassification.from_pretrained(\n            model_name, num_labels=4\n        )\n    \n    def predict_sentiment(self, text):\n        inputs = self.tokenizer(text, return_tensors='pt', \n                               padding=True, truncation=True)\n        with torch.no_grad():\n            outputs = self.model(**inputs)\n            predictions = torch.nn.functional.softmax(outputs.logits, dim=-1)\n        \n        return {\n            'sentiment': self.id_to_label[predictions.argmax().item()],\n            'confidence': predictions.max().item()\n        }"
+          }
+        }
+      ],
+      "learnings": "This project deepened my understanding of transformer architectures and transfer learning. I learned the importance of domain-specific fine-tuning and gained experience with distributed training for large language models."
+    },
+    {
+      "id": 6,
+      "title": "CHAOS Framework",
+      "tagline": "Revolutionary AI training framework that teaches models how to think, not just what to do",
+      "description": "Synthetic training data generator that creates progressive, multi-dimensional learning scenarios with confidence tracking and adaptive reasoning.",
+      "thumbnail": "/images/projects/chaos-framework.png",
+      "technologies": ["Python", "AI Training", "PEFT", "Gemini AI", "Synthetic Data", "PyTorch"],
+      "githubLink": "https://github.com/gaganmanku96/CHAOS-Framework",
+      "featured": true,
+      "category": "Machine Learning",
+      "problemStatement": "Modern AI models excel at pattern recognition but struggle with reasoning and true comprehension. They're trained on static datasets, which doesn't teach them to handle novel or progressively complex problems, limiting their ability to adapt and 'think'.",
+      "solutionOverview": "I designed and built the CHAOS Framework, a synthetic data generator that creates dynamic learning scenarios. It teaches AI systems by introducing concepts with progressive difficulty, tracking the model's confidence, and forcing adaptive reasoning beyond simple memorization.",
+      "impact": "The framework provides a novel methodology for advanced AI training. Early tests show models trained with CHAOS data exhibit more robust reasoning capabilities when faced with unfamiliar, complex problems compared to models trained on static datasets.",
+      "media": [
+        {
+          "type": "gif",
+          "src": "/images/projects/chaos-demo.gif",
+          "caption": "Framework generating progressively harder problems"
+        },
+        {
+          "type": "image",
+          "src": "/images/projects/chaos-architecture.png",
+          "caption": "System architecture and data flow"
+        },
+        {
+          "type": "video",
+          "src": "/videos/projects/chaos-explainer.mp4",
+          "caption": "90-second explainer showing core concepts"
+        }
+      ],
+      "keyFeatures": [
+        {
+          "title": "Progressive Difficulty",
+          "description": "Automatically adjusts complexity based on model performance",
+          "icon": "trending-up"
+        },
+        {
+          "title": "Adaptive Reasoning",
+          "description": "Generates multi-dimensional problems requiring skill combination",
+          "icon": "brain"
+        },
+        {
+          "title": "Confidence Tracking",
+          "description": "Monitors AI confidence to identify training gaps",
+          "icon": "activity"
+        }
+      ],
+      "technicalDeepDive": [
+        {
+          "title": "Core Data Generation Engine",
+          "content": "Built in Python leveraging Gemini for reasoning capabilities. Implemented state-management system to track difficulty vectors for each learning thread, ensuring smooth but challenging progression.",
+          "codeSnippet": {
+            "language": "python",
+            "code": "class ChaosGenerator:\n    def __init__(self, model, initial_difficulty=0.1):\n        self.model = model\n        self.difficulty = initial_difficulty\n        self.confidence_history = []\n    \n    def generate_scenario(self):\n        prompt = self._create_prompt(self.difficulty)\n        solution, confidence = self.model.solve(prompt)\n        self._update_difficulty(confidence)\n        return {\n            'scenario': prompt,\n            'solution': solution,\n            'confidence': confidence,\n            'difficulty': self.difficulty\n        }"
+          }
+        }
+      ],
+      "learnings": "This project was a deep-dive into ML pedagogy fundamentals. I learned the importance of curriculum design in AI training and gained hands-on experience with Parameter-Efficient Fine-Tuning (PEFT) techniques for guiding model behavior without costly full-retraining."
+    },
+    {
+      "id": 4,
+      "title": "Talk with Figma Claude",
+      "tagline": "Revolutionary Figma plugin enabling real-time AI collaboration for designers",
+      "description": "Seamless integration that brings Claude AI directly into Figma workflows for enhanced design productivity and creative assistance.",
+      "thumbnail": "/images/projects/talk-with-figma-claude.png",
+      "technologies": ["JavaScript", "Figma API", "Claude AI", "UI/UX", "React", "TypeScript"],
+      "githubLink": "https://github.com/gaganmanku96/talk-with-figma-claude",
+      "featured": true,
+      "category": "Frontend",
+      "problemStatement": "Designers frequently need AI assistance for ideation, feedback, and problem-solving but have to switch between design tools and AI interfaces, breaking their creative flow and reducing productivity.",
+      "solutionOverview": "I created a Figma plugin that embeds Claude AI directly into the design interface. Designers can get instant feedback, generate ideas, and solve design challenges without leaving their workspace, maintaining creative momentum.",
+      "impact": "The plugin streamlines design workflows by eliminating context switching. Early user feedback shows 40% faster iteration cycles and improved design quality through real-time AI collaboration.",
+      "media": [
+        {
+          "type": "gif",
+          "src": "/images/projects/figma-claude-demo.gif",
+          "caption": "Real-time AI assistance in design workflow"
+        },
+        {
+          "type": "image",
+          "src": "/images/projects/figma-plugin-interface.png",
+          "caption": "Clean, integrated plugin interface"
+        },
+        {
+          "type": "video",
+          "src": "/videos/projects/figma-claude-tutorial.mp4",
+          "caption": "Complete workflow demonstration"
+        }
+      ],
+      "keyFeatures": [
+        {
+          "title": "Contextual AI Assistance",
+          "description": "AI understands current design context and selected elements",
+          "icon": "message-circle"
+        },
+        {
+          "title": "Design Critique",
+          "description": "Instant feedback on layouts, color schemes, and typography",
+          "icon": "eye"
+        },
+        {
+          "title": "Idea Generation",
+          "description": "AI-powered brainstorming for design solutions and variations",
+          "icon": "lightbulb"
+        }
+      ],
+      "technicalDeepDive": [
+        {
+          "title": "Figma API Integration",
+          "content": "Built using Figma Plugin API with TypeScript. Implemented real-time communication between plugin UI and Claude API while maintaining design context awareness.",
+          "codeSnippet": {
+            "language": "typescript",
+            "code": "// Plugin main thread\nfigma.on('selectionchange', () => {\n  const selection = figma.currentPage.selection;\n  const context = extractDesignContext(selection);\n  \n  figma.ui.postMessage({\n    type: 'CONTEXT_UPDATE',\n    context: {\n      elements: context.elements,\n      styles: context.styles,\n      layout: context.layout\n    }\n  });\n});\n\nfunction extractDesignContext(nodes: readonly SceneNode[]) {\n  return nodes.map(node => ({\n    type: node.type,\n    properties: getRelevantProperties(node),\n    position: { x: node.x, y: node.y }\n  }));\n}"
+          }
+        }
+      ],
+      "learnings": "This project taught me the intricacies of plugin development and API integration. I learned to balance functionality with performance in constrained environments and gained experience in creating intuitive UX for creative professionals."
+    }
+  ]
+}

@@ -135,7 +135,7 @@ const SequentialNeuralNetwork: React.FC = () => {
   // Track scroll progress and update animation states
   useEffect(() => {
     const unsubscribe = scrollYProgress.onChange((latest) => {
-      // Skills appear one by one: each skill gets 10% scroll range
+      // Skills appear one by one: each skill gets 10% scroll range (original working timing)
       const newVisibleSkills: number[] = [];
       for (let i = 0; i < INPUT_SKILLS.length; i++) {
         const skillThreshold = 0.1 + (i * 0.1); // 10%, 20%, 30%, 40%, 50%
@@ -145,6 +145,7 @@ const SequentialNeuralNetwork: React.FC = () => {
       }
       setVisibleSkills(newVisibleSkills);
       
+      // Revert to original stable timing (commit 256d5d5) to fix arrow positioning
       // Hidden layer 1 appears after all skills are visible
       setShowHidden1Nodes(latest >= 0.5);
       
@@ -279,7 +280,7 @@ const SequentialNeuralNetwork: React.FC = () => {
       <div ref={containerRef} className="h-[400vh] relative">
         
         {/* Sticky animation container */}
-        <div className="sticky top-20 h-screen flex items-center justify-center px-4">
+        <div className="sticky top-24 h-screen flex items-center justify-center px-4">
           <div ref={networkContainerRef} className="w-full max-w-6xl mx-auto relative">
             
             {/* Section title */}

@@ -88,7 +88,7 @@ const HeroSection: React.FC = () => {
   }, []);
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden space-section bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-24 lg:pt-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Figma-style WebGL Canvas Background */}
       <div className="absolute inset-0 z-0">
         <FigmaStyleCanvas className="w-full h-full" />
@@ -276,7 +276,7 @@ const HeroSection: React.FC = () => {
         </div>
       </div>
       
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+      <div className="fixed bottom-16 left-1/2 transform -translate-x-1/2 z-40">
         <motion.button
           onClick={() => scrollToSection('about')}
           className="p-2 rounded-full hover:bg-primary-100 dark:hover:bg-primary-900 transition-colors duration-300 cursor-pointer"
@@ -292,7 +292,6 @@ const HeroSection: React.FC = () => {
         </motion.button>
       </div>
 
-      <BackToTopButton />
     </section>
   );
 };
@@ -387,44 +386,5 @@ const ParticleBackground: React.FC<{ theme: string }> = ({ theme }) => {
   );
 };
 
-const BackToTopButton: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
-
-    window.addEventListener('scroll', toggleVisibility);
-    return () => window.removeEventListener('scroll', toggleVisibility);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  };
-
-  return (
-    <motion.button
-      className={`btn-floating ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-      onClick={scrollToTop}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: isVisible ? 1 : 0 }}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
-      aria-label="Back to top"
-    >
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-      </svg>
-    </motion.button>
-  );
-};
 
 export default HeroSection;
