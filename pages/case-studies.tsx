@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Layout from '@/components/Layout';
 import CaseStudiesSection from '@/components/sections/CaseStudiesSection';
 
-export default function CaseStudies() {
+export default function CaseStudiesPage() {
   return (
     <>
       <Head>
@@ -13,7 +13,7 @@ export default function CaseStudies() {
       </Head>
 
       <Layout>
-        <main className="pt-20">
+        <main>
           <CaseStudiesSection />
         </main>
       </Layout>

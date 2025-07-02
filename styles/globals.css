@@ -82,7 +82,7 @@ body {
 /* Custom utility classes */
 @layer components {
   .container-custom {
-    @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+    @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative;
   }
   
   .section-padding {
@@ -106,7 +106,7 @@ body {
   
   .btn-secondary {
     background: var(--gradient-secondary);
-    @apply text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0;
+    @apply text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-100;
     box-shadow: 0 10px 15px -3px rgba(255, 111, 97, 0.25);
     position: relative;
     overflow: hidden;
@@ -121,21 +121,21 @@ body {
   .btn-vibrant {
     background: var(--gradient-animated);
     background-size: 400% 400%;
-    @apply text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0;
+    @apply text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-100;
     box-shadow: 0 10px 15px -3px rgba(2, 128, 144, 0.25);
     animation: gradientShift 3s ease-in-out infinite;
   }
   
   .btn-vibrant:hover {
     box-shadow: 0 20px 25px -5px rgba(2, 128, 144, 0.5);
-    transform: translateY(-3px) scale(1.05);
+    transform: scale(1.05);
     animation-duration: 1.5s;
   }
   
   .btn-outline {
     border: 2px solid var(--primary-color);
     color: var(--primary-color);
-    @apply font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0;
+    @apply font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-100;
   }
   
   .btn-outline:hover {
@@ -155,7 +155,7 @@ body {
   }
   
   .card-hover {
-    @apply card transform hover:-translate-y-2 hover:scale-[1.02];
+    @apply card transform hover:scale-[1.01] transition-all duration-300;
   }
   
   .glass-effect {
@@ -189,7 +189,7 @@ body {
   
   .card-vibrant:hover {
     box-shadow: 0 25px 50px -12px rgba(2, 128, 144, 0.25);
-    transform: translateY(-8px) scale(1.02);
+    transform: scale(1.01);
     border-color: rgba(2, 128, 144, 0.3);
   }
   
@@ -262,7 +262,7 @@ body {
   
   /* Consistent Spacing System */
   .space-section {
-    @apply py-16 md:py-24 lg:py-32;
+    @apply py-12 md:py-16 lg:py-20 xl:py-24;
   }
   
   .space-component {

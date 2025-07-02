@@ -4,60 +4,121 @@
       "id": 1,
       "title": "Finding Missing Person using AI",
       "tagline": "AI-powered facial recognition system that helps reunite families with missing loved ones",
-      "description": "Advanced computer vision solution using facial recognition and machine learning to help locate missing persons with PostgreSQL database integration.",
+      "description": "Advanced computer vision solution using MediaPipe Face Mesh and machine learning to help locate missing persons with SQLite database and Streamlit interface.",
       "thumbnail": "/images/projects/finding-missing-person.png",
-      "technologies": ["Python", "Computer Vision", "Machine Learning", "PostgreSQL", "OpenCV", "TensorFlow"],
+      "technologies": ["Python", "MediaPipe", "Streamlit", "SQLite", "Computer Vision", "Machine Learning", "scikit-learn"],
       "githubLink": "https://github.com/gaganmanku96/Finding-missing-person-using-AI",
       "featured": true,
       "category": "Machine Learning",
-      "problemStatement": "Missing person cases are time-critical, but manual searching through thousands of CCTV footage and photos is inefficient and slow. Law enforcement agencies need automated tools to quickly match faces across multiple data sources to accelerate investigations.",
-      "solutionOverview": "I developed an AI-powered facial recognition system that automatically processes images from various sources (CCTV, photos, social media) and matches them against a database of missing persons. The system uses deep learning models optimized for low-quality images and varying lighting conditions.",
-      "impact": "The system can process thousands of images in minutes rather than hours, potentially reducing search time by 80%. It provides confidence scores and location metadata to help law enforcement prioritize leads and coordinate search efforts more effectively.",
+      "problemStatement": "Thousands of people, especially children, go missing every day in India. Despite efforts from NGOs and government initiatives, timely recovery remains a challenge. Traditional investigative methods, while effective, can be slow and resource-intensive. This project introduces an AI-assisted platform designed to expedite the process of locating missing individuals.",
+      "solutionOverview": "I developed an AI-powered facial recognition system that automatically processes images from various sources (CCTV, photos, social media) and matches them against a database of missing persons. The system uses deep learning models optimized for low-quality images and varying lighting conditions. It features both an administrative dashboard for law enforcement and a public submission form for crowdsourced information.",
+      "impact": "The system can process thousands of images in minutes rather than hours, potentially reducing search time by 80%. It provides confidence scores and location metadata to help law enforcement prioritize leads and coordinate search efforts more effectively. The public submission feature also enables broader community participation in finding missing individuals.",
       "media": [
         {
           "type": "image",
-          "src": "/images/projects/missing-person-demo.png",
-          "caption": "Face detection and matching interface"
+          "src": "/images/projects/ss_image.png",
+          "caption": "Main Dashboard"
         },
         {
           "type": "image",
-          "src": "/images/projects/missing-person-architecture.png",
-          "caption": "System architecture showing data flow"
+          "src": "/images/projects/ss_image-1.png",
+          "caption": "Case Details"
         },
         {
-          "type": "gif",
-          "src": "/images/projects/missing-person-demo.gif",
-          "caption": "Real-time face matching demonstration"
+          "type": "image",
+          "src": "/images/projects/ss_image-2.png",
+          "caption": "User Management"
+        },
+        {
+          "type": "image",
+          "src": "/images/projects/ss_image-3.png",
+          "caption": "Mobile Submission Form"
+        },
+        {
+          "type": "image",
+          "src": "/images/projects/ss_image-4.png",
+          "caption": "Image Upload"
+        },
+        {
+          "type": "image",
+          "src": "/images/projects/ss_image-5.png",
+          "caption": "Face Mesh Extraction"
+        },
+        {
+          "type": "image",
+          "src": "/images/projects/news-article-1.png",
+          "caption": "News Coverage: Missing Persons Crisis"
+        },
+        {
+          "type": "image",
+          "src": "/images/projects/news-article-2.png",
+          "caption": "Media Report: Child Safety Initiatives"
+        },
+        {
+          "type": "image",
+          "src": "/images/projects/news-article-3.png",
+          "caption": "Press Coverage: AI Solutions for Social Good"
+        },
+        {
+          "type": "image",
+          "src": "/images/projects/news-article-4.png",
+          "caption": "Feature Story: Technology for Missing Persons"
         }
       ],
       "keyFeatures": [
         {
-          "title": "Real-time Face Detection",
-          "description": "Processes live camera feeds and batch images with high accuracy",
-          "icon": "camera"
+          "title": "Seamless Registration",
+          "description": "Easily register new missing person cases, including image uploads with automated facial feature extraction.",
+          "icon": "user-plus"
         },
         {
-          "title": "Multi-source Integration",
-          "description": "Connects with CCTV systems, photo databases, and social media platforms",
+          "title": "Efficient Matching",
+          "description": "Match submitted images against the database using face mesh data, reducing manual review burden.",
+          "icon": "search"
+        },
+        {
+          "title": "Multi-User Dashboards",
+          "description": "Admin and user interfaces for managing, updating, and monitoring cases.",
+          "icon": "layout"
+        },
+        {
+          "title": "Public Engagement",
+          "description": "Mobile and web submission portals for sighting reports.",
+          "icon": "users"
+        },
+        {
+          "title": "Lightweight & Portable",
+          "description": "All data is stored in SQLite; ready-to-run with minimal setup.",
           "icon": "database"
-        },
-        {
-          "title": "Smart Matching Algorithm",
-          "description": "Handles poor lighting, angles, and image quality with confidence scoring",
-          "icon": "brain"
         }
       ],
       "technicalDeepDive": [
         {
-          "title": "Face Recognition Pipeline",
-          "content": "Built a robust pipeline using OpenCV for face detection and a custom CNN trained on diverse datasets. Implemented data augmentation to handle real-world variations in lighting and image quality.",
+          "title": "MediaPipe Face Mesh Extraction",
+          "content": "The system uses MediaPipe Face Mesh to extract 468 facial landmarks in 3D space. Each landmark contains x, y, z coordinates that create a unique facial signature for matching. The refined landmarks provide superior accuracy for identification even in challenging lighting conditions.",
           "codeSnippet": {
             "language": "python",
-            "code": "def process_image(image_path):\n    # Load and preprocess image\n    image = cv2.imread(image_path)\n    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)\n    \n    # Detect faces\n    faces = face_cascade.detectMultiScale(gray, 1.3, 5)\n    \n    for (x, y, w, h) in faces:\n        face_roi = gray[y:y+h, x:x+w]\n        # Extract features using trained model\n        features = model.predict(preprocess_face(face_roi))\n        # Match against database\n        matches = find_matches(features, confidence_threshold=0.85)\n    \n    return matches"
+            "code": "import mediapipe as mp\nimport numpy as np\n\ndef extract_face_mesh_landmarks(image: np.ndarray):\n    mp_face_mesh = mp.solutions.face_mesh\n    with mp_face_mesh.FaceMesh(\n        static_image_mode=True, max_num_faces=1, refine_landmarks=True\n    ) as face_mesh:\n        results = face_mesh.process(image)\n        if results.multi_face_landmarks:\n            landmarks = results.multi_face_landmarks[0].landmark\n            # Flatten all landmarks into a single list [x1, y1, z1, x2, y2, z2, ...]\n            return [coord for lm in landmarks for coord in (lm.x, lm.y, lm.z)]\n        else:\n            return None"
+          }
+        },
+        {
+          "title": "Streamlit for UI Development",
+          "content": "Streamlit is used for building both the administrative dashboard and the public submission form, enabling rapid prototyping and deployment of interactive web applications with Python. This allows for a user-friendly interface without extensive frontend development.",
+          "codeSnippet": {
+            "language": "python",
+            "code": "import streamlit as st\n\nst.title(\"Missing Person Dashboard\")\n\n# Example of a Streamlit input and button\nuser_name = st.text_input(\"Enter your name:\")\nif st.button(\"Submit\"):\n    st.write(f\"Hello, {user_name}!\")"
+          }
+        },
+        {
+          "title": "KNN-Based Facial Matching Algorithm",
+          "content": "The system uses a K-Nearest Neighbors classifier with ball-tree algorithm for efficient facial matching. It compares face mesh landmarks using distance metrics to find the closest matches with configurable threshold settings for accuracy control.",
+          "codeSnippet": {
+            "language": "python",
+            "code": "from sklearn.neighbors import KNeighborsClassifier\nimport numpy as np\n\ndef match_faces(distance_threshold=3):\n    # Load registered cases as training data\n    reg_features = registered_cases_df.iloc[:, 2:].values.astype(float)\n    numeric_labels = list(range(len(reg_features)))\n    \n    # Train KNN classifier\n    knn = KNeighborsClassifier(n_neighbors=1, algorithm=\"ball_tree\", weights=\"distance\")\n    knn.fit(reg_features, numeric_labels)\n    \n    # Match public submissions against registered cases\n    for pub_case in public_cases:\n        face_encoding = np.array(pub_case[1:]).astype(float)\n        closest_distances = knn.kneighbors([face_encoding])[0][0]\n        closest_distance = np.min(closest_distances)\n        \n        if closest_distance >= distance_threshold:\n            predicted_idx = knn.predict([face_encoding])[0]\n            matched_case = original_reg_labels[predicted_idx]\n            # Store match with confidence score"
           }
         }
       ],
-      "learnings": "This project taught me the importance of handling edge cases in computer vision, especially with varying image quality. I learned to balance accuracy with speed and gained experience in building scalable database architectures for real-time applications."
+      "learnings": "This project provided valuable experience in building a full-stack AI application, from data collection and model integration to UI development and database management. I learned the importance of user-friendly interfaces for complex AI systems and gained practical insights into deploying machine learning models in real-world scenarios. The project also highlighted the ethical considerations and societal impact of AI technologies in sensitive applications like facial recognition for missing persons."
     },
     {
       "id": 2,

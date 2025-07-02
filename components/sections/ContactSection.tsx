@@ -130,7 +130,7 @@ const ContactSection: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-12"
+          className="text-center mb-8"
         >
           <span className="text-sm font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-2 inline-block">Let's Connect</span>
           <h2 className="heading-secondary mb-6 text-gradient">Get In Touch</h2>
@@ -139,7 +139,7 @@ const ContactSection: React.FC = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <motion.div
             variants={containerVariants}
             initial="hidden"

@@ -23,7 +23,7 @@ export default function Work() {
       </Head>
 
       <Layout>
-        <main className="pt-20">
+        <main>
           <WorkExperienceSection />
         </main>
       </Layout>

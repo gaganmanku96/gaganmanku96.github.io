@@ -249,6 +249,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                                 fill
                                 className="object-cover"
                                 sizes="(max-width: 768px) 100vw, 50vw"
+                                priority={false}
                               />
                             </div>
                           )}

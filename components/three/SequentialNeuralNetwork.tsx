@@ -134,7 +134,7 @@ const SequentialNeuralNetwork: React.FC = () => {
 
   // Track scroll progress and update animation states
   useEffect(() => {
-    const unsubscribe = scrollYProgress.onChange((latest) => {
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
       // Skills appear one by one: each skill gets 10% scroll range (original working timing)
       const newVisibleSkills: number[] = [];
       for (let i = 0; i < INPUT_SKILLS.length; i++) {

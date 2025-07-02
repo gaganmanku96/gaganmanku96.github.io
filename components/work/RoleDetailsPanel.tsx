@@ -151,7 +151,7 @@ const RoleDetailsPanel: React.FC<RoleDetailsPanelProps> = ({ role, isTransitioni
             </div>
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+            <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 gap-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary-600 dark:text-primary-400">
                   {role.projects.length}

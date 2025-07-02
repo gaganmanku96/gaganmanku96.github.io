@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Layout from '@/components/Layout';
 import ProjectsSection from '@/components/sections/ProjectsSection';
 
-export default function Projects() {
+export default function ProjectsPage() {
   return (
     <>
       <Head>
@@ -13,7 +13,7 @@ export default function Projects() {
       </Head>
 
       <Layout>
-        <main className="pt-20">
+        <main>
           <ProjectsSection />
         </main>
       </Layout>

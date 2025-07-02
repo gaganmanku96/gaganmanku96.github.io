@@ -123,7 +123,7 @@ const BlogSection: React.FC = () => {
   };
 
   return (
-    <section id="blog" className="py-20 bg-gray-50 dark:bg-gray-950">
+    <section id="blog" className="space-section bg-gray-50 dark:bg-gray-950">
       <div className="container-custom">
         <motion.div
           ref={ref} // Use the ref for the main section animation trigger

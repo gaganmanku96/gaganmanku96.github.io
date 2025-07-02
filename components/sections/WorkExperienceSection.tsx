@@ -14,12 +14,12 @@ const WorkExperienceSection: React.FC = () => {
   // Scroll tracking
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"]
+    offset: ["start start", "end end"]
   });
 
   // Scroll-based role progression
   useEffect(() => {
-    const unsubscribe = scrollYProgress.onChange((latest) => {
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
       // Define scroll thresholds for each role (6 roles = 6 segments)
       const roleThresholds = [
         { threshold: 0.0, role: careerData[0] },   // Intern: 0-15%
@@ -72,12 +72,12 @@ const WorkExperienceSection: React.FC = () => {
   };
 
   return (
-    <section className="relative w-full bg-slate-50 dark:bg-slate-900">
-      {/* Scroll container for fixed layout similar to SequentialNeuralNetwork */}
-      <div ref={containerRef} className="h-[200vh] lg:h-[400vh] relative">
+    <div className="relative w-full bg-slate-50 dark:bg-slate-900">
+      {/* Scroll container - provides scroll distance for fixed viewport */}
+      <div ref={containerRef} className="h-[300vh] relative">
         
-        {/* Sticky container */}
-        <div className="sticky top-20 min-h-screen flex items-center justify-center">
+        {/* Sticky container - fixed viewport */}
+        <div className="sticky top-0 h-screen flex items-center justify-center">
           <div className="w-full max-w-7xl mx-auto px-4 h-full flex flex-col">
             
             {/* Header */}
@@ -176,7 +176,7 @@ const WorkExperienceSection: React.FC = () => {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

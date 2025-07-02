@@ -88,7 +88,7 @@ const ResumeSection: React.FC = () => {
   ];
 
   return (
-    <section id="resume" className="py-24 bg-gradient-to-br from-white to-green-50 dark:from-gray-950 dark:to-gray-900 overflow-hidden">
+    <section id="resume" className="space-section bg-gradient-to-br from-white to-green-50 dark:from-gray-950 dark:to-gray-900 overflow-hidden">
       <div className="container-custom">
         {/* Section Header */}
         <motion.div

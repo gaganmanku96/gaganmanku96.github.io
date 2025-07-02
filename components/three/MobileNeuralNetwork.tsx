@@ -66,7 +66,7 @@ const MobileNeuralNetwork: React.FC<MobileNeuralNetworkProps> = ({ scrollProgres
 
   // Track scroll progress and update animation states (simplified)
   useEffect(() => {
-    const unsubscribe = scrollProgress.onChange((latest: number) => {
+    const unsubscribe = scrollProgress.on("change", (latest: number) => {
       // Skills appear one by one: each skill gets 8% scroll range
       const newVisibleSkills: number[] = [];
       for (let i = 0; i < INPUT_SKILLS.length; i++) {

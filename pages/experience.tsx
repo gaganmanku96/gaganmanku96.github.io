@@ -13,7 +13,7 @@ export default function Experience() {
       </Head>
 
       <Layout>
-        <main className="pt-20">
+        <main>
           <ExperienceSection />
         </main>
       </Layout>

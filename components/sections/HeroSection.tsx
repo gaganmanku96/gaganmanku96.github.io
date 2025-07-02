@@ -5,6 +5,7 @@ import { useTheme } from '@/context/ThemeContext';
 import Image from 'next/image';
 import BackgroundElements from '../BackgroundElements';
 import FigmaStyleCanvas from '../FigmaStyleCanvas';
+import ErrorBoundary from '../ErrorBoundary';
 
 const HeroSection: React.FC = () => {
   const { theme } = useTheme();
@@ -91,7 +92,13 @@ const HeroSection: React.FC = () => {
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-24 lg:pt-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Figma-style WebGL Canvas Background */}
       <div className="absolute inset-0 z-0">
-        <FigmaStyleCanvas className="w-full h-full" />
+        <ErrorBoundary
+          fallback={
+            <div className="w-full h-full bg-gradient-to-br from-primary-500/10 via-transparent to-secondary-500/10" />
+          }
+        >
+          <FigmaStyleCanvas className="w-full h-full" />
+        </ErrorBoundary>
       </div>
       
       {/* Fallback/Additional Background Elements */}
@@ -170,12 +177,12 @@ const HeroSection: React.FC = () => {
                 </svg>
                 Download Resume
               </a>
-              <button 
-                onClick={() => scrollToSection('contact')}
-                className="btn-outline text-lg w-full sm:w-auto text-center"
+              <a 
+                href="/contact"
+                className="btn-outline text-lg w-full sm:w-auto text-center inline-flex items-center justify-center"
               >
                 Connect With Me
-              </button>
+              </a>
             </motion.div>
 
             <motion.div

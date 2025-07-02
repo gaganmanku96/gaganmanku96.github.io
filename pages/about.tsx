@@ -13,7 +13,7 @@ export default function About() {
       </Head>
 
       <Layout>
-        <main className="pt-20">
+        <main>
           <AboutSection />
         </main>
       </Layout>

@@ -51,7 +51,7 @@ const CareerNeuralNetwork: React.FC<CareerNeuralNetworkProps> = ({
   const [connectionPaths, setConnectionPaths] = useState<string[]>([]);
   const [isMobile, setIsMobile] = useState(false);
   const [currentScrollProgress, setCurrentScrollProgress] = useState(0);
-  const [visibleRoles, setVisibleRoles] = useState<number[]>([]);
+  const [visibleRoles, setVisibleRoles] = useState<number[]>([0]);
   const [visibleConnections, setVisibleConnections] = useState<number[]>([]);
 
   // Check for mobile
@@ -64,7 +64,7 @@ const CareerNeuralNetwork: React.FC<CareerNeuralNetworkProps> = ({
 
   // Track scroll progress and update animations
   useEffect(() => {
-    const unsubscribe = scrollProgress.onChange((latest: number) => {
+    const unsubscribe = scrollProgress.on("change", (latest: number) => {
       setCurrentScrollProgress(latest);
 
       // Progressive role visibility based on scroll
@@ -245,7 +245,7 @@ const CareerNeuralNetwork: React.FC<CareerNeuralNetworkProps> = ({
                 onClick={() => handleRoleClick(role)}
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ 
-                  opacity: isVisible ? 1 : 0.3, 
+                  opacity: isVisible ? 1 : 0, 
                   x: 0,
                   scale: isScrollBased && !isSelected ? 1.05 : 1
                 }}
