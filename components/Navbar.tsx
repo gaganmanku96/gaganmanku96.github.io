@@ -3,11 +3,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
 
-interface NavbarProps {
-  scrollProgress: number;
-}
-
-const Navbar: React.FC<NavbarProps> = ({ scrollProgress }) => {
+const Navbar: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
