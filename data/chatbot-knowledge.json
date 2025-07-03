@@ -1,0 +1,171 @@
+{
+  "personal": {
+    "name": "Gagandeep Singh",
+    "title": "Senior Data Scientist & GenAI Expert",
+    "location": "Your Location",
+    "email": "your.email@example.com",
+    "bio": "Passionate AI/ML engineer with 6+ years of experience building cutting-edge solutions. Specializing in Generative AI, LLMs, and scalable machine learning systems.",
+    "years_experience": "6+",
+    "current_role": "AVP - Data Science",
+    "company": "Zykrr Technologies"
+  },
+  
+  "skills": {
+    "programming_languages": [
+      "Python",
+      "SQL",
+      "JavaScript",
+      "TypeScript"
+    ],
+    "ai_ml_frameworks": [
+      "TensorFlow",
+      "PyTorch", 
+      "scikit-learn",
+      "Hugging Face Transformers",
+      "LangChain",
+      "OpenAI API"
+    ],
+    "cloud_platforms": [
+      "AWS",
+      "Azure",
+      "Google Cloud Platform"
+    ],
+    "databases": [
+      "PostgreSQL",
+      "MongoDB",
+      "Redis",
+      "Vector Databases"
+    ],
+    "web_technologies": [
+      "React",
+      "Next.js",
+      "FastAPI",
+      "Node.js"
+    ],
+    "specializations": [
+      "Generative AI",
+      "Large Language Models",
+      "Natural Language Processing",
+      "Computer Vision",
+      "MLOps",
+      "Data Engineering"
+    ]
+  },
+
+  "career_progression": [
+    {
+      "title": "AVP - Data Science",
+      "company": "Zykrr Technologies", 
+      "duration": "2023 - Present",
+      "key_achievements": [
+        "Lead AI/ML initiatives across multiple product lines",
+        "Built and deployed 10+ GenAI applications",
+        "Managed team of data scientists and ML engineers"
+      ]
+    },
+    {
+      "title": "Senior Manager - Data Science",
+      "company": "Zykrr Technologies",
+      "duration": "2022 - 2023", 
+      "key_achievements": [
+        "Scaled ML infrastructure to handle enterprise workloads",
+        "Implemented MLOps best practices",
+        "Led cross-functional AI projects"
+      ]
+    },
+    {
+      "title": "Manager - Data Science",
+      "company": "Zykrr Technologies",
+      "duration": "2021 - 2022",
+      "key_achievements": [
+        "Built team from 2 to 8+ data scientists",
+        "Delivered multiple customer-facing AI solutions",
+        "Established data science best practices"
+      ]
+    }
+  ],
+
+  "featured_projects": [
+    {
+      "name": "Multi-Agent GenAI Analytics Chatbot",
+      "description": "Revolutionary multi-agent system for natural language analytics interactions",
+      "technologies": ["Python", "LangChain", "OpenAI GPT", "RLHF", "FastAPI"],
+      "impact": "40% increase in user engagement, 85% query resolution accuracy",
+      "category": "Generative AI"
+    },
+    {
+      "name": "Call Analytics with Speech Processing", 
+      "description": "Advanced call analytics platform using Whisper and NLP models",
+      "technologies": ["Whisper", "PyTorch", "Transformers", "Azure Speech"],
+      "impact": "Processing 10,000+ calls monthly, 92% sentiment accuracy",
+      "category": "Speech Analytics"
+    },
+    {
+      "name": "Finding Missing Person using AI",
+      "description": "AI-powered facial recognition system for missing person identification",
+      "technologies": ["MediaPipe", "scikit-learn", "Computer Vision", "Python"],
+      "impact": "Automated facial matching with high accuracy",
+      "category": "Computer Vision"
+    }
+  ],
+
+  "education": {
+    "degree": "Your Degree",
+    "institution": "Your University", 
+    "graduation_year": "20XX",
+    "relevant_coursework": [
+      "Machine Learning",
+      "Data Structures & Algorithms",
+      "Statistics",
+      "Computer Science Fundamentals"
+    ]
+  },
+
+  "achievements": [
+    "Built 25+ AI/ML projects across various domains",
+    "Led teams of 8+ data scientists and engineers", 
+    "Deployed production ML systems serving millions of users",
+    "Expert in both research and production AI implementations",
+    "Published technical articles and case studies"
+  ],
+
+  "interests": [
+    "Latest developments in Generative AI and LLMs",
+    "Open source AI/ML contributions",
+    "Mentoring junior data scientists",
+    "Speaking at AI/ML conferences",
+    "Building innovative AI products"
+  ],
+
+  "portfolio_highlights": {
+    "website_technologies": [
+      "Next.js 13",
+      "React 18", 
+      "TypeScript",
+      "Three.js",
+      "Framer Motion",
+      "Tailwind CSS"
+    ],
+    "unique_features": [
+      "Interactive 3D neural network visualization",
+      "Holographic effects with custom GLSL shaders",
+      "Advanced particle systems and animations",
+      "AI-powered chatbot integration",
+      "Responsive design across all devices"
+    ]
+  },
+
+  "contact_preferences": {
+    "best_contact_method": "Email",
+    "response_time": "Within 24 hours",
+    "availability": "Open to opportunities and collaborations",
+    "time_zone": "Your Timezone"
+  },
+
+  "chatbot_personality": {
+    "tone": "Professional yet approachable",
+    "expertise_level": "Senior technical expert",
+    "communication_style": "Clear, detailed explanations with technical depth when appropriate",
+    "helpfulness": "Eager to discuss projects, provide insights, and explore collaboration opportunities"
+  }
+}
