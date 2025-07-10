@@ -1,0 +1,77 @@
+________________________________________
+Part 1: Your Detailed "Master" Experience Document
+This is the expanded, well-structured version of your entire journey at zykrr. Use this as your source of truth for interview prep.
+Intern [Mentor-led]
+•	Project: Text Analytics Migration & Enhancement
+o	Migrated a legacy text analytics system from JavaScript to Python, laying the groundwork for future ML development. Increasei
+o	Enhanced the new system by introducing features like industry mapping for topics and keyword-level sentiment.
+o	Initial Model: Implemented a TF-IDF model with binary classification for sentiment analysis.
+o	Model Evolution: Identified the limitations of binary classification for nuanced feedback. Researched and experimented with more advanced architectures like RNNs and LSTMs for improved sentiment analysis.
+o	Infrastructure & Deployment: Independently deployed the entire Python application and its models onto an AWS EC2 VM.
+o	Data Pipeline: Implemented a Redis blocking queue to create a robust producer-consumer pattern for handling asynchronous data processing tasks.
+Data Scientist [Solo Contributor]
+•	Project: Core Model Upgrade to BERT
+o	Pioneered the adoption of BERT for the company's text analytics engine shortly after its release, significantly upgrading model performance and capabilities.
+o	Replaced hardcoded fuzzy-match mappings for keyword extraction with a more robust, ML-driven approach.
+•	Project: Custom NER Model
+o	Developed a custom Named Entity Recognition (NER) model using BERT, fine-tuned on the CoNLL-2003 dataset to extract specific entities from customer feedback.
+•	Project: Advanced Keyword Sentiment Algorithm
+o	Problem: The existing model assigned the same sentence-level sentiment to all keywords, which was often inaccurate.
+o	Solution: Researched and developed a novel hybrid algorithm combining analysis of neighboring words (dependency parsing concepts) with sentence splitting based on conjunctions.
+o	Impact: This algorithm achieved over 80% accuracy in correctly assigning sentiment at a keyword level. Wrote a migration script to re-process and backfill historical data with the superior results in the MongoDB database.
+•	Project: Predictive Analytics (V1)
+o	Initiated the company's first foray into predictive analytics.
+o	Developed a model using CSAT (Customer Satisfaction) drivers as independent variables to predict NPS (Net Promoter Score), aiming to provide clients with actionable insights on where to focus improvement efforts.
+•	Infrastructure & Tooling:
+o	Integrated AWS SNS for real-time error reporting and application monitoring.
+o	Developed numerous web scraping scripts to build custom datasets for model training.
+Senior Data Scientist [Solo Contributor]
+•	Project: Tone Detection Model
+o	Developed and trained a multi-class tone detection model (angry, sad, neutral, surprise, happy) using BERT.
+o	Achieved high accuracy by curating a unique, industry-specific dataset through web scraping and augmenting it with publicly available data.
+•	Project: Model Optimization & MLOps
+o	Cost/Performance Optimization: Migrated NLP models from BERT to the smaller, faster DistilBERT and applied int4 quantization to reduce inference costs and latency.
+o	Open Source Contribution: Discovered and fixed a bug in the simpletransformers library related to quantized NER model prediction and successfully submitted a pull request.
+o	Containerization & Orchestration: Containerized all data science applications using Docker and led the migration to a Kubernetes cluster for deployment and management. Managed updates via kubectl within a VPN-secured environment.
+•	Project: RASA Chatbot
+o	Received a request from a potential client and independently built a proof-of-concept chatbot using RASA.
+o	The chatbot included custom logic for validating user inputs like email, phone numbers, and detecting gibberish.
+Manager - Data Scientist [Led a team of 2]
+•	Project: Key Driver Analysis (KDA) Product
+o	Owned the end-to-end development of the KDA product, which included a Key Driver Matrix and a Planner tool for clients.
+•	Project: Text Analytics Actionables
+o	Led the development of a feature to automatically extract actionable insights from feedback.
+o	POC: Used Sentence Transformers to group semantically similar, hardcoded actionables.
+o	Production: Trained and deployed a T5 model to generate abstractive summaries and extract key action points directly from text.
+o	Technology Evaluation: Researched and benchmarked various VectorDBs (Chroma, Milvus, Pinecone) to inform future architectural decisions.
+•	Project: Client-Specific Social Listening Tool
+o	Created a custom Streamlit application for an aviation client to monitor and respond to Twitter mentions in real-time, calculating metrics like Turnaround Time (TAT).
+•	Leadership & Mentorship:
+o	Onboarded and mentored a new data scientist, delegating tasks and leading the team in delivering numerous custom dashboards and features.
+•	R&D: Speech-to-Text
+o	Began initial experiments with Whisper for speech-to-text transcription, laying the groundwork for a future product.
+Senior Manager, Data Scientist [Solo Contributor]
+•	Strategic Collaboration: Spent significant time with the business team, defining requirements for new additions to Predictive Analytics and fulfilling complex client requests.
+•	Generative AI R&D: Deeply immersed in learning GenAI and prompt engineering, creating numerous proof-of-concept applications that demonstrated the technology's value to the business.
+•	Client Delivery: Built multiple custom dashboards to meet specific client needs.
+AVP - Data Scientist [Led a team of 2]
+•	Project: GenAI Text Analytics Migration
+o	Led the strategic migration of the core text analytics pipeline from DistilBERT to a GenAI-based system using Gemini Flash 1.5.
+o	Architected a system using MongoDB to store industry-specific mappings and all LLM I/O for future fine-tuning.
+o	Actionables were automatically extracted using an LLM and stored in a Qdrant vector database with metadata.
+•	Project: Multi-Agent Analytics Chatbot
+o	Architecture: Designed and built a multi-agent chatbot with 4 distinct agents (Router, Data Analyst, Code, Reviewer) using a custom framework.
+o	Core Logic: Implemented an Active ReAct Prompting technique where the logic for answering questions was stored in and retrieved from a Qdrant DB, ensuring consistency and enabling a feedback loop.
+o	Evaluation & RLHF: Established a Golden Dataset for evaluation, using both human SMEs and "LLM as Judge." Implemented an RLHF mechanism (thumbs up/down with reason) to capture user feedback and improve the agent's logic over time.
+o	Cost Management: Built a framework and Streamlit dashboard to track LLM costs granularly by client, user, and agent.
+o	CI/CD: Established CI/CD pipelines for automated deployment to UAT (on merge request) and Production (on merge to master).
+•	Project: Call Analytics (CLA) Product
+o	Problem: An insurance client was spending hours manually auditing calls.
+o	Solution: Led the development of a robust backend for call analytics. Built a pipeline for audio pre-processing (noise isolation, amplification) and used an LLM for speaker diarization. After research into the hallucination problem, made the strategic decision to self-host Whisper Large-v2 on a GPU machine for higher accuracy.
+o	Impact: Reduced the client's audio validation time from 3 hours to 30 minutes per call.
+•	Project: Model Fine-Tuning
+o	Leveraged the stored prompt data to fine-tune a Llama 3.1 model using QLoRA, creating two specialized adapters for text analytics and summarization.
+•	Project: Operations Automation
+o	Deployed and managed a self-hosted N8N instance to create internal automation workflows.
+o	Impact: Reduced survey generation time from 2 hours to 15 mins, and data generation from 1 hour to 5 mins.
+•	Project Leadership: Acted as a de-facto Product Manager for the CLA and Analytics Chatbot initiatives, coordinating 

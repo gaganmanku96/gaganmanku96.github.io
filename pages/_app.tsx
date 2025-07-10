@@ -2,6 +2,7 @@ import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import { useState, useEffect } from 'react';
 import { ThemeProvider } from '@/context/ThemeContext';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function App({ Component, pageProps }: AppProps) {
   // Add this to prevent hydration mismatch
@@ -18,6 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider>
       <Component {...pageProps} />
+      <Analytics />
     </ThemeProvider>
   );
 }

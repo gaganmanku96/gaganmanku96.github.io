@@ -54,3 +54,32 @@ Thumbs.db
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+logs
+*.log
+dev-debug.log
+# Dependency directories
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+
+# Task files
+# tasks.json
+# tasks/
+
+# Development tools and docs
+.claude/
+.roo/
+.roomodes/
+.taskmaster/
+.agent.md
+ENHANCEMENT_SUMMARY.md
+MOBILE_FIXES_SUMMARY.md
+PORTFOLIO_ENHANCEMENT_SUMMARY.md
+CLAUDE.md 

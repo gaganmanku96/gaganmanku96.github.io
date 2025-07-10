@@ -1,8 +1,8 @@
 {
   "basic_info": {
     "name": "Gagandeep Singh",
-    "title": "Senior Data Scientist",
-    "company": "Zykrr Technologies",
+    "title": "Data Scientist",
+    "company": [{"previous company": "Zykrr Technologies", "last working day": "27th June, 2025"}],
     "experience_years": 6,
     "location": "India",
     "email": "gaganmanku96@gmail.com",
@@ -14,39 +14,19 @@
     "key_achievements": [
       "Promoted multiple times at Zykrr, reflecting consistent performance",
       "Expert in multi-agent GenAI systems, LLM frameworks, and speech analytics platforms",
-      "Achieved 40% increase in user engagement through interactive AI systems",
-      "Processes 10,000+ calls monthly for actionable insights",
-      "Improved model accuracy by 70%"
+      "Hands-on experience in Langchain, Langgraph, MCP, CrewAI, A2A Protocol"
     ]
   },
   "technical_expertise": {
-    "programming_languages": {
-      "Python": 95,
-      "JavaScript": 75,
-      "SQL": 85
-    },
-    "ai_ml_frameworks": {
-      "PyTorch": 95,
-      "Hugging Face & Transformers": 90,
-      "Generative AI & LLMs": 95,
-      "Natural Language Processing": 90,
-      "TensorFlow": 85,
-      "OpenAI API": 90,
-      "LangChain": 85
-    },
-    "cloud_and_infrastructure": {
-      "FastAPI": 85,
-      "Docker/Kubernetes": 85,
-      "Azure Cloud": 80,
-      "Vector Databases": 80,
-      "AWS": 75
-    },
-    "databases": {
-      "PostgreSQL": 80,
-      "MongoDB": 75,
-      "Redis": 70
-    }
+    "programming_languages": ["Python","SQL"],
+    "ai_ml_frameworks": ["PyTorch","Hugging Face & Transformers","Generative AI & LLMs","Natural Language Processing", "Speech Analysis", "Churn Analysis", "Cluster Analysis"],
+    "llm_frameworks": ["LangChain", "LangGraph", "Crewai"],
+    "cloud_and_infrastructure": ["F astAPI", "Docker/Kubernetes", "Azure Cloud", "Vector Databases", "AWS"],
+    "databases":["PostgreSQL",  "MongoDB", "Redis", "Vector DB (ChromaDB, QdrantDB, Milvus, Pinecone)"],
+    "mlops": ["Docker", "Kubernetes", "MLFlow"],
+    "ai_evals": ["Opik", "RAGAS"]
   },
+  "hobbies": ["cooking", "travel", "driving", "swimming", "badminton", "gym freak", "tech nerd"],
   "strengths": [
     "Strong problem-solving abilities and analytical thinking",
     "Excellent communication skills for technical and non-technical audiences",
@@ -86,47 +66,38 @@
     "Attending AI conferences and technical meetups"
   ],
   "fun_facts": [
-    "Built my first machine learning model during college to predict stock prices",
-    "Passionate about making AI more accessible through educational content",
+    "I'm know to cook exotic dishes",
+    "Passionate about writing making AI more accessible through educational content",
     "Enjoy experimenting with new AI models and frameworks in personal projects",
     "Love solving complex algorithmic problems on coding platforms",
     "Active contributor to AI communities and forums"
   ],
   "featured_projects": [
     {
-      "name": "Finding Missing Person using AI",
-      "description": "AI-powered solution using facial recognition and ML to help locate missing persons with PostgreSQL integration",
-      "technologies": ["Python", "Computer Vision", "PostgreSQL", "Machine Learning"]
-    },
-    {
-      "name": "ALBERT Sentiment Analysis",
-      "description": "Google's state-of-the-art NLP model implementation with superior results across various tasks",
-      "technologies": ["ALBERT", "NLP", "Python", "Transformers"]
-    },
-    {
-      "name": "Talk with Figma Claude",
-      "description": "Revolutionary integration enabling designers to interact with Claude AI directly within Figma for enhanced workflows",
-      "technologies": ["Claude API", "Figma Plugin", "JavaScript", "AI Integration"]
-    },
-    {
       "name": "CHAOS Framework",
       "description": "Synthetic training data generator that teaches AI systems 'how to think, not just what to do'. Features progressive difficulty, confidence tracking, adaptive reasoning, multi-dimensional learning scenarios, and uses PEFT (Parameter Efficient Fine-Tuning) with Gemini AI",
       "technologies": ["Python", "PEFT", "Gemini AI", "Synthetic Data", "ML Training"]
     },
     {
-      "name": "Browserless Selenium Scraping",
-      "description": "High-performance web scraping solution using Selenium in serverless environments, optimized for scalability with Docker",
-      "technologies": ["Selenium", "Docker", "Python", "Serverless", "Web Scraping"]
+      "name": "InnerVoice",
+      "description": "Synthetic training data generator that teaches AI systems 'how to think, not just what to do'. Features progressive difficulty, confidence tracking, adaptive reasoning, multi-dimensional learning scenarios, and uses PEFT (Parameter Efficient Fine-Tuning) with Gemini AI",
+      "technologies": ["Python", "PEFT", "Gemini AI", "Synthetic Data", "ML Training"]
+    },
+    {
+      "name": "Finding Missing Person using AI",
+      "description": "AI-powered solution using facial recognition and ML to help locate missing persons with PostgreSQL integration",
+      "technologies": ["Python", "Computer Vision", "Sqlite", "Machine Learning", "Mediapipe"]
+    },
+
+    {
+      "name": "Talk with Figma Claude",
+      "description": "Revolutionary integration enabling designers to interact with Claude AI directly within Figma for enhanced workflows",
+      "technologies": ["Claude Desktop", "Figma Plugin", "JavaScript", "AI Integration"]
     },
     {
       "name": "Gibberish Detection",
       "description": "Experimental ML project for detecting and classifying gibberish text using advanced ML techniques with Jupyter Notebook",
-      "technologies": ["Python", "NLP", "Machine Learning", "Jupyter"]
-    },
-    {
-      "name": "Docker Tutorial for Data Scientists",
-      "description": "Comprehensive educational resource teaching data scientists how to leverage Docker for reproducible ML workflows",
-      "technologies": ["Docker", "MLOps", "Data Science", "DevOps"]
+      "technologies": ["Python", "NLP", "Machine Learning"]
     }
   ]
 }

@@ -139,13 +139,13 @@ const ContactSection: React.FC = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-stretch">
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate={controls}
             ref={ref}
-            className="space-y-6"
+            className="space-y-6 flex flex-col"
           >
             {contactInfo.map((info, index) => (
               <motion.div
@@ -186,32 +186,13 @@ const ContactSection: React.FC = () => {
                 )}
               </motion.div>
             ))}
-            
-            <motion.div variants={itemVariants} className="pt-6">
-              <h4 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Connect With Me</h4>
-              <div className="flex space-x-4">
-                {socialLinks.map(social => (
-                  <Tooltip key={social.label} text={social.label}>
-                    <a 
-                      href={social.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      aria-label={social.label} 
-                      className="w-12 h-12 flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-full text-slate-600 dark:text-slate-300 hover:bg-primary-500 hover:text-white dark:hover:bg-primary-500 transition-all duration-300 transform hover:scale-110"
-                    >
-                      {social.icon}
-                    </a>
-                  </Tooltip>
-                ))}
-              </div>
-            </motion.div>
           </motion.div>
 
           <motion.div
             variants={itemVariants}
             initial="hidden"
             animate={controls}
-            className="bg-white dark:bg-slate-800/50 p-8 rounded-xl shadow-md border border-slate-200 dark:border-slate-700/50 h-fit"
+            className="bg-white dark:bg-slate-800/50 p-8 rounded-xl shadow-md border border-slate-200 dark:border-slate-700/50 flex flex-col h-full"
           >
             <h3 className="heading-tertiary text-slate-900 dark:text-white mb-6">Send Me a Message</h3>
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -264,7 +245,7 @@ const ContactSection: React.FC = () => {
                   value={formData.message} 
                   onChange={handleChange} 
                   required 
-                  rows={5} 
+                  rows={4} 
                   placeholder="Your Message..." 
                   className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none transition-all duration-300"
                 />

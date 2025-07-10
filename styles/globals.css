@@ -302,6 +302,148 @@ body {
   }
 }
 
+/* Mobile Optimizations */
+.mobile-optimized {
+  /* Optimize touch interactions */
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Ensure proper positioning context */
+  position: relative;
+}
+
+.mobile-optimized .magnetic-button {
+  /* Disable magnetic effects on mobile */
+  transform: none !important;
+}
+
+.touch-device {
+  /* Larger touch targets */
+  --touch-target-min: 44px;
+}
+
+.touch-device button,
+.touch-device a {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+}
+
+.landscape-mode {
+  /* Adjust for landscape orientation */
+  --hero-padding-top: 2rem;
+}
+
+/* Reduced motion for mobile performance */
+@media (max-width: 768px) {
+  .three-scene {
+    /* Reduce 3D complexity on mobile */
+    transform: scale(0.8);
+    opacity: 0.7;
+  }
+  
+  .particle-system {
+    /* Reduce particle count */
+    --particle-count: 500;
+  }
+  
+  .floating-elements {
+    /* Disable floating animations on mobile */
+    animation: none;
+  }
+
+  /* Fix mobile overlapping issues */
+  #home {
+    /* Ensure proper stacking and spacing */
+    position: relative;
+    overflow-x: hidden;
+    min-height: 100vh;
+    padding-top: 4rem;
+  }
+
+  /* Hide floating skill badges completely on mobile */
+  .floating-skill-badges {
+    display: none !important;
+  }
+
+  /* Reduce 3D canvas impact on mobile */
+  canvas {
+    pointer-events: none;
+    opacity: 0.2;
+    transform: scale(0.7);
+    z-index: 1;
+  }
+
+  /* Ensure main content is above background elements */
+  .hero-main-content {
+    position: relative;
+    z-index: 30;
+    padding: 2rem 1rem;
+  }
+
+  /* Fix text overlapping with 3D elements */
+  #home h1, #home h2, #home p {
+    position: relative;
+    z-index: 40;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  /* Add background blur to text for better readability */
+  #home .text-content {
+    backdrop-filter: blur(2px);
+    background: rgba(255,255,255,0.05);
+    border-radius: 1rem;
+    padding: 1rem;
+  }
+
+  /* Fix Featured Work section overlapping */
+  section[class*="space-section"] {
+    position: relative;
+    z-index: 30;
+    margin-top: 2rem;
+  }
+
+  /* Ensure proper spacing between sections on mobile */
+  section[class*="space-section"]:first-of-type {
+    margin-top: 4rem;
+  }
+
+  /* Fix text overlapping with neural network elements */
+  .text-primary-600,
+  .text-primary-400,
+  .heading-secondary {
+    position: relative;
+    z-index: 50;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  /* Fix button spacing on mobile */
+  .mobile-cta-buttons {
+    gap: 1rem;
+    padding: 0 1rem;
+    width: 100%;
+  }
+
+  .mobile-cta-buttons button,
+  .mobile-cta-buttons a {
+    width: 100%;
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+}
+
+/* Tablet specific fixes */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .floating-skill-badges {
+    opacity: 0.7;
+    transform: scale(0.9);
+  }
+  
+  canvas {
+    opacity: 0.6;
+  }
+}
+
 /* Advanced Animations */
 .fade-in {
   animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);

@@ -404,55 +404,149 @@ const FloatingText: React.FC = () => {
   );
 };
 
-// Skill Orbs Component
-const SkillOrbs: React.FC = () => {
+// Interactive Skill Orbs Component with Mouse Following
+const SkillOrbs: React.FC<{ mousePosition?: THREE.Vector2 }> = ({ mousePosition }) => {
+  const { camera, raycaster, pointer } = useThree();
+  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+  
   const skills = useMemo(() => [
-    { name: 'Python', color: '#FFD43B', position: [3, 1.5, -2] },
-    { name: 'TensorFlow', color: '#FF6B35', position: [-3, 1.8, -1.5] },
-    { name: 'PyTorch', color: '#EE4C2C', position: [2.5, -1.2, -2.2] },
-    { name: 'OpenAI', color: '#00D4FF', position: [-2.8, -1.5, -1.8] },
-    { name: 'LangChain', color: '#9333EA', position: [3.2, 0.5, 1.5] },
-    { name: 'AWS', color: '#FF9900', position: [-3.5, 0.8, 1.2] },
+    { name: 'Python', color: '#FFD43B', position: [3, 1.5, -2], basePosition: [3, 1.5, -2] },
+    { name: 'TensorFlow', color: '#FF6B35', position: [-3, 4.2, -1.5], basePosition: [-3, 4.2, -1.5] },
+    { name: 'PyTorch', color: '#EE4C2C', position: [2.5, 4.5, -2.2], basePosition: [2.5, 4.5, -2.2] },
+    { name: 'OpenAI', color: '#00D4FF', position: [-2.8, -1.5, -1.8], basePosition: [-2.8, -1.5, -1.8] },
+    { name: 'LangChain', color: '#9333EA', position: [3.2, 3.8, 1.5], basePosition: [3.2, 3.8, 1.5] },
+    { name: 'AWS', color: '#FF9900', position: [-3.5, 3.5, 1.2], basePosition: [-3.5, 3.5, 1.2] },
   ], []);
 
   return (
     <>
       {skills.map((skill, idx) => (
-        <Float
+        <InteractiveSkillOrb
           key={skill.name}
-          speed={0.5 + Math.random() * 1.0}
-          rotationIntensity={1}
-          floatIntensity={0.5}
-        >
-          <group position={skill.position as [number, number, number]}>
-            <Sphere args={[0.15, 16, 16]}>
-              <meshStandardMaterial
-                color={skill.color}
-                emissive={skill.color}
-                emissiveIntensity={0.5}
-                transparent
-                opacity={0.8}
-                toneMapped={false}
-              />
-            </Sphere>
-            <Text
-              position={[0, -0.4, 0]}
-              fontSize={0.08}
-              color={skill.color}
-              anchorX="center"
-              anchorY="middle"
-                >
-              {skill.name}
-              <meshBasicMaterial
-                color={skill.color}
-                transparent
-                opacity={0.9}
-              />
-            </Text>
-          </group>
-        </Float>
+          skill={skill}
+          isHovered={hoveredSkill === skill.name}
+          onHover={setHoveredSkill}
+          mousePosition={mousePosition}
+        />
       ))}
     </>
+  );
+};
+
+// Individual Interactive Skill Orb
+const InteractiveSkillOrb: React.FC<{
+  skill: any;
+  isHovered: boolean;
+  onHover: (name: string | null) => void;
+  mousePosition?: THREE.Vector2;
+}> = ({ skill, isHovered, onHover, mousePosition }) => {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const groupRef = useRef<THREE.Group>(null);
+  const [clicked, setClicked] = useState(false);
+
+  useFrame((state) => {
+    if (!groupRef.current || !mousePosition) return;
+
+    // Mouse attraction effect
+    const mouseInfluence = isHovered ? 0.3 : 0.1;
+    const targetX = skill.basePosition[0] + (mousePosition.x * mouseInfluence);
+    const targetY = skill.basePosition[1] + (mousePosition.y * mouseInfluence);
+    const targetZ = skill.basePosition[2];
+
+    // Smooth interpolation to target position
+    groupRef.current.position.x = THREE.MathUtils.lerp(groupRef.current.position.x, targetX, 0.05);
+    groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, targetY, 0.05);
+    groupRef.current.position.z = THREE.MathUtils.lerp(groupRef.current.position.z, targetZ, 0.05);
+
+    // Rotation based on mouse position
+    if (meshRef.current) {
+      meshRef.current.rotation.x = state.clock.elapsedTime * 0.5 + (mousePosition.y * 0.5);
+      meshRef.current.rotation.y = state.clock.elapsedTime * 0.3 + (mousePosition.x * 0.5);
+    }
+
+    // Scale animation when hovered
+    const targetScale = isHovered ? 1.3 : clicked ? 1.1 : 1;
+    if (groupRef.current.scale.x !== targetScale) {
+      groupRef.current.scale.setScalar(THREE.MathUtils.lerp(groupRef.current.scale.x, targetScale, 0.1));
+    }
+  });
+
+  const handleClick = () => {
+    setClicked(!clicked);
+    // Add haptic feedback if available
+    if (navigator.vibrate) {
+      navigator.vibrate(50);
+    }
+  };
+
+  return (
+    <Float
+      speed={0.5 + Math.random() * 1.0}
+      rotationIntensity={isHovered ? 2 : 1}
+      floatIntensity={isHovered ? 1 : 0.5}
+    >
+      <group 
+        ref={groupRef}
+        position={skill.basePosition as [number, number, number]}
+        onPointerOver={() => onHover(skill.name)}
+        onPointerOut={() => onHover(null)}
+        onClick={handleClick}
+      >
+        <mesh ref={meshRef}>
+          <sphereGeometry args={[0.15, 32, 32]} />
+          <meshStandardMaterial
+            color={skill.color}
+            emissive={skill.color}
+            emissiveIntensity={isHovered ? 0.8 : 0.5}
+            transparent
+            opacity={isHovered ? 1 : 0.8}
+            toneMapped={false}
+            roughness={0.2}
+            metalness={0.8}
+          />
+        </mesh>
+
+        {/* Skill name text */}
+        <Text
+          position={[0, -0.4, 0]}
+          fontSize={isHovered ? 0.1 : 0.08}
+          color={skill.color}
+          anchorX="center"
+          anchorY="middle"
+        >
+          {skill.name}
+          <meshBasicMaterial
+            color={skill.color}
+            transparent
+            opacity={isHovered ? 1 : 0.9}
+          />
+        </Text>
+
+        {/* Orbital ring when hovered */}
+        {isHovered && (
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <ringGeometry args={[0.25, 0.27, 32]} />
+            <meshBasicMaterial
+              color={skill.color}
+              transparent
+              opacity={0.6}
+              side={THREE.DoubleSide}
+            />
+          </mesh>
+        )}
+
+        {/* Pulsing glow effect */}
+        <mesh>
+          <sphereGeometry args={[0.2, 16, 16]} />
+          <meshBasicMaterial
+            color={skill.color}
+            transparent
+            opacity={isHovered ? 0.3 : 0.1}
+            blending={THREE.AdditiveBlending}
+          />
+        </mesh>
+      </group>
+    </Float>
   );
 };
 
@@ -636,6 +730,13 @@ const ParticleField: React.FC = () => {
 
 const AiBrainScene: React.FC = () => {
   const [enablePostProcessing, setEnablePostProcessing] = useState(true);
+  const [mousePosition, setMousePosition] = useState(new THREE.Vector2(0, 0));
+  const { pointer } = useThree();
+
+  useFrame(() => {
+    // Update mouse position for interactive elements
+    setMousePosition(pointer.clone());
+  });
 
   return (
     <>
@@ -646,13 +747,15 @@ const AiBrainScene: React.FC = () => {
       <directionalLight position={[0, 10, 5]} intensity={0.5} />
       
       <NeuralNetwork />
+      <SkillOrbs mousePosition={mousePosition} />
+      <FloatingGeometry />
       <ParticleField />
       
       <OrbitControls
         enableZoom={false}
         enablePan={false}
         autoRotate
-        autoRotateSpeed={0.5}
+        autoRotateSpeed={0.3}
         maxPolarAngle={Math.PI / 1.5}
         minPolarAngle={Math.PI / 3}
       />
@@ -663,17 +766,17 @@ const AiBrainScene: React.FC = () => {
         >
           <EffectComposer multisampling={0}>
             <Bloom 
-              intensity={1.2}
-              luminanceThreshold={0.5}
-              luminanceSmoothing={0.7}
+              intensity={1.5}
+              luminanceThreshold={0.4}
+              luminanceSmoothing={0.8}
             />
             <ChromaticAberration 
               blendFunction={BlendFunction.NORMAL} 
-              offset={new THREE.Vector2(0.0005, 0.0012)} 
+              offset={new THREE.Vector2(0.001, 0.002)} 
             />
             <Noise 
               blendFunction={BlendFunction.SOFT_LIGHT} 
-              opacity={0.02} 
+              opacity={0.03} 
             />
           </EffectComposer>
         </ThreeErrorBoundary>

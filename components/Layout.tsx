@@ -5,6 +5,8 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import CommandPalette from './CommandPalette';
 import { useTheme } from '@/context/ThemeContext';
+import MobileOptimizations from './ui/MobileOptimizations';
+import MobileViewportFix from './ui/MobileViewportFix';
 
 // Dynamically import the Chatbot component with SSR disabled
 const Chatbot = dynamic(() => import('./Chatbot'), { ssr: false });
@@ -33,7 +35,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }, []);
 
   return (
-    <>
+    <MobileOptimizations>
+      <MobileViewportFix />
       <div className="min-h-screen flex flex-col">
         <Navbar />
         
@@ -55,7 +58,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         isOpen={showChatbot} 
         onToggle={() => setShowChatbot(prev => !prev)} 
       />
-    </>
+    </MobileOptimizations>
   );
 };
 

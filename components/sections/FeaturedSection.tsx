@@ -32,48 +32,27 @@ const FeaturedSection: React.FC = () => {
   const latestCaseStudies = [
     {
       id: '1',
-      title: 'Multi-Agent GenAI Chatbot System',
-      description: 'Developed a sophisticated multi-agent chatbot system that increased user engagement by 40%. The system employs advanced NLP techniques and conversation flow management to deliver personalized experiences.',
-      tags: ['GenAI', 'Multi-Agent', 'NLP', 'Chatbots'],
-      link: '/case-studies#multi-agent-chatbot',
+      title: 'Why Whisper Hallucinates and How to Fix It',
+      description: 'Coming Soon - Comprehensive research exploring hallucination phenomena in OpenAI\'s Whisper model and developing practical solutions for production environments.',
+      tags: ['Whisper', 'Speech AI', 'Audio Processing', 'Research'],
+      link: '/case-studies',
     },
     {
       id: '2',
-      title: 'LLM Telemetry Framework',
-      description: 'Built a comprehensive telemetry framework for monitoring and optimizing Large Language Model performance. Processes 10,000+ calls monthly providing actionable insights for model improvement.',
-      tags: ['LLM', 'Telemetry', 'Monitoring', 'Analytics'],
-      link: '/case-studies#llm-telemetry',
+      title: 'LoRA Best Practices: What Actually Works in Production',
+      description: 'Coming Soon - Real-world insights from training dozens of LoRA adapters. Sharing what worked, what failed, and the battle-tested practices for production deployment.',
+      tags: ['LoRA', 'Best Practices', 'Production', 'Real-world'],
+      link: '/case-studies',
     },
     {
       id: '3',
-      title: 'Speech Analytics Platform',
-      description: 'Engineered an advanced speech analytics platform using Whisper and custom NLP models. Improved model accuracy by 70% while processing thousands of audio files for sentiment and intent analysis.',
-      tags: ['Speech Analytics', 'Whisper', 'NLP', 'Audio Processing'],
-      link: '/case-studies#speech-analytics',
+      title: 'Can We Add Hindi Language Support in Parakeet S2T?',
+      description: 'Coming Soon - Groundbreaking research exploring feasibility and implementation strategies for adding Hindi language support to NVIDIA\'s Parakeet Speech-to-Text model.',
+      tags: ['Parakeet', 'Hindi NLP', 'Multilingual AI', 'Speech-to-Text'],
+      link: '/case-studies',
     },
   ];
 
-  // Key achievements data
-  const keyAchievements = [
-    {
-      id: '1',
-      title: '40% Engagement Increase',
-      description: 'Achieved a remarkable 40% increase in user engagement through the implementation of interactive AI systems and personalized user experiences using advanced machine learning algorithms.',
-      tags: ['User Engagement', 'AI Systems', 'Personalization'],
-    },
-    {
-      id: '2',
-      title: '70% Accuracy Improvement',
-      description: 'Improved model accuracy by 70% through innovative feature engineering, advanced preprocessing techniques, and fine-tuning of machine learning models for production environments.',
-      tags: ['Model Accuracy', 'Feature Engineering', 'ML Optimization'],
-    },
-    {
-      id: '3',
-      title: '10K+ Monthly Processing',
-      description: 'Successfully processing over 10,000 calls monthly for actionable insights using scalable AI infrastructure and real-time analytics pipelines built with modern cloud technologies.',
-      tags: ['Scale', 'Real-time Analytics', 'Cloud Infrastructure'],
-    },
-  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -97,7 +76,7 @@ const FeaturedSection: React.FC = () => {
   };
 
   return (
-    <section className="space-section bg-gradient-to-br from-slate-50 to-primary-50/30 dark:from-slate-900 dark:to-primary-900/10">
+    <section className="space-section bg-gradient-to-br from-slate-50 to-primary-50/30 dark:from-slate-900 dark:to-primary-900/10 relative z-30">
       <div className="container-custom">
         <motion.div
           variants={containerVariants}
@@ -107,8 +86,8 @@ const FeaturedSection: React.FC = () => {
           className="space-y-16"
         >
           {/* Section Header */}
-          <motion.div variants={itemVariants} className="text-center">
-            <span className="text-sm font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-2 inline-block">
+          <motion.div variants={itemVariants} className="text-center relative z-40">
+            <span className="text-sm font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-2 inline-block relative z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm px-4 py-2 rounded-full">
               Featured Work
             </span>
             <h2 className="heading-secondary mb-6 text-gradient">Latest Projects & Achievements</h2>
@@ -138,15 +117,6 @@ const FeaturedSection: React.FC = () => {
             />
           </motion.div>
 
-          {/* Key Achievements Carousel */}
-          <motion.div variants={itemVariants}>
-            <Carousel
-              items={keyAchievements}
-              title="Key Achievements"
-              autoPlay={true}
-              autoPlayDelay={8000}
-            />
-          </motion.div>
 
           {/* Call to Action */}
           <motion.div variants={itemVariants} className="text-center">
